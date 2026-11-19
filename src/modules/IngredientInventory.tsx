@@ -1,0 +1,285 @@
+import React, { useState } from 'react';
+import { AlertCircle, History, PackagePlus, TrendingUp } from 'lucide-react';
+import { useHargaPas } from '../store/HargaPasContext';
+import { formatIDR, formatShortDate } from '../utils/format';
+import { PointerCard } from '../components/ui/PointerCard';
+import { PressButton } from '../components/ui/PressButton';
+import { Ingredient } from '../types/hargapas';
+
+export const IngredientInventory: React.FC = () => {
+  const { ingredients, updateIngredientPrice, restockIngredient, addIngredient } = useHargaPas();
+
+  const [historyTarget, setHistoryTarget] = useState<Ingredient | null>(null);
+  const [priceEditId, setPriceEditId] = useState<string | null>(null);
+  const [newPrice, setNewPrice] = useState<number>(0);
+
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newIngName, setNewIngName] = useState('');
+  const [newIngUnit, setNewIngUnit] = useState<Ingredient['unit']>('kg');
+  const [newIngPrice, setNewIngPrice] = useState(25000);
+  const [newIngStock, setNewIngStock] = useState(5);
+  const [newIngMin, setNewIngMin] = useState(2);
+  const [newIngSupplier, setNewIngSupplier] = useState('Supplier Lokal');
+
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newIngName.trim()) return;
+    addIngredient({
+      name: newIngName.trim(),
+      unit: newIngUnit,
+      pricePerUnit: newIngPrice,
+      stock: newIngStock,
+      minStock: newIngMin,
+      supplier: newIngSupplier.trim() || 'Supplier Umum',
+    });
+    setNewIngName('');
+    setShowAddForm(false);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Inventaris Bahan Baku</h1>
+          <p className="text-sm text-[#52605a] dark:text-slate-400 mt-0.5">
+            Kelola stok, batas minimum (reorder point), dan riwayat pergerakan harga beli.
+          </p>
+        </div>
+        <PressButton variant="primary" onClick={() => setShowAddForm((v) => !v)}>
+          <PackagePlus className="w-4 h-4" />
+          {showAddForm ? 'Tutup Form' : 'Tambah Bahan Baku'}
+        </PressButton>
+      </div>
+
+      {showAddForm && (
+        <PointerCard className="p-6">
+          <form onSubmit={handleAdd} className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium mb-1">Nama Bahan</label>
+              <input
+                type="text"
+                required
+                value={newIngName}
+                onChange={(e) => setNewIngName(e.target.value)}
+                placeholder="mis. Sirup Pandan"
+                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Satuan</label>
+              <select
+                value={newIngUnit}
+                onChange={(e) => setNewIngUnit(e.target.value as Ingredient['unit'])}
+                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3 py-2 text-sm"
+              >
+                <option value="kg">kg</option>
+                <option value="liter">liter</option>
+                <option value="pcs">pcs</option>
+                <option value="gram">gram</option>
+                <option value="ml">ml</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Harga / Satuan</label>
+              <input
+                type="number"
+                min={1}
+                value={newIngPrice}
+                onChange={(e) => setNewIngPrice(Number(e.target.value))}
+                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3 py-2 text-sm tabular-nums"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Stok Awal / Min</label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  step="0.1"
+                  value={newIngStock}
+                  onChange={(e) => setNewIngStock(Number(e.target.value))}
+                  className="w-1/2 rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-2.5 py-2 text-sm tabular-nums"
+                />
+                <input
+                  type="number"
+                  step="0.1"
+                  value={newIngMin}
+                  onChange={(e) => setNewIngMin(Number(e.target.value))}
+                  className="w-1/2 rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-2.5 py-2 text-sm tabular-nums"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-medium mb-1">Supplier</label>
+              <input
+                type="text"
+                value={newIngSupplier}
+                onChange={(e) => setNewIngSupplier(e.target.value)}
+                placeholder="Supplier Lokal"
+                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <PressButton type="submit" variant="mint" className="w-full">
+                Simpan Bahan
+              </PressButton>
+            </div>
+          </form>
+        </PointerCard>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {ingredients.map((ing) => {
+          const isLow = ing.stock <= ing.minStock;
+          const prevPrice =
+            ing.priceHistory.length >= 2
+              ? ing.priceHistory[ing.priceHistory.length - 2].pricePerUnit
+              : ing.pricePerUnit;
+          const priceDiffPct =
+            prevPrice > 0 ? ((ing.pricePerUnit - prevPrice) / prevPrice) * 100 : 0;
+
+          return (
+            <PointerCard key={ing.id} lift className="p-5 flex flex-col justify-between gap-4">
+              <div>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h2 className="font-bold text-base">{ing.name}</h2>
+                    <div className="text-xs text-[#52605a] dark:text-slate-400">
+                      {ing.supplier}
+                    </div>
+                  </div>
+                  {isLow ? (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300">
+                      <AlertCircle className="w-3 h-3" />
+                      Perlu Restok
+                    </span>
+                  ) : (
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#7bdc93]/25 text-[#1f4d3d] dark:text-[#7bdc93]">
+                      Stok Aman
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-3 rounded-2xl bg-[#f8faf9] dark:bg-slate-800/70 p-3.5">
+                  <div>
+                    <div className="text-[11px] text-[#52605a] dark:text-slate-400">Stok Saat Ini</div>
+                    <div className="text-lg font-bold tabular-nums">
+                      {ing.stock} <span className="text-xs font-normal">{ing.unit}</span>
+                    </div>
+                    <div className="text-[11px] text-[#52605a] dark:text-slate-400">
+                      Min: {ing.minStock} {ing.unit}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-[#52605a] dark:text-slate-400">Harga Beli</div>
+                    <div className="text-lg font-bold tabular-nums">
+                      {formatIDR(ing.pricePerUnit)}
+                    </div>
+                    {priceDiffPct !== 0 && (
+                      <div
+                        className={`text-[11px] font-semibold flex items-center gap-1 ${
+                          priceDiffPct > 0 ? 'text-rose-600' : 'text-emerald-600'
+                        }`}
+                      >
+                        <TrendingUp className="w-3 h-3" />
+                        {priceDiffPct > 0 ? '+' : ''}
+                        {priceDiffPct.toFixed(1)}%
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {priceEditId === ing.id ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    step={500}
+                    value={newPrice}
+                    onChange={(e) => setNewPrice(Math.max(0, Number(e.target.value)))}
+                    className="flex-1 rounded-xl border border-[#2c5f4e]/25 px-3 py-1.5 text-sm tabular-nums bg-white dark:bg-slate-900"
+                  />
+                  <PressButton
+                    size="sm"
+                    variant="mint"
+                    onClick={() => {
+                      updateIngredientPrice(ing.id, newPrice);
+                      setPriceEditId(null);
+                    }}
+                  >
+                    Simpan
+                  </PressButton>
+                  <PressButton size="sm" variant="ghost" onClick={() => setPriceEditId(null)}>
+                    Batal
+                  </PressButton>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <PressButton
+                    size="sm"
+                    variant="primary"
+                    onClick={() => restockIngredient(ing.id, ing.unit === 'pcs' ? 100 : 5)}
+                  >
+                    + Restok ({ing.unit === 'pcs' ? '100' : '5'} {ing.unit})
+                  </PressButton>
+                  <PressButton
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => {
+                      setPriceEditId(ing.id);
+                      setNewPrice(ing.pricePerUnit);
+                    }}
+                  >
+                    Update Harga
+                  </PressButton>
+                  <PressButton
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setHistoryTarget(ing)}
+                  >
+                    <History className="w-3.5 h-3.5" />
+                    Riwayat
+                  </PressButton>
+                </div>
+              )}
+            </PointerCard>
+          );
+        })}
+      </div>
+
+      {/* Price History Modal */}
+      {historyTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs">
+          <PointerCard className="w-full max-w-md p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="font-bold text-base">Riwayat Harga: {historyTarget.name}</h3>
+                <p className="text-xs text-[#52605a] dark:text-slate-400">
+                  Satuan per {historyTarget.unit}
+                </p>
+              </div>
+              <PressButton size="sm" variant="ghost" onClick={() => setHistoryTarget(null)}>
+                Tutup
+              </PressButton>
+            </div>
+            <div className="space-y-2.5 max-h-64 overflow-y-auto">
+              {[...historyTarget.priceHistory].reverse().map((h) => (
+                <div
+                  key={h.id}
+                  className="flex items-center justify-between rounded-2xl bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2.5 text-xs"
+                >
+                  <div>
+                    <div className="font-semibold">{formatShortDate(h.date)}</div>
+                    <div className="text-[#52605a] dark:text-slate-400">{h.note}</div>
+                  </div>
+                  <div className="font-bold tabular-nums text-sm">
+                    {formatIDR(h.pricePerUnit)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </PointerCard>
+        </div>
+      )}
+    </div>
+  );
+};
