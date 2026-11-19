@@ -41,7 +41,7 @@ export const IngredientInventory: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Inventaris Bahan Baku</h1>
-          <p className="text-sm text-[#52605a] dark:text-slate-400 mt-0.5">
+          <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
             Kelola stok, batas minimum (reorder point), dan riwayat pergerakan harga beli.
           </p>
         </div>
@@ -62,7 +62,7 @@ export const IngredientInventory: React.FC = () => {
                 value={newIngName}
                 onChange={(e) => setNewIngName(e.target.value)}
                 placeholder="mis. Sirup Pandan"
-                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2 text-sm"
+                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2 text-sm"
               />
             </div>
             <div>
@@ -70,7 +70,7 @@ export const IngredientInventory: React.FC = () => {
               <select
                 value={newIngUnit}
                 onChange={(e) => setNewIngUnit(e.target.value as Ingredient['unit'])}
-                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3 py-2 text-sm"
+                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3 py-2 text-sm"
               >
                 <option value="kg">kg</option>
                 <option value="liter">liter</option>
@@ -86,7 +86,7 @@ export const IngredientInventory: React.FC = () => {
                 min={1}
                 value={newIngPrice}
                 onChange={(e) => setNewIngPrice(Number(e.target.value))}
-                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3 py-2 text-sm tabular-nums"
+                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3 py-2 text-sm tabular-nums"
               />
             </div>
             <div>
@@ -97,14 +97,14 @@ export const IngredientInventory: React.FC = () => {
                   step="0.1"
                   value={newIngStock}
                   onChange={(e) => setNewIngStock(Number(e.target.value))}
-                  className="w-1/2 rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-2.5 py-2 text-sm tabular-nums"
+                  className="w-1/2 rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-2.5 py-2 text-sm tabular-nums"
                 />
                 <input
                   type="number"
                   step="0.1"
                   value={newIngMin}
                   onChange={(e) => setNewIngMin(Number(e.target.value))}
-                  className="w-1/2 rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-2.5 py-2 text-sm tabular-nums"
+                  className="w-1/2 rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-2.5 py-2 text-sm tabular-nums"
                 />
               </div>
             </div>
@@ -115,11 +115,11 @@ export const IngredientInventory: React.FC = () => {
                 value={newIngSupplier}
                 onChange={(e) => setNewIngSupplier(e.target.value)}
                 placeholder="Supplier Lokal"
-                className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2 text-sm"
+                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2 text-sm"
               />
             </div>
             <div>
-              <PressButton type="submit" variant="mint" className="w-full">
+              <PressButton type="submit" variant="accent" className="w-full">
                 Simpan Bahan
               </PressButton>
             </div>
@@ -129,7 +129,8 @@ export const IngredientInventory: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {ingredients.map((ing) => {
-          const isLow = ing.stock <= ing.minStock;
+          const isOut = ing.stock <= 0;
+          const isLow = ing.stock > 0 && ing.stock <= ing.minStock;
           const prevPrice =
             ing.priceHistory.length >= 2
               ? ing.priceHistory[ing.priceHistory.length - 2].pricePerUnit
@@ -143,41 +144,48 @@ export const IngredientInventory: React.FC = () => {
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h2 className="font-bold text-base">{ing.name}</h2>
-                    <div className="text-xs text-[#52605a] dark:text-slate-400">
+                    <div className="text-xs text-[#6B7280] dark:text-[#94A3B8]">
                       {ing.supplier}
                     </div>
                   </div>
-                  {isLow ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300">
+                  {isOut ? (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#FEE2E2] text-[#DC2626] dark:bg-[#7F1D1D] dark:text-[#F87171]">
                       <AlertCircle className="w-3 h-3" />
-                      Perlu Restok
+                      Stok Habis
+                    </span>
+                  ) : isLow ? (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#FEF3C7] text-[#D97706] dark:bg-[#78350F] dark:text-[#FBBF24]">
+                      <AlertCircle className="w-3 h-3" />
+                      Stok Menipis
                     </span>
                   ) : (
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#7bdc93]/25 text-[#1f4d3d] dark:text-[#7bdc93]">
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#DCFCE7] text-[#16A34A] dark:bg-[#14532D] dark:text-[#22C55E]">
                       Stok Aman
                     </span>
                   )}
                 </div>
 
-                <div className="mt-4 grid grid-cols-2 gap-3 rounded-2xl bg-[#f8faf9] dark:bg-slate-800/70 p-3.5">
+                <div className="mt-4 grid grid-cols-2 gap-3 rounded-2xl bg-[#F3F4F6] dark:bg-[#0F172A] border border-transparent dark:border-[#334155] p-3.5">
                   <div>
-                    <div className="text-[11px] text-[#52605a] dark:text-slate-400">Stok Saat Ini</div>
+                    <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8]">Stok Saat Ini</div>
                     <div className="text-lg font-bold tabular-nums">
                       {ing.stock} <span className="text-xs font-normal">{ing.unit}</span>
                     </div>
-                    <div className="text-[11px] text-[#52605a] dark:text-slate-400">
+                    <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8]">
                       Min: {ing.minStock} {ing.unit}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[11px] text-[#52605a] dark:text-slate-400">Harga Beli</div>
+                    <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8]">Harga Beli</div>
                     <div className="text-lg font-bold tabular-nums">
                       {formatIDR(ing.pricePerUnit)}
                     </div>
                     {priceDiffPct !== 0 && (
                       <div
                         className={`text-[11px] font-semibold flex items-center gap-1 ${
-                          priceDiffPct > 0 ? 'text-rose-600' : 'text-emerald-600'
+                          priceDiffPct > 0
+                            ? 'text-[#D97706] dark:text-[#FBBF24]'
+                            : 'text-[#16A34A] dark:text-[#22C55E]'
                         }`}
                       >
                         <TrendingUp className="w-3 h-3" />
@@ -196,11 +204,11 @@ export const IngredientInventory: React.FC = () => {
                     step={500}
                     value={newPrice}
                     onChange={(e) => setNewPrice(Math.max(0, Number(e.target.value)))}
-                    className="flex-1 rounded-xl border border-[#2c5f4e]/25 px-3 py-1.5 text-sm tabular-nums bg-white dark:bg-slate-900"
+                    className="flex-1 rounded-xl border border-[#CCE5DF] dark:border-[#334155] px-3 py-1.5 text-sm tabular-nums bg-[#FAF9F6] dark:bg-[#0F172A]"
                   />
                   <PressButton
                     size="sm"
-                    variant="mint"
+                    variant="accent"
                     onClick={() => {
                       updateIngredientPrice(ing.id, newPrice);
                       setPriceEditId(null);
@@ -216,7 +224,7 @@ export const IngredientInventory: React.FC = () => {
                 <div className="flex items-center gap-2 flex-wrap">
                   <PressButton
                     size="sm"
-                    variant="primary"
+                    variant={isLow || isOut ? 'accent' : 'primary'}
                     onClick={() => restockIngredient(ing.id, ing.unit === 'pcs' ? 100 : 5)}
                   >
                     + Restok ({ing.unit === 'pcs' ? '100' : '5'} {ing.unit})
@@ -248,12 +256,12 @@ export const IngredientInventory: React.FC = () => {
 
       {/* Price History Modal */}
       {historyTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
           <PointerCard className="w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="font-bold text-base">Riwayat Harga: {historyTarget.name}</h3>
-                <p className="text-xs text-[#52605a] dark:text-slate-400">
+                <p className="text-xs text-[#6B7280] dark:text-[#94A3B8]">
                   Satuan per {historyTarget.unit}
                 </p>
               </div>
@@ -265,11 +273,11 @@ export const IngredientInventory: React.FC = () => {
               {[...historyTarget.priceHistory].reverse().map((h) => (
                 <div
                   key={h.id}
-                  className="flex items-center justify-between rounded-2xl bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2.5 text-xs"
+                  className="flex items-center justify-between rounded-2xl bg-[#F3F4F6] dark:bg-[#0F172A] border border-transparent dark:border-[#334155] px-3.5 py-2.5 text-xs"
                 >
                   <div>
                     <div className="font-semibold">{formatShortDate(h.date)}</div>
-                    <div className="text-[#52605a] dark:text-slate-400">{h.note}</div>
+                    <div className="text-[#6B7280] dark:text-[#94A3B8]">{h.note}</div>
                   </div>
                   <div className="font-bold tabular-nums text-sm">
                     {formatIDR(h.pricePerUnit)}

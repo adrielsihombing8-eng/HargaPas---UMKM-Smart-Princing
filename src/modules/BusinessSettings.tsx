@@ -18,11 +18,14 @@ const REGIONS: MarketRegion[] = [
 export const BusinessSettings: React.FC = () => {
   const { settings, updateSettings, resetToSeed, showToast } = useHargaPas();
 
+  const inputClass =
+    'w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm';
+
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Pengaturan Usaha</h1>
-        <p className="text-sm text-[#52605a] dark:text-slate-400 mt-0.5">
+        <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
           Sesuaikan profil UMKM, batas aman margin, dan preferensi tampilan aplikasi.
         </p>
       </div>
@@ -32,25 +35,25 @@ export const BusinessSettings: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-[#52605a] dark:text-slate-400 mb-1.5">
+            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
               Nama Usaha
             </label>
             <input
               type="text"
               value={settings.businessName}
               onChange={(e) => updateSettings({ businessName: e.target.value })}
-              className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2.5 text-sm"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#52605a] dark:text-slate-400 mb-1.5">
+            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
               Kategori Bisnis
             </label>
             <select
               value={settings.category}
               onChange={(e) => updateSettings({ category: e.target.value as BusinessCategory })}
-              className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2.5 text-sm"
+              className={inputClass}
             >
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>
@@ -61,13 +64,13 @@ export const BusinessSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#52605a] dark:text-slate-400 mb-1.5">
+            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
               Wilayah Usaha (Benchmark Pasar)
             </label>
             <select
               value={settings.region}
               onChange={(e) => updateSettings({ region: e.target.value as MarketRegion })}
-              className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2.5 text-sm"
+              className={inputClass}
             >
               {REGIONS.map((r) => (
                 <option key={r} value={r}>
@@ -78,7 +81,7 @@ export const BusinessSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#52605a] dark:text-slate-400 mb-1.5">
+            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
               Target Omzet Bulanan (Rp)
             </label>
             <input
@@ -88,12 +91,12 @@ export const BusinessSettings: React.FC = () => {
               onChange={(e) =>
                 updateSettings({ monthlyRevenueTarget: Math.max(0, Number(e.target.value)) })
               }
-              className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2.5 text-sm tabular-nums"
+              className={`${inputClass} tabular-nums`}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#52605a] dark:text-slate-400 mb-1.5">
+            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
               Target Laba Bersih Bulanan (Rp)
             </label>
             <input
@@ -103,7 +106,7 @@ export const BusinessSettings: React.FC = () => {
               onChange={(e) =>
                 updateSettings({ monthlyProfitTarget: Math.max(0, Number(e.target.value)) })
               }
-              className="w-full rounded-2xl border border-[#2c5f4e]/15 dark:border-slate-700 bg-[#f8faf9] dark:bg-slate-800 px-3.5 py-2.5 text-sm tabular-nums"
+              className={`${inputClass} tabular-nums`}
             />
           </div>
         </div>
@@ -111,7 +114,7 @@ export const BusinessSettings: React.FC = () => {
         <div className="pt-2">
           <div className="flex justify-between text-xs font-medium mb-2">
             <span>Ambang Batas Toleransi Margin Aman (%)</span>
-            <span className="font-bold text-[#2c5f4e] dark:text-[#7bdc93] tabular-nums">
+            <span className="font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
               {settings.marginThreshold}%
             </span>
           </div>
@@ -123,7 +126,7 @@ export const BusinessSettings: React.FC = () => {
             onChange={(e) => updateSettings({ marginThreshold: Number(e.target.value) })}
             className="w-full mint-slider"
           />
-          <p className="text-xs text-[#52605a] dark:text-slate-400 mt-1.5">
+          <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] mt-1.5">
             Produk dengan margin di bawah nilai ini akan memicu Peringatan Cerdas di Dashboard.
           </p>
         </div>
@@ -139,18 +142,18 @@ export const BusinessSettings: React.FC = () => {
       </PointerCard>
 
       <PointerCard className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
+        <div className="min-w-0 flex-1">
           <h3 className="text-sm font-bold">Mode Tampilan & Data Lokal</h3>
-          <p className="text-xs text-[#52605a] dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
             Ganti tema terang/gelap atau kembalikan data dummy ke kondisi awal.
           </p>
         </div>
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap shrink-0">
           <PressButton
             variant="secondary"
             onClick={() => updateSettings({ darkMode: !settings.darkMode })}
           >
-            {settings.darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {settings.darkMode ? <Sun className="w-4 h-4 text-[#FDE68A]" /> : <Moon className="w-4 h-4" />}
             {settings.darkMode ? 'Mode Terang' : 'Mode Gelap'}
           </PressButton>
           <PressButton variant="danger" onClick={resetToSeed}>

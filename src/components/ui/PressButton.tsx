@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 
 interface PressButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'mint' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'mint' | 'accent' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -29,15 +29,17 @@ export const PressButton: React.FC<PressButtonProps> = ({
 
   const variantClasses: Record<NonNullable<PressButtonProps['variant']>, string> = {
     primary:
-      'bg-[#2c5f4e] text-white hover:bg-[#234d3f] shadow-sm shadow-[#2c5f4e]/20',
+      'bg-[#5EEAD4] dark:bg-[#14B8A6] text-[#0F172A] font-semibold hover:bg-[#2DD4BF] dark:hover:bg-[#2DD4BF] shadow-sm shadow-[#0D9488]/15',
+    accent:
+      'bg-[#CCFBF1] dark:bg-[#5EEAD4] text-[#0F766E] dark:text-[#0F172A] font-semibold hover:bg-[#99F6E4] dark:hover:bg-[#99F6E4] shadow-sm shadow-[#0D9488]/10',
     mint:
-      'bg-[#7bdc93] text-[#030213] font-semibold hover:bg-[#6ad284] shadow-sm shadow-[#7bdc93]/25',
+      'bg-[#CCFBF1] dark:bg-[#5EEAD4] text-[#0F766E] dark:text-[#0F172A] font-semibold hover:bg-[#99F6E4] dark:hover:bg-[#99F6E4] shadow-sm shadow-[#0D9488]/10',
     secondary:
-      'bg-white dark:bg-slate-800 text-[#030213] dark:text-slate-100 border border-[#2c5f4e]/15 dark:border-slate-700 hover:bg-[#f1f6f3] dark:hover:bg-slate-700',
+      'bg-[#E3F3F0] dark:bg-[#1E293B] text-[#134E4A] dark:text-[#CBD5E1] border border-[#CCE5DF] dark:border-[#334155] hover:bg-[#CCFBF1] dark:hover:bg-[#334155]',
     ghost:
-      'bg-transparent text-[#2c5f4e] dark:text-[#7bdc93] hover:bg-[#2c5f4e]/8 dark:hover:bg-[#7bdc93]/10',
+      'bg-transparent text-[#0D9488] dark:text-[#5EEAD4] hover:bg-[#CCFBF1]/70 dark:hover:bg-[#115E59]/70',
     danger:
-      'bg-rose-600 text-white hover:bg-rose-700 shadow-sm shadow-rose-600/20',
+      'bg-[#FFE4E6] dark:bg-[#7F1D1D] text-[#BE123C] dark:text-[#FDA4AF] font-semibold hover:bg-[#FECDD3] dark:hover:bg-[#991B1B]',
   };
 
   const sizeClasses: Record<NonNullable<PressButtonProps['size']>, string> = {
@@ -50,7 +52,7 @@ export const PressButton: React.FC<PressButtonProps> = ({
     <button
       ref={ref}
       onPointerMove={handlePointerMove}
-      className={`btn-press pointer-track inline-flex items-center justify-center gap-2 font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`btn-press pointer-track inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...rest}
     >
       {children}

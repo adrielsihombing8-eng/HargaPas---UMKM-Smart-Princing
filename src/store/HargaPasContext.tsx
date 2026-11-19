@@ -90,8 +90,10 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const root = document.documentElement;
     if (state.settings.darkMode) {
       root.classList.add('dark');
+      root.setAttribute('data-theme', 'dark');
     } else {
       root.classList.remove('dark');
+      root.setAttribute('data-theme', 'light');
     }
   }, [state.settings.darkMode]);
 

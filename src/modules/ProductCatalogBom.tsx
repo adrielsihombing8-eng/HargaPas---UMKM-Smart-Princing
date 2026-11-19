@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
+import { Calculator, ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
 import { useHargaPas } from '../store/HargaPasContext';
 import {
   calculateMarginPercent,
@@ -11,7 +11,11 @@ import { formatIDR, formatPercent } from '../utils/format';
 import { PointerCard } from '../components/ui/PointerCard';
 import { PressButton } from '../components/ui/PressButton';
 
-export const ProductCatalogBom: React.FC = () => {
+interface ProductCatalogBomProps {
+  onEditHpp?: (productId: string) => void;
+}
+
+export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp }) => {
   const { products, ingredients, settings, updateProduct, deleteProduct } = useHargaPas();
   const [expandedId, setExpandedId] = useState<string | null>(products[0]?.id ?? null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -21,7 +25,7 @@ export const ProductCatalogBom: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Katalog Produk & Resep (BOM)</h1>
-        <p className="text-sm text-[#52605a] dark:text-slate-400 mt-0.5">
+        <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
           Pantau status margin setiap menu dan rincian takaran bahan baku per porsi.
         </p>
       </div>
@@ -36,10 +40,10 @@ export const ProductCatalogBom: React.FC = () => {
 
           const statusStyle =
             status === 'aman'
-              ? 'bg-[#7bdc93]/25 text-[#1f4d3d] dark:text-[#7bdc93]'
+              ? 'bg-[#DCFCE7] text-[#16A34A] dark:bg-[#14532D] dark:text-[#22C55E]'
               : status === 'waspada'
-              ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300'
-              : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300';
+              ? 'bg-[#FEF3C7] text-[#D97706] dark:bg-[#78350F] dark:text-[#FBBF24]'
+              : 'bg-[#FEE2E2] text-[#DC2626] dark:bg-[#7F1D1D] dark:text-[#F87171]';
 
           const statusLabel =
             status === 'aman' ? 'Margin Aman' : status === 'waspada' ? 'Margin Waspada' : 'Margin Kritis';
@@ -50,20 +54,20 @@ export const ProductCatalogBom: React.FC = () => {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <h2 className="text-base font-bold">{product.name}</h2>
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#2c5f4e]/10 dark:bg-slate-800 text-[#2c5f4e] dark:text-slate-300 font-medium">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#99F6E4] font-medium">
                       {product.category}
                     </span>
                     <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${statusStyle}`}>
                       {statusLabel} ({formatPercent(margin)})
                     </span>
                   </div>
-                  <div className="text-xs text-[#52605a] dark:text-slate-400 flex flex-wrap gap-x-4 gap-y-1">
+                  <div className="text-xs text-[#6B7280] dark:text-[#94A3B8] flex flex-wrap gap-x-4 gap-y-1">
                     <span>
-                      HPP: <strong className="text-[#030213] dark:text-white tabular-nums">{formatIDR(hpp)}</strong>
+                      HPP: <strong className="text-[#134E4A] dark:text-[#CBD5E1] tabular-nums">{formatIDR(hpp)}</strong>
                     </span>
                     <span>
                       Harga Jual:{' '}
-                      <strong className="text-[#2c5f4e] dark:text-[#7bdc93] tabular-nums">
+                      <strong className="text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
                         {formatIDR(product.sellingPrice)}
                       </strong>
                     </span>
@@ -82,11 +86,11 @@ export const ProductCatalogBom: React.FC = () => {
                         step={500}
                         value={editPrice}
                         onChange={(e) => setEditPrice(Math.max(0, Number(e.target.value)))}
-                        className="w-28 rounded-xl border border-[#2c5f4e]/25 px-3 py-1.5 text-sm tabular-nums bg-white dark:bg-slate-800"
+                        className="w-28 rounded-xl border border-[#CCE5DF] dark:border-[#334155] px-3 py-1.5 text-sm tabular-nums bg-[#FAF9F6] dark:bg-[#0F172A]"
                       />
                       <PressButton
                         size="sm"
-                        variant="mint"
+                        variant="accent"
                         onClick={() => {
                           updateProduct({ ...product, sellingPrice: editPrice });
                           setEditingId(null);
@@ -116,6 +120,17 @@ export const ProductCatalogBom: React.FC = () => {
                     </PressButton>
                   )}
 
+                  {onEditHpp && (
+                    <PressButton
+                      size="sm"
+                      variant="primary"
+                      onClick={() => onEditHpp(product.id)}
+                    >
+                      <Calculator className="w-3.5 h-3.5" />
+                      Edit HPP
+                    </PressButton>
+                  )}
+
                   <PressButton
                     size="sm"
                     variant="ghost"
@@ -131,7 +146,7 @@ export const ProductCatalogBom: React.FC = () => {
 
                   <button
                     onClick={() => deleteProduct(product.id)}
-                    className="p-2 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 btn-press cursor-pointer"
+                    className="p-2 rounded-xl text-[#DC2626] dark:text-[#F87171] hover:bg-[#FEE2E2] dark:hover:bg-[#7F1D1D]/50 btn-press cursor-pointer"
                     aria-label="Hapus produk"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -140,21 +155,21 @@ export const ProductCatalogBom: React.FC = () => {
               </div>
 
               {isExpanded && (
-                <div className="mt-5 pt-4 border-t border-[#2c5f4e]/10 dark:border-slate-800">
-                  <div className="text-xs font-semibold text-[#52605a] dark:text-slate-400 mb-3">
+                <div className="mt-5 pt-4 border-t border-[#E5E7EB] dark:border-[#334155]">
+                  <div className="text-xs font-semibold text-[#6B7280] dark:text-[#94A3B8] mb-3">
                     Komposisi Bill of Materials (BOM) per 1 Porsi
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs">
                       <thead>
-                        <tr className="text-left text-[#52605a] dark:text-slate-400 border-b border-[#2c5f4e]/10 dark:border-slate-800">
+                        <tr className="text-left text-[#6B7280] dark:text-[#94A3B8] border-b border-[#E5E7EB] dark:border-[#334155]">
                           <th className="pb-2 font-medium">Bahan Baku</th>
                           <th className="pb-2 font-medium">Takaran</th>
                           <th className="pb-2 font-medium">Harga Satuan</th>
                           <th className="pb-2 font-medium text-right">Biaya / Porsi</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#2c5f4e]/5 dark:divide-slate-800/60">
+                      <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#334155]">
                         {product.bom.map((item) => {
                           const ing = ingredients.find((i) => i.id === item.ingredientId);
                           if (!ing) return null;
@@ -174,7 +189,7 @@ export const ProductCatalogBom: React.FC = () => {
                             </tr>
                           );
                         })}
-                        <tr className="bg-[#f8faf9] dark:bg-slate-800/40">
+                        <tr className="bg-[#E3F3F0] dark:bg-[#0F172A]/60">
                           <td className="py-2 font-medium" colSpan={3}>
                             Subtotal Bahan Baku
                           </td>
@@ -183,7 +198,7 @@ export const ProductCatalogBom: React.FC = () => {
                           </td>
                         </tr>
                         <tr>
-                          <td className="py-2 text-[#52605a] dark:text-slate-400" colSpan={3}>
+                          <td className="py-2 text-[#6B7280] dark:text-[#94A3B8]" colSpan={3}>
                             Tenaga Kerja + Operasional per Porsi
                           </td>
                           <td className="py-2 text-right tabular-nums">

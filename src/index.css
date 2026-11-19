@@ -3,26 +3,67 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --bg-main: #f8faf9;
-  --bg-card: #ffffff;
-  --text-primary: #030213;
-  --text-secondary: #52605a;
-  --sidebar-bg: #2c5f4e;
-  --sidebar-accent: #3a6b5a;
-  --primary-mint: #7bdc93;
-  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 4px 10px -4px rgba(0, 0, 0, 0.02);
-  --shadow-lift: 0 18px 36px -10px rgba(44, 95, 78, 0.12), 0 6px 16px -6px rgba(0, 0, 0, 0.04);
+  /* Brand Colors: Hijau Tosca + Pastel */
+  --color-primary: #0D9488;
+  --color-primary-dark: #0F766E;
+  --color-primary-soft: #CCFBF1;
+  --color-accent: #99F6E4;
+  --color-accent-warm: #FDE68A;
+  --color-accent-soft: #F0FDFA;
+
+  /* Neutrals & Surfaces */
+  --bg-main: #FAF9F6;
+  --bg-surface: #EFF9F7;
+  --bg-subtle: #E3F3F0;
+  --border-color: #CCE5DF;
+  --text-primary: #134E4A;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+
+  /* Semantic Status (Pastel) */
+  --status-success: #15803D;
+  --status-success-bg: #DCFCE7;
+  --status-warning: #B45309;
+  --status-warning-bg: #FEF3C7;
+  --status-danger: #BE123C;
+  --status-danger-bg: #FFE4E6;
+  --status-info: #0369A1;
+  --status-info-bg: #E0F2FE;
+
+  /* Elevation & Motion */
+  --shadow-soft: 0 10px 25px -5px rgba(13, 148, 136, 0.06), 0 4px 10px -4px rgba(0, 0, 0, 0.02);
+  --shadow-lift: 0 18px 36px -10px rgba(13, 148, 136, 0.13), 0 6px 16px -6px rgba(0, 0, 0, 0.04);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.dark {
-  --bg-main: #0f172a;
-  --bg-card: #162033;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.35), 0 4px 10px -4px rgba(0, 0, 0, 0.25);
-  --shadow-lift: 0 18px 36px -10px rgba(0, 0, 0, 0.5);
+/* Dark Mode Override */
+.dark,
+[data-theme="dark"] {
+  --color-primary: #14B8A6;
+  --color-primary-dark: #0D9488;
+  --color-primary-soft: #115E59;
+  --color-accent: #5EEAD4;
+  --color-accent-warm: #FDE68A;
+  --color-accent-soft: #134E4A;
+
+  --bg-main: #0F172A;
+  --bg-surface: #1E293B;
+  --bg-subtle: #162235;
+  --border-color: #334155;
+  --text-primary: #CBD5E1;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  --status-success: #4ADE80;
+  --status-success-bg: #14532D;
+  --status-warning: #FDE68A;
+  --status-warning-bg: #78350F;
+  --status-danger: #FDA4AF;
+  --status-danger-bg: #7F1D1D;
+
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 4px 10px -4px rgba(0, 0, 0, 0.25);
+  --shadow-lift: 0 18px 36px -10px rgba(0, 0, 0, 0.55);
 }
 
 * {
@@ -51,15 +92,11 @@ body {
 
 /* Card lift & soft shadow */
 .card-surface {
-  background-color: var(--bg-card);
+  background-color: var(--bg-surface);
   border-radius: 1.5rem; /* rounded-3xl */
   box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(44, 95, 78, 0.07);
-  transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), border-color 200ms var(--ease-out);
-}
-
-.dark .card-surface {
-  border-color: rgba(123, 220, 147, 0.1);
+  border: 1px solid var(--border-color);
+  transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), border-color 200ms var(--ease-out), background-color 220ms var(--ease-out);
 }
 
 .card-lift:hover {
@@ -82,7 +119,7 @@ body {
   transition: opacity 180ms var(--ease-out);
   background: radial-gradient(
     240px circle at var(--px, 50%) var(--py, 50%),
-    rgba(123, 220, 147, 0.14),
+    rgba(153, 246, 228, 0.18),
     transparent 70%
   );
 }
@@ -105,18 +142,14 @@ body {
   transition: transform 340ms var(--ease-spring), height 260ms var(--ease-out), opacity 180ms var(--ease-out);
 }
 
-/* Custom range slider */
+/* Custom range slider: Hijau Tosca + Pastel Mint ring */
 input[type='range'].mint-slider {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
   border-radius: 9999px;
-  background: #e2ebe6;
+  background: var(--border-color);
   outline: none;
-}
-
-.dark input[type='range'].mint-slider {
-  background: #24334d;
 }
 
 input[type='range'].mint-slider::-webkit-slider-thumb {
@@ -125,10 +158,10 @@ input[type='range'].mint-slider::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   border-radius: 9999px;
-  background: #2c5f4e;
-  border: 3px solid #7bdc93;
+  background: var(--color-primary);
+  border: 3px solid var(--color-primary-soft);
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.25);
   transition: transform 140ms var(--ease-out);
 }
 

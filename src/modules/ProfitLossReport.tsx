@@ -20,7 +20,6 @@ export const ProfitLossReport: React.FC = () => {
     const labaBersih = labaKotor - bebanOperasional;
     const netMarginPct = omzet > 0 ? (labaBersih / omzet) * 100 : 0;
 
-    // Breakdown by product
     const byProduct = new Map<
       string,
       { name: string; qty: number; revenue: number; hpp: number; profit: number }
@@ -56,7 +55,7 @@ export const ProfitLossReport: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Laporan Laba / Rugi Sederhana</h1>
-          <p className="text-sm text-[#52605a] dark:text-slate-400 mt-0.5">
+          <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
             Rekapitulasi performa keuangan {settings.businessName} periode berjalan.
           </p>
         </div>
@@ -67,7 +66,7 @@ export const ProfitLossReport: React.FC = () => {
       </div>
 
       <PointerCard className="p-6 max-w-3xl">
-        <div className="flex items-center gap-2 text-xs font-semibold text-[#2c5f4e] dark:text-[#7bdc93] mb-4">
+        <div className="flex items-center gap-2 text-xs font-semibold text-[#0D9488] dark:text-[#14B8A6] mb-4">
           <FileSpreadsheet className="w-4 h-4" />
           IKHTISAR LABA / RUGI
         </div>
@@ -77,25 +76,25 @@ export const ProfitLossReport: React.FC = () => {
             <span className="font-medium">Pendapatan Penjualan (Omzet)</span>
             <span className="font-bold tabular-nums">{formatIDR(report.omzet)}</span>
           </div>
-          <div className="flex justify-between py-2 text-rose-600 dark:text-rose-400">
+          <div className="flex justify-between py-2 text-[#DC2626] dark:text-[#F87171]">
             <span>Harga Pokok Penjualan (HPP Terpakai)</span>
             <span className="font-semibold tabular-nums">-{formatIDR(report.hppTerpakai)}</span>
           </div>
-          <div className="flex justify-between py-3 border-t border-b border-[#2c5f4e]/15 dark:border-slate-700 font-bold">
+          <div className="flex justify-between py-3 border-t border-b border-[#CCE5DF] dark:border-[#334155] font-bold">
             <span>Laba Kotor (Gross Profit)</span>
-            <span className="tabular-nums text-[#2c5f4e] dark:text-[#7bdc93]">
+            <span className="tabular-nums text-[#0D9488] dark:text-[#14B8A6]">
               {formatIDR(report.labaKotor)}
             </span>
           </div>
-          <div className="flex justify-between py-2 text-rose-600 dark:text-rose-400">
+          <div className="flex justify-between py-2 text-[#DC2626] dark:text-[#F87171]">
             <span>Beban Operasional & Sewa</span>
             <span className="font-semibold tabular-nums">
               -{formatIDR(report.bebanOperasional)}
             </span>
           </div>
-          <div className="flex justify-between p-4 rounded-2xl bg-[#2c5f4e] text-white font-bold text-base mt-2">
+          <div className="flex justify-between p-4 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#99F6E4] border border-[#99F6E4] dark:border-[#0D9488]/40 font-bold text-base mt-2">
             <span>Laba Bersih (Net Profit)</span>
-            <span className="text-[#7bdc93] tabular-nums">
+            <span className="text-[#0F172A] dark:text-[#5EEAD4] tabular-nums">
               {formatIDR(report.labaBersih)} ({formatPercent(report.netMarginPct)})
             </span>
           </div>
@@ -107,7 +106,7 @@ export const ProfitLossReport: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs text-[#52605a] dark:text-slate-400 border-b border-[#2c5f4e]/10 dark:border-slate-800">
+              <tr className="text-left text-xs text-[#6B7280] dark:text-[#94A3B8] border-b border-[#E5E7EB] dark:border-[#334155]">
                 <th className="pb-3 font-medium">Produk</th>
                 <th className="pb-3 font-medium text-right">Terjual</th>
                 <th className="pb-3 font-medium text-right">Omzet</th>
@@ -115,16 +114,16 @@ export const ProfitLossReport: React.FC = () => {
                 <th className="pb-3 font-medium text-right">Laba Kotor</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2c5f4e]/5 dark:divide-slate-800">
+            <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#334155]">
               {report.productRows.map((row) => (
                 <tr key={row.name}>
                   <td className="py-3 font-semibold">{row.name}</td>
                   <td className="py-3 text-right tabular-nums">{row.qty} porsi</td>
                   <td className="py-3 text-right tabular-nums">{formatIDR(row.revenue)}</td>
-                  <td className="py-3 text-right tabular-nums text-[#52605a] dark:text-slate-400">
+                  <td className="py-3 text-right tabular-nums text-[#6B7280] dark:text-[#94A3B8]">
                     {formatIDR(row.hpp)}
                   </td>
-                  <td className="py-3 text-right font-bold tabular-nums text-[#2c5f4e] dark:text-[#7bdc93]">
+                  <td className="py-3 text-right font-bold tabular-nums text-[#16A34A] dark:text-[#22C55E]">
                     {formatIDR(row.profit)}
                   </td>
                 </tr>
