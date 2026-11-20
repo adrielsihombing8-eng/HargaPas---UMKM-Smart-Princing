@@ -55,7 +55,7 @@ export const ProfitLossReport: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Laporan Laba / Rugi Sederhana</h1>
-          <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
+          <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
             Rekapitulasi performa keuangan {settings.businessName} periode berjalan.
           </p>
         </div>
@@ -66,7 +66,7 @@ export const ProfitLossReport: React.FC = () => {
       </div>
 
       <PointerCard className="p-6 max-w-3xl">
-        <div className="flex items-center gap-2 text-xs font-semibold text-[#0D9488] dark:text-[#14B8A6] mb-4">
+        <div className="flex items-center gap-2 text-xs font-semibold text-[#C68B59] dark:text-[#C68B59] mb-4">
           <FileSpreadsheet className="w-4 h-4" />
           IKHTISAR LABA / RUGI
         </div>
@@ -80,9 +80,9 @@ export const ProfitLossReport: React.FC = () => {
             <span>Harga Pokok Penjualan (HPP Terpakai)</span>
             <span className="font-semibold tabular-nums">-{formatIDR(report.hppTerpakai)}</span>
           </div>
-          <div className="flex justify-between py-3 border-t border-b border-[#CCE5DF] dark:border-[#334155] font-bold">
+          <div className="flex justify-between py-3 border-t border-b border-[#E2D3C1] dark:border-[#4E372B] font-bold">
             <span>Laba Kotor (Gross Profit)</span>
-            <span className="tabular-nums text-[#0D9488] dark:text-[#14B8A6]">
+            <span className="tabular-nums text-[#C68B59] dark:text-[#C68B59]">
               {formatIDR(report.labaKotor)}
             </span>
           </div>
@@ -92,9 +92,9 @@ export const ProfitLossReport: React.FC = () => {
               -{formatIDR(report.bebanOperasional)}
             </span>
           </div>
-          <div className="flex justify-between p-4 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#99F6E4] border border-[#99F6E4] dark:border-[#0D9488]/40 font-bold text-base mt-2">
+          <div className="flex justify-between p-4 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] border border-[#C68B59] dark:border-[#C68B59]/40 font-bold text-base mt-2">
             <span>Laba Bersih (Net Profit)</span>
-            <span className="text-[#0F172A] dark:text-[#5EEAD4] tabular-nums">
+            <span className="text-[#2B1B14] dark:text-[#C68B59] tabular-nums">
               {formatIDR(report.labaBersih)} ({formatPercent(report.netMarginPct)})
             </span>
           </div>
@@ -106,7 +106,7 @@ export const ProfitLossReport: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs text-[#6B7280] dark:text-[#94A3B8] border-b border-[#E5E7EB] dark:border-[#334155]">
+              <tr className="text-left text-xs text-[#5A4636] dark:text-[#D5C3B3] border-b border-[#E5E7EB] dark:border-[#4E372B]">
                 <th className="pb-3 font-medium">Produk</th>
                 <th className="pb-3 font-medium text-right">Terjual</th>
                 <th className="pb-3 font-medium text-right">Omzet</th>
@@ -114,13 +114,13 @@ export const ProfitLossReport: React.FC = () => {
                 <th className="pb-3 font-medium text-right">Laba Kotor</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#334155]">
+            <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#4E372B]">
               {report.productRows.map((row) => (
                 <tr key={row.name}>
                   <td className="py-3 font-semibold">{row.name}</td>
                   <td className="py-3 text-right tabular-nums">{row.qty} porsi</td>
                   <td className="py-3 text-right tabular-nums">{formatIDR(row.revenue)}</td>
-                  <td className="py-3 text-right tabular-nums text-[#6B7280] dark:text-[#94A3B8]">
+                  <td className="py-3 text-right tabular-nums text-[#5A4636] dark:text-[#D5C3B3]">
                     {formatIDR(row.hpp)}
                   </td>
                   <td className="py-3 text-right font-bold tabular-nums text-[#16A34A] dark:text-[#22C55E]">

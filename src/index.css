@@ -3,57 +3,59 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Brand Colors: Hijau Tosca + Pastel */
-  --color-primary: #0D9488;
-  --color-primary-dark: #0F766E;
-  --color-primary-soft: #CCFBF1;
-  --color-accent: #99F6E4;
-  --color-accent-warm: #FDE68A;
-  --color-accent-soft: #F0FDFA;
+  /* Brand Colors: Caffe Klasik (Hangat, Nuansa Kafe Penuh) */
+  --color-primary: #C68B59;       /* Caramel */
+  --color-primary-dark: #A8703F;  /* Toffee (Primary hover) */
+  --color-primary-soft: #EFE3D3;  /* Cappuccino */
+  --color-accent: #F4B9C8;        /* Pink donat (Aksen manis) */
+  --color-accent-warm: #EF7A5A;   /* Coral kentang (Aksen hangat) */
+  --color-accent-dark: #3E2A20;   /* Dark roast (Aksen gelap) */
+  --color-accent-soft: #FAF6F0;   /* Krem susu */
 
   /* Neutrals & Surfaces */
-  --bg-main: #FAF9F6;
-  --bg-surface: #EFF9F7;
-  --bg-subtle: #E3F3F0;
-  --border-color: #CCE5DF;
-  --text-primary: #134E4A;
-  --text-secondary: #4B5563;
-  --text-muted: #6B7280;
+  --bg-main: #FAF6F0;             /* Latar halaman: Krem susu */
+  --bg-surface: #FFFDF9;          /* Latar card: Foam */
+  --bg-subtle: #EFE3D3;           /* Latar section: Cappuccino */
+  --border-color: #E2D3C1;        /* Warm Cappuccino border */
+  --text-primary: #2B1B14;        /* Teks heading: Espresso */
+  --text-secondary: #5A4636;      /* Teks isi: Mocha */
+  --text-muted: #7C6655;          /* Muted Mocha */
 
-  /* Semantic Status (Pastel) */
+  /* Semantic Status (Warm Pastel) */
   --status-success: #15803D;
   --status-success-bg: #DCFCE7;
-  --status-warning: #B45309;
+  --status-warning: #A8703F;
   --status-warning-bg: #FEF3C7;
   --status-danger: #BE123C;
   --status-danger-bg: #FFE4E6;
-  --status-info: #0369A1;
-  --status-info-bg: #E0F2FE;
+  --status-info: #A8703F;
+  --status-info-bg: #EFE3D3;
 
   /* Elevation & Motion */
-  --shadow-soft: 0 10px 25px -5px rgba(13, 148, 136, 0.06), 0 4px 10px -4px rgba(0, 0, 0, 0.02);
-  --shadow-lift: 0 18px 36px -10px rgba(13, 148, 136, 0.13), 0 6px 16px -6px rgba(0, 0, 0, 0.04);
+  --shadow-soft: 0 10px 25px -5px rgba(62, 42, 32, 0.07), 0 4px 10px -4px rgba(43, 27, 20, 0.04);
+  --shadow-lift: 0 18px 36px -10px rgba(62, 42, 32, 0.14), 0 6px 16px -6px rgba(43, 27, 20, 0.06);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Dark Mode Override */
+/* Dark Mode Override (Espresso & Dark Roast Night Café) */
 .dark,
 [data-theme="dark"] {
-  --color-primary: #14B8A6;
-  --color-primary-dark: #0D9488;
-  --color-primary-soft: #115E59;
-  --color-accent: #5EEAD4;
-  --color-accent-warm: #FDE68A;
-  --color-accent-soft: #134E4A;
+  --color-primary: #C68B59;
+  --color-primary-dark: #A8703F;
+  --color-primary-soft: #3E2A20;
+  --color-accent: #F4B9C8;
+  --color-accent-warm: #EF7A5A;
+  --color-accent-dark: #2B1B14;
+  --color-accent-soft: #2B1B14;
 
-  --bg-main: #0F172A;
-  --bg-surface: #1E293B;
-  --bg-subtle: #162235;
-  --border-color: #334155;
-  --text-primary: #CBD5E1;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  --bg-main: #1B120D;
+  --bg-surface: #2B1B14;
+  --bg-subtle: #3E2A20;
+  --border-color: #4E372B;
+  --text-primary: #FAF6F0;
+  --text-secondary: #D5C3B3;
+  --text-muted: #A38D7B;
 
   --status-success: #4ADE80;
   --status-success-bg: #14532D;
@@ -62,8 +64,8 @@
   --status-danger: #FDA4AF;
   --status-danger-bg: #7F1D1D;
 
-  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 4px 10px -4px rgba(0, 0, 0, 0.25);
-  --shadow-lift: 0 18px 36px -10px rgba(0, 0, 0, 0.55);
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.45), 0 4px 10px -4px rgba(0, 0, 0, 0.3);
+  --shadow-lift: 0 18px 36px -10px rgba(0, 0, 0, 0.6);
 }
 
 * {
@@ -93,7 +95,7 @@ body {
 /* Card lift & soft shadow */
 .card-surface {
   background-color: var(--bg-surface);
-  border-radius: 1.5rem; /* rounded-3xl */
+  border-radius: 1.5rem;
   box-shadow: var(--shadow-soft);
   border: 1px solid var(--border-color);
   transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), border-color 200ms var(--ease-out), background-color 220ms var(--ease-out);
@@ -119,7 +121,7 @@ body {
   transition: opacity 180ms var(--ease-out);
   background: radial-gradient(
     240px circle at var(--px, 50%) var(--py, 50%),
-    rgba(153, 246, 228, 0.18),
+    rgba(198, 139, 89, 0.16),
     transparent 70%
   );
 }
@@ -128,7 +130,7 @@ body {
   opacity: 1;
 }
 
-/* Pressable button feedback (Emil Kowalski micro-interaction) */
+/* Pressable button feedback */
 .btn-press {
   transition: transform 120ms var(--ease-out), background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out), color 160ms var(--ease-out);
 }
@@ -142,7 +144,7 @@ body {
   transition: transform 340ms var(--ease-spring), height 260ms var(--ease-out), opacity 180ms var(--ease-out);
 }
 
-/* Custom range slider: Hijau Tosca + Pastel Mint ring */
+/* Custom range slider: Caramel + Cappuccino ring */
 input[type='range'].mint-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -161,12 +163,13 @@ input[type='range'].mint-slider::-webkit-slider-thumb {
   background: var(--color-primary);
   border: 3px solid var(--color-primary-soft);
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.25);
+  box-shadow: 0 2px 6px rgba(62, 42, 32, 0.25);
   transition: transform 140ms var(--ease-out);
 }
 
 input[type='range'].mint-slider::-webkit-slider-thumb:hover {
   transform: scale(1.12);
+  background: var(--color-primary-dark);
 }
 
 input[type='range'].mint-slider::-webkit-slider-thumb:active {

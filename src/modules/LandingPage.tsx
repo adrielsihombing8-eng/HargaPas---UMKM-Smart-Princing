@@ -146,38 +146,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
   }, [demoProduct, ingredients, demoMargin]);
 
   return (
-    <div className="relative min-h-screen bg-[#FAF9F6] dark:bg-[#0F172A] text-[#134E4A] dark:text-[#CBD5E1]">
-      {/* Organic River-Flowing Aurora Following Scroll */}
+    <div className="relative min-h-screen bg-[#FAF6F0] dark:bg-[#1B120D] text-[#2B1B14] dark:text-[#FAF6F0]">
+      {/* Organic River-Flowing Aurora Following Scroll (Caffe Klasik Palette) */}
       <RiverAurora darkMode={settings.darkMode} />
 
       {/* Sticky Top Navbar */}
-      <header className="sticky top-0 z-50 bg-[#FAF9F6]/85 dark:bg-[#0F172A]/85 backdrop-blur-md border-b border-[#CCE5DF] dark:border-[#334155]">
+      <header className="sticky top-0 z-50 bg-[#FAF6F0]/88 dark:bg-[#1B120D]/88 backdrop-blur-md border-b border-[#E2D3C1] dark:border-[#4E372B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-[#5EEAD4] dark:bg-[#14B8A6] text-[#0F172A] flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-2xl bg-[#C68B59] text-[#FFFDF9] flex items-center justify-center shadow-sm">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-bold text-base tracking-tight text-[#0F766E] dark:text-[#99F6E4]">
+              <div className="font-bold text-base tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                 HargaPas UMKM
               </div>
-              <div className="text-[11px] text-[#0D9488] dark:text-[#5EEAD4] font-medium">
+              <div className="text-[11px] text-[#A8703F] dark:text-[#C68B59] font-medium">
                 Smart Pricing & Simulasi Usaha
               </div>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold text-[#4B5563] dark:text-[#94A3B8]">
-            <a href="#simulasi" className="hover:text-[#0D9488] dark:hover:text-[#5EEAD4] transition-colors">
+          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold text-[#5A4636] dark:text-[#D5C3B3]">
+            <a href="#simulasi" className="hover:text-[#A8703F] dark:hover:text-[#C68B59] transition-colors">
               Simulasi Mini
             </a>
-            <a href="#masalah" className="hover:text-[#0D9488] dark:hover:text-[#5EEAD4] transition-colors">
+            <a href="#masalah" className="hover:text-[#A8703F] dark:hover:text-[#C68B59] transition-colors">
               Mengapa HargaPas
             </a>
-            <a href="#fitur" className="hover:text-[#0D9488] dark:hover:text-[#5EEAD4] transition-colors">
+            <a href="#fitur" className="hover:text-[#A8703F] dark:hover:text-[#C68B59] transition-colors">
               9+ Modul Utama
             </a>
-            <a href="#alur" className="hover:text-[#0D9488] dark:hover:text-[#5EEAD4] transition-colors">
+            <a href="#alur" className="hover:text-[#A8703F] dark:hover:text-[#C68B59] transition-colors">
               Cara Kerja
             </a>
           </nav>
@@ -185,7 +185,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           <div className="flex items-center gap-2.5 shrink-0">
             <button
               onClick={() => updateSettings({ darkMode: !settings.darkMode })}
-              className="p-2 rounded-2xl bg-[#EFF9F7] dark:bg-[#1E293B] border border-[#CCE5DF] dark:border-[#334155] text-[#0D9488] dark:text-[#5EEAD4] btn-press cursor-pointer"
+              className="p-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-[#A8703F] dark:text-[#C68B59] btn-press cursor-pointer"
               aria-label="Ganti mode warna"
               title={settings.darkMode ? 'Mode Terang' : 'Mode Gelap'}
             >
@@ -206,20 +206,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         </div>
       </header>
 
-      {/* Hero Section Band — Soft Mint (#CFEFE6) background ONLY for this section */}
-      <section className="relative bg-[#CFEFE6] dark:bg-[#132A2E] border-b border-[#B7E4D8]/80 dark:border-[#1E293B]">
+      {/* Hero Section Band — Latar Section Cappuccino (#EFE3D3) */}
+      <section className="relative bg-[#EFE3D3] dark:bg-[#2B1B14] border-b border-[#E2D3C1] dark:border-[#4E372B]">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-14 lg:pb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EFF9F7]/90 dark:bg-[#115E59]/90 border border-[#99F6E4] dark:border-[#14B8A6]/40 text-xs font-semibold text-[#0F766E] dark:text-[#99F6E4]">
-              <Layers className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFFDF9]/90 dark:bg-[#3E2A20]/90 border border-[#C68B59]/40 text-xs font-semibold text-[#A8703F] dark:text-[#FAF6F0]">
+              <Layers className="w-3.5 h-3.5 text-[#C68B59]" />
               Prototipe Interaktif • Data Dummy Lokal
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12] text-[#0F172A] dark:text-[#CBD5E1]">
+            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12] text-[#2B1B14] dark:text-[#FAF6F0]">
               Hitung HPP, jaga margin, dan tentukan harga jual UMKM tanpa tebak-tebakan.
             </h1>
 
-            <p className="text-sm sm:text-base text-[#1E3A3A] dark:text-[#94A3B8] leading-relaxed max-w-xl">
+            <p className="text-sm sm:text-base text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed max-w-xl">
               HargaPas UMKM menggabungkan kalkulator modal produksi (BOM), simulasi skenario
               laba, perhitungan harga marketplace, hingga kasir POS yang otomatis memotong stok
               bahan baku dalam satu dashboard yang ramah pemula.
@@ -236,40 +236,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               </PressButton>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#99E2D0] dark:border-[#334155]">
+            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#D8C5B0] dark:border-[#4E372B]">
               <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#0F766E] dark:text-[#5EEAD4] tabular-nums">
+                <div className="text-xl sm:text-2xl font-extrabold text-[#A8703F] dark:text-[#C68B59] tabular-nums">
                   10 Modul
                 </div>
-                <div className="text-xs text-[#2C5552] dark:text-[#94A3B8]">
+                <div className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                   Alur bisnis terintegrasi
                 </div>
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#0F766E] dark:text-[#5EEAD4] tabular-nums">
+                <div className="text-xl sm:text-2xl font-extrabold text-[#A8703F] dark:text-[#C68B59] tabular-nums">
                   Auto-BOM
                 </div>
-                <div className="text-xs text-[#2C5552] dark:text-[#94A3B8]">
+                <div className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                   Stok & HPP saling terhubung
                 </div>
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-extrabold text-[#0F766E] dark:text-[#5EEAD4] tabular-nums">
+                <div className="text-xl sm:text-2xl font-extrabold text-[#A8703F] dark:text-[#C68B59] tabular-nums">
                   4 Kanal
                 </div>
-                <div className="text-xs text-[#2C5552] dark:text-[#94A3B8]">
+                <div className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                   Simulasi komisi online
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Interactive 3D UMKM Culinary & Beverage Objects (Lazy-Loaded & GPU-Paused Offscreen) */}
+          {/* Interactive 3D UMKM Culinary & Beverage Objects */}
           <div className="lg:col-span-6">
             <Suspense
               fallback={
                 <div className="w-full h-[500px] sm:h-[580px] flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full border-4 border-[#99F6E4] border-t-[#0D9488] animate-spin" />
+                  <div className="w-12 h-12 rounded-full border-4 border-[#EFE3D3] border-t-[#C68B59] animate-spin" />
                 </div>
               }
             >
@@ -280,16 +280,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       </section>
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-28">
-        {/* Stacked Card Deck Sections (each lands cleanly over the previous one) */}
+        {/* Stacked Card Deck Sections (Latar Card Foam #FFFDF9) */}
         <div className="space-y-12 lg:space-y-20">
           {/* Card 01: Interactive Mini Price Simulator */}
           <StackedSection id="simulasi" index={0} label="SIMULASI MINI LANGSUNG">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
               <div className="lg:col-span-5 space-y-3">
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                   Uji Penetapan Harga Jual Secara Real-Time
                 </h2>
-                <p className="text-sm text-[#4B5563] dark:text-[#94A3B8] leading-relaxed">
+                <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed">
                   Pilih contoh menu UMKM, geser target margin laba, dan lihat langsung rekomendasi
                   harga offline, laba bersih per porsi, serta harga jual GoFood (+20%) tanpa
                   menggerus keuntungan.
@@ -303,7 +303,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               </div>
 
               <div className="lg:col-span-7 space-y-4">
-                <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155]">
+                <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[#EFE3D3] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B]">
                   {products.slice(0, 2).map((prod, idx) => {
                     const active = demoProdIdx === idx;
                     return (
@@ -313,8 +313,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                         onClick={() => setDemoProdIdx(idx)}
                         className={`btn-press py-2.5 px-3 rounded-xl text-xs font-semibold truncate cursor-pointer ${
                           active
-                            ? 'bg-[#99F6E4] dark:bg-[#14B8A6] text-[#0F172A] shadow-xs'
-                            : 'text-[#4B5563] dark:text-[#94A3B8] hover:text-[#134E4A]'
+                            ? 'bg-[#C68B59] text-[#FFFDF9] shadow-xs'
+                            : 'text-[#5A4636] dark:text-[#D5C3B3] hover:text-[#2B1B14] dark:hover:text-[#FAF6F0]'
                         }`}
                       >
                         {prod.name}
@@ -323,10 +323,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                   })}
                 </div>
 
-                <div className="rounded-2xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] p-4 space-y-3">
-                  <div className="flex items-center justify-between text-xs font-medium">
+                <div className="rounded-2xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-4 space-y-3">
+                  <div className="flex items-center justify-between text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3]">
                     <span>Target Margin Laba (%)</span>
-                    <span className="font-bold text-[#0F766E] dark:text-[#5EEAD4] tabular-nums text-sm">
+                    <span className="font-bold text-[#A8703F] dark:text-[#C68B59] tabular-nums text-sm">
                       {demoMargin}%
                     </span>
                   </div>
@@ -338,34 +338,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                     onChange={(e) => setDemoMargin(Number(e.target.value))}
                     className="w-full mint-slider"
                   />
-                  <div className="flex justify-between text-[11px] text-[#6B7280] dark:text-[#94A3B8]">
+                  <div className="flex justify-between text-[11px] text-[#5A4636] dark:text-[#D5C3B3]">
                     <span>HPP Modal / porsi: {formatIDR(demoCalc.baseHpp)}</span>
                     <span>Margin Aktual: {formatPercent(demoCalc.actualMargin)}</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] border border-[#99F6E4] dark:border-[#14B8A6]/30 p-3.5">
-                    <div className="text-[11px] text-[#0F766E] dark:text-[#99F6E4] font-medium">
+                  <div className="rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] border border-[#C68B59]/40 p-3.5">
+                    <div className="text-[11px] text-[#5A4636] dark:text-[#EFE3D3] font-medium">
                       Harga Jual Offline
                     </div>
-                    <div className="text-lg font-extrabold text-[#0F172A] dark:text-[#5EEAD4] tabular-nums mt-1">
+                    <div className="text-lg font-extrabold text-[#2B1B14] dark:text-[#FAF6F0] tabular-nums mt-1">
                       {formatIDR(demoCalc.sellingPrice)}
                     </div>
                   </div>
-                  <div className="rounded-2xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] p-3.5">
-                    <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8] font-medium">
+                  <div className="rounded-2xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-3.5">
+                    <div className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3] font-medium">
                       Laba / Porsi
                     </div>
                     <div className="text-lg font-extrabold text-[#15803D] dark:text-[#4ADE80] tabular-nums mt-1">
                       +{formatIDR(demoCalc.profitPerUnit)}
                     </div>
                   </div>
-                  <div className="rounded-2xl bg-[#FEF3C7]/85 dark:bg-[#78350F]/45 border border-[#FDE68A] dark:border-[#FDE68A]/30 p-3.5">
-                    <div className="text-[11px] text-[#92400E] dark:text-[#FDE68A] font-medium">
+                  <div className="rounded-2xl bg-[#EF7A5A]/15 dark:bg-[#EF7A5A]/20 border border-[#EF7A5A]/40 p-3.5">
+                    <div className="text-[11px] text-[#A8703F] dark:text-[#EF7A5A] font-medium">
                       Harga GoFood (+20%)
                     </div>
-                    <div className="text-lg font-extrabold text-[#92400E] dark:text-[#FDE68A] tabular-nums mt-1">
+                    <div className="text-lg font-extrabold text-[#2B1B14] dark:text-[#FAF6F0] tabular-nums mt-1">
                       {formatIDR(demoCalc.gofoodPrice)}
                     </div>
                   </div>
@@ -378,41 +378,47 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           <StackedSection id="masalah" index={1} label="MENGAPA HARGAPAS">
             <div className="space-y-6">
               <div className="max-w-2xl">
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                   Masalah Klasik UMKM yang Diselesaikan HargaPas
                 </h2>
-                <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-1">
+                <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-1">
                   Banyak usaha ramai pembeli, tetapi kas menipis karena harga jual belum memperhitungkan komponen biaya tersembunyi.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="rounded-3xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] p-6 space-y-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-[#FEF3C7] dark:bg-[#78350F] text-[#B45309] dark:text-[#FDE68A] flex items-center justify-center font-bold text-sm">
+                <div className="rounded-3xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-6 space-y-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-[#EF7A5A]/20 text-[#EF7A5A] flex items-center justify-center font-bold text-sm">
                     01
                   </div>
-                  <h3 className="font-bold text-base">Harga Bahan Naik Diam-Diam</h3>
-                  <p className="text-xs text-[#4B5563] dark:text-[#94A3B8] leading-relaxed">
+                  <h3 className="font-bold text-base text-[#2B1B14] dark:text-[#FAF6F0]">
+                    Harga Bahan Naik Diam-Diam
+                  </h3>
+                  <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed">
                     Saat harga kopi bubuk atau susu naik, HPP ikut naik. HargaPas otomatis mendeteksi penurunan margin dan memicu Peringatan Cerdas.
                   </p>
                 </div>
 
-                <div className="rounded-3xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] p-6 space-y-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#99F6E4] flex items-center justify-center font-bold text-sm">
+                <div className="rounded-3xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-6 space-y-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-[#F4B9C8]/35 text-[#2B1B14] dark:text-[#F4B9C8] flex items-center justify-center font-bold text-sm">
                     02
                   </div>
-                  <h3 className="font-bold text-base">Komisi Aplikasi Online 20%</h3>
-                  <p className="text-xs text-[#4B5563] dark:text-[#94A3B8] leading-relaxed">
+                  <h3 className="font-bold text-base text-[#2B1B14] dark:text-[#FAF6F0]">
+                    Komisi Aplikasi Online 20%
+                  </h3>
+                  <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed">
                     Menyamakan harga offline dan online sering membuat rugi. Kalkulator Marketplace menghitung harga markup tepat agar net diterima tetap aman.
                   </p>
                 </div>
 
-                <div className="rounded-3xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] p-6 space-y-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-[#DCFCE7] dark:bg-[#14532D] text-[#15803D] dark:text-[#4ADE80] flex items-center justify-center font-bold text-sm">
+                <div className="rounded-3xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-6 space-y-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] flex items-center justify-center font-bold text-sm">
                     03
                   </div>
-                  <h3 className="font-bold text-base">Tidak Tahu Target Balik Modal</h3>
-                  <p className="text-xs text-[#4B5563] dark:text-[#94A3B8] leading-relaxed">
+                  <h3 className="font-bold text-base text-[#2B1B14] dark:text-[#FAF6F0]">
+                    Tidak Tahu Target Balik Modal
+                  </h3>
+                  <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed">
                     Modul BEP menghitung persis berapa porsi per hari yang harus terjual untuk menutup sewa, listrik, gaji, serta memantau target laba bulanan.
                   </p>
                 </div>
@@ -425,10 +431,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight">
+                  <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                     9+ Modul Finansial Terintegrasi
                   </h2>
-                  <p className="text-xs sm:text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
+                  <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
                     Klik kartu mana saja untuk langsung mencoba modul terkait di dalam aplikasi.
                   </p>
                 </div>
@@ -446,19 +452,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                       key={feat.id}
                       lift
                       onClick={() => onEnterApp(feat.id)}
-                      className="p-3.5 bg-[#E3F3F0] dark:bg-[#0F172A] flex flex-col justify-between gap-2 cursor-pointer"
+                      className="p-3.5 bg-[#FAF6F0] dark:bg-[#1B120D] flex flex-col justify-between gap-2 cursor-pointer"
                     >
                       <div>
                         <div className="flex items-center justify-between gap-2">
-                          <div className="w-8 h-8 rounded-xl bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#5EEAD4] flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] flex items-center justify-center shrink-0">
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FAF9F6] dark:bg-[#1E293B] text-[#0D9488] dark:text-[#99F6E4]">
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-[#A8703F] dark:text-[#EFE3D3]">
                             {feat.tag}
                           </span>
                         </div>
-                        <h3 className="font-bold text-sm mt-2.5 leading-snug">{feat.title}</h3>
-                        <p className="text-[11px] text-[#4B5563] dark:text-[#94A3B8] mt-1 leading-relaxed line-clamp-2">
+                        <h3 className="font-bold text-sm mt-2.5 leading-snug text-[#2B1B14] dark:text-[#FAF6F0]">
+                          {feat.title}
+                        </h3>
+                        <p className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3] mt-1 leading-relaxed line-clamp-2">
                           {feat.desc}
                         </p>
                       </div>
@@ -471,7 +479,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 <button
                   type="button"
                   onClick={() => setShowAllFeatures((prev) => !prev)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] hover:bg-[#99F6E4] dark:hover:bg-[#0F766E] border border-[#99F6E4] dark:border-[#14B8A6]/40 text-xs font-bold text-[#0F766E] dark:text-[#99F6E4] btn-press cursor-pointer transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] hover:bg-[#C68B59] hover:text-[#FFFDF9] dark:hover:bg-[#C68B59] border border-[#C68B59]/40 text-xs font-bold text-[#2B1B14] dark:text-[#FAF6F0] btn-press cursor-pointer transition-colors"
                 >
                   {showAllFeatures ? (
                     <>
@@ -493,33 +501,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           <StackedSection id="alur" index={3} label="ALUR PENGGUNAAN">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                   3 Langkah Mulai Mengelola Harga Usaha
                 </h2>
-                <p className="text-xs sm:text-sm text-[#4B5563] dark:text-[#94A3B8] mt-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-2 leading-relaxed">
                   Semua data awal sudah terisi otomatis dengan contoh kedai minuman sehingga Anda bisa langsung mencoba setiap fitur.
                 </p>
               </div>
 
               <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="rounded-2xl bg-[#CCFBF1]/70 dark:bg-[#0F172A] border border-[#99F6E4] dark:border-[#334155] p-5 space-y-1.5">
-                  <div className="text-xs font-bold text-[#0F766E] dark:text-[#5EEAD4]">Langkah 1</div>
-                  <div className="font-bold text-sm">Input Bahan & Stok</div>
-                  <p className="text-xs text-[#4B5563] dark:text-[#94A3B8]">
+                <div className="rounded-2xl bg-[#EFE3D3]/75 dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-5 space-y-1.5">
+                  <div className="text-xs font-bold text-[#A8703F] dark:text-[#C68B59]">Langkah 1</div>
+                  <div className="font-bold text-sm text-[#2B1B14] dark:text-[#FAF6F0]">Input Bahan & Stok</div>
+                  <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                     Catat bahan baku beserta harga beli dan batas minimum stok di Inventaris.
                   </p>
                 </div>
-                <div className="rounded-2xl bg-[#CCFBF1]/70 dark:bg-[#0F172A] border border-[#99F6E4] dark:border-[#334155] p-5 space-y-1.5">
-                  <div className="text-xs font-bold text-[#0F766E] dark:text-[#5EEAD4]">Langkah 2</div>
-                  <div className="font-bold text-sm">Set HPP & Harga Jual</div>
-                  <p className="text-xs text-[#4B5563] dark:text-[#94A3B8]">
+                <div className="rounded-2xl bg-[#EFE3D3]/75 dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-5 space-y-1.5">
+                  <div className="text-xs font-bold text-[#A8703F] dark:text-[#C68B59]">Langkah 2</div>
+                  <div className="font-bold text-sm text-[#2B1B14] dark:text-[#FAF6F0]">Set HPP & Harga Jual</div>
+                  <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                     Susun resep batch produksi di Kalkulator HPP lalu simpan ke Katalog.
                   </p>
                 </div>
-                <div className="rounded-2xl bg-[#CCFBF1]/70 dark:bg-[#0F172A] border border-[#99F6E4] dark:border-[#334155] p-5 space-y-1.5">
-                  <div className="text-xs font-bold text-[#0F766E] dark:text-[#5EEAD4]">Langkah 3</div>
-                  <div className="font-bold text-sm">Catat Penjualan & Pantau</div>
-                  <p className="text-xs text-[#4B5563] dark:text-[#94A3B8]">
+                <div className="rounded-2xl bg-[#EFE3D3]/75 dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-5 space-y-1.5">
+                  <div className="text-xs font-bold text-[#A8703F] dark:text-[#C68B59]">Langkah 3</div>
+                  <div className="font-bold text-sm text-[#2B1B14] dark:text-[#FAF6F0]">Catat Penjualan & Pantau</div>
+                  <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                     Gunakan Kas & POS untuk potong stok otomatis dan pantau Laba/Rugi.
                   </p>
                 </div>
@@ -530,14 +538,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           {/* Card 05: Final CTA */}
           <StackedSection index={4} label="MULAI SEKARANG">
             <div className="py-4 text-center space-y-4">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#15803D] dark:text-[#4ADE80] bg-[#DCFCE7] dark:bg-[#14532D] px-3 py-1 rounded-full">
-                <CheckCircle2 className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#2B1B14] dark:text-[#FAF6F0] bg-[#F4B9C8]/40 dark:bg-[#3E2A20] border border-[#F4B9C8] dark:border-[#C68B59]/40 px-3 py-1 rounded-full">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#A8703F] dark:text-[#C68B59]" />
                 Siap Dicoba Langsung di Browser (LocalStorage)
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                 Siap Menentukan Harga yang Pas untuk Bisnis Anda?
               </h2>
-              <p className="text-sm text-[#4B5563] dark:text-[#94A3B8] max-w-xl mx-auto">
+              <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] max-w-xl mx-auto">
                 Masuk ke workspace HargaPas UMKM sekarang untuk melihat ringkasan keuangan, menguji simulasi What-If, atau mengatur HPP produk Anda sendiri.
               </p>
               <div className="pt-2 flex items-center justify-center gap-3 flex-wrap">
@@ -554,7 +562,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         </div>
       </main>
 
-      <footer className="relative z-10 border-t border-[#CCE5DF] dark:border-[#334155] bg-[#FAF9F6]/90 dark:bg-[#0F172A]/90 backdrop-blur-md py-6 px-4 sm:px-8 text-center text-xs text-[#6B7280] dark:text-[#94A3B8]">
+      <footer className="relative z-10 border-t border-[#E2D3C1] dark:border-[#4E372B] bg-[#FAF6F0]/90 dark:bg-[#1B120D]/90 backdrop-blur-md py-6 px-4 sm:px-8 text-center text-xs text-[#5A4636] dark:text-[#D5C3B3]">
         HargaPas UMKM • Prototipe Aplikasi Web Manajemen Harga & Finansial UMKM (Mode Data Dummy Lokal)
       </footer>
     </div>

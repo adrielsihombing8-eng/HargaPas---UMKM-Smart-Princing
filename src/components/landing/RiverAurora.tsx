@@ -102,12 +102,12 @@ function sampleRiverPoints(
 }
 
 const RIBBON_SPECS: RibbonSpec[] = [
-  // 1. Primary Pastel Sky Blue Lead Filament
+  // 1. Primary Caramel -> Toffee -> Creamy Foam Lead Filament
   {
     dx: 0,
     dy: 0,
     spread: 0,
-    colors: ['#60A5FA', '#7DD3FC', '#BAE6FD', '#E0F2FE'],
+    colors: ['#A8703F', '#C68B59', '#E6C29F', '#FFFDF9'],
     coreWidth: 3.4,
     haloWidth: 42,
     scrollRange: [0.0, 0.94],
@@ -117,12 +117,12 @@ const RIBBON_SPECS: RibbonSpec[] = [
     swayPhase: 0.0,
     curtainIndices: [10, 24, 42, 66, 88, 110, 132, 146],
   },
-  // 2. Soft Powder Pastel Blue Braided Outer Current
+  // 2. Warm Coral Kentang -> Caramel Braided Outer Current
   {
     dx: 26,
     dy: -16,
     spread: 42,
-    colors: ['#7DD3FC', '#93C5FD', '#BFDBFE', '#EFF6FF'],
+    colors: ['#C68B59', '#EF7A5A', '#F5B09C', '#FFFDF9'],
     coreWidth: 2.8,
     haloWidth: 48,
     scrollRange: [0.02, 0.96],
@@ -132,12 +132,12 @@ const RIBBON_SPECS: RibbonSpec[] = [
     swayPhase: 1.4,
     curtainIndices: [16, 36, 58, 82, 104, 126],
   },
-  // 3. Atmospheric Pastel Blue Halo Background Stream
+  // 3. Atmospheric Cappuccino -> Caramel Halo Background Stream
   {
     dx: -30,
     dy: 20,
     spread: -46,
-    colors: ['#60A5FA', '#93C5FD', '#BAE6FD', '#DBEAFE'],
+    colors: ['#A8703F', '#C68B59', '#EFE3D3', '#FAF6F0'],
     coreWidth: 2.2,
     haloWidth: 56,
     scrollRange: [0.0, 0.98],
@@ -147,12 +147,12 @@ const RIBBON_SPECS: RibbonSpec[] = [
     swayPhase: 2.6,
     curtainIndices: [20, 48, 76, 100, 122],
   },
-  // 4. Ice Pastel Blue Counter-Wave
+  // 4. Sweet Pink Donat -> Coral Kentang Counter-Wave
   {
     dx: -15,
     dy: 11,
     spread: 26,
-    colors: ['#38BDF8', '#7DD3FC', '#BAE6FD', '#F0F9FF'],
+    colors: ['#EF7A5A', '#F4B9C8', '#FAD8E0', '#FFFDF9'],
     coreWidth: 3.0,
     haloWidth: 44,
     scrollRange: [0.05, 0.98],
@@ -162,12 +162,12 @@ const RIBBON_SPECS: RibbonSpec[] = [
     swayPhase: 3.9,
     curtainIndices: [14, 38, 62, 92, 118, 140],
   },
-  // 5. Crisp Arctic Pastel Blue Accent Filament
+  // 5. Crisp Caramel-Latte Accent Filament
   {
     dx: 10,
     dy: -8,
     spread: -18,
-    colors: ['#7DD3FC', '#BAE6FD', '#E0F2FE', '#F0F9FF'],
+    colors: ['#C68B59', '#F4B9C8', '#EFE3D3', '#FFFDF9'],
     coreWidth: 2.6,
     haloWidth: 32,
     scrollRange: [0.03, 0.95],
@@ -294,9 +294,9 @@ export const RiverAurora: React.FC<RiverAuroraProps> = ({ darkMode }) => {
             const rayH = 115 * sy;
 
             const rayGrad = ctx.createLinearGradient(cx, cy - rayH * 0.72, cx, cy + rayH * 0.28);
-            rayGrad.addColorStop(0, 'rgba(186, 230, 253, 0)');
-            rayGrad.addColorStop(0.5, `rgba(186, 230, 253, ${curtainAlpha.toFixed(3)})`);
-            rayGrad.addColorStop(1, 'rgba(147, 197, 253, 0)');
+            rayGrad.addColorStop(0, 'rgba(198, 139, 89, 0)');
+            rayGrad.addColorStop(0.5, `rgba(198, 139, 89, ${curtainAlpha.toFixed(3)})`);
+            rayGrad.addColorStop(1, 'rgba(244, 185, 200, 0)');
 
             ctx.strokeStyle = rayGrad;
             ctx.lineWidth = Math.max(4, 9 * scaleAvg);

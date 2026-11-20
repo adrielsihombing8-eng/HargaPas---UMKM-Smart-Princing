@@ -29,15 +29,15 @@ export const PressButton: React.FC<PressButtonProps> = ({
 
   const variantClasses: Record<NonNullable<PressButtonProps['variant']>, string> = {
     primary:
-      'bg-[#5EEAD4] dark:bg-[#14B8A6] text-[#0F172A] font-semibold hover:bg-[#2DD4BF] dark:hover:bg-[#2DD4BF] shadow-sm shadow-[#0D9488]/15',
+      'bg-[#C68B59] dark:bg-[#C68B59] text-[#FFFDF9] font-semibold hover:bg-[#A8703F] dark:hover:bg-[#A8703F] shadow-sm shadow-[#3E2A20]/15',
     accent:
-      'bg-[#CCFBF1] dark:bg-[#5EEAD4] text-[#0F766E] dark:text-[#0F172A] font-semibold hover:bg-[#99F6E4] dark:hover:bg-[#99F6E4] shadow-sm shadow-[#0D9488]/10',
+      'bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#2B1B14] dark:text-[#FAF6F0] font-semibold hover:bg-[#E2D0B8] dark:hover:bg-[#4E372B] shadow-sm shadow-[#3E2A20]/10',
     mint:
-      'bg-[#CCFBF1] dark:bg-[#5EEAD4] text-[#0F766E] dark:text-[#0F172A] font-semibold hover:bg-[#99F6E4] dark:hover:bg-[#99F6E4] shadow-sm shadow-[#0D9488]/10',
+      'bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#2B1B14] dark:text-[#FAF6F0] font-semibold hover:bg-[#E2D0B8] dark:hover:bg-[#4E372B] shadow-sm shadow-[#3E2A20]/10',
     secondary:
-      'bg-[#E3F3F0] dark:bg-[#1E293B] text-[#134E4A] dark:text-[#CBD5E1] border border-[#CCE5DF] dark:border-[#334155] hover:bg-[#CCFBF1] dark:hover:bg-[#334155]',
+      'bg-[#FFFDF9] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0] border border-[#E2D3C1] dark:border-[#4E372B] hover:bg-[#EFE3D3] dark:hover:bg-[#3E2A20]',
     ghost:
-      'bg-transparent text-[#0D9488] dark:text-[#5EEAD4] hover:bg-[#CCFBF1]/70 dark:hover:bg-[#115E59]/70',
+      'bg-transparent text-[#A8703F] dark:text-[#C68B59] hover:bg-[#EFE3D3]/70 dark:hover:bg-[#3E2A20]/70',
     danger:
       'bg-[#FFE4E6] dark:bg-[#7F1D1D] text-[#BE123C] dark:text-[#FDA4AF] font-semibold hover:bg-[#FECDD3] dark:hover:bg-[#991B1B]',
   };

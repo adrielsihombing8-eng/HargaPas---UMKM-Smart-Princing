@@ -50,7 +50,7 @@ export const PosCashier: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Kas & POS Sederhana</h1>
-        <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
+        <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
           Catat penjualan cepat dengan pengurangan stok bahan baku otomatis berdasarkan resep BOM.
         </p>
       </div>
@@ -58,18 +58,18 @@ export const PosCashier: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PointerCard className="p-6">
           <h2 className="text-base font-bold flex items-center gap-2 mb-4">
-            <ShoppingBag className="w-4 h-4 text-[#0D9488] dark:text-[#14B8A6]" />
+            <ShoppingBag className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59]" />
             Catat Penjualan Produk
           </h2>
           <form onSubmit={handleRecordSale} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+              <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                 Pilih Menu
               </label>
               <select
                 value={selectedProd?.id ?? ''}
                 onChange={(e) => setSelectedProdId(e.target.value)}
-                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm font-medium"
+                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#4E372B] bg-[#F3F4F6] dark:bg-[#2B1B14] px-3.5 py-2.5 text-sm font-medium"
               >
                 {products.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -81,7 +81,7 @@ export const PosCashier: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                   Jumlah (Porsi)
                 </label>
                 <input
@@ -89,17 +89,17 @@ export const PosCashier: React.FC = () => {
                   min={1}
                   value={qty}
                   onChange={(e) => setQty(Math.max(1, Number(e.target.value)))}
-                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm tabular-nums"
+                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#4E372B] bg-[#F3F4F6] dark:bg-[#2B1B14] px-3.5 py-2.5 text-sm tabular-nums"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                   Kanal Penjualan
                 </label>
                 <select
                   value={channel}
                   onChange={(e) => setChannel(e.target.value as SaleTransaction['channel'])}
-                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm"
+                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#4E372B] bg-[#F3F4F6] dark:bg-[#2B1B14] px-3.5 py-2.5 text-sm"
                 >
                   <option value="Offline">Offline / Kasir</option>
                   <option value="GoFood">GoFood</option>
@@ -111,15 +111,15 @@ export const PosCashier: React.FC = () => {
             </div>
 
             {selectedProd && (
-              <div className="rounded-2xl bg-[#F3F4F6] dark:bg-[#0F172A] border border-transparent dark:border-[#334155] p-4 flex items-center justify-between text-xs">
+              <div className="rounded-2xl bg-[#F3F4F6] dark:bg-[#2B1B14] border border-transparent dark:border-[#4E372B] p-4 flex items-center justify-between text-xs">
                 <div>
-                  <div className="text-[#6B7280] dark:text-[#94A3B8]">Total Tagihan</div>
-                  <div className="text-xl font-extrabold text-[#0D9488] dark:text-[#14B8A6] tabular-nums mt-0.5">
+                  <div className="text-[#5A4636] dark:text-[#D5C3B3]">Total Tagihan</div>
+                  <div className="text-xl font-extrabold text-[#C68B59] dark:text-[#C68B59] tabular-nums mt-0.5">
                     {formatIDR(selectedProd.sellingPrice * qty)}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[#6B7280] dark:text-[#94A3B8]">Estimasi Laba Kotor</div>
+                  <div className="text-[#5A4636] dark:text-[#D5C3B3]">Estimasi Laba Kotor</div>
                   <div className="font-bold text-[#16A34A] dark:text-[#22C55E] tabular-nums mt-0.5">
                     {formatIDR((selectedProd.sellingPrice - unitHpp) * qty)}
                   </div>
@@ -136,14 +136,14 @@ export const PosCashier: React.FC = () => {
         <PointerCard className="p-6">
           <h2 className="text-base font-bold mb-4">Catat Kas Masuk / Keluar</h2>
           <form onSubmit={handleRecordCash} className="space-y-4">
-            <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155]">
+            <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B]">
               <button
                 type="button"
                 onClick={() => setCfType('out')}
                 className={`py-2 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
                   cfType === 'out'
                     ? 'bg-[#FFE4E6] dark:bg-[#7F1D1D] text-[#BE123C] dark:text-[#FDA4AF] shadow-sm'
-                    : 'text-[#6B7280] dark:text-[#94A3B8]'
+                    : 'text-[#5A4636] dark:text-[#D5C3B3]'
                 }`}
               >
                 Kas Keluar (Beban)
@@ -153,8 +153,8 @@ export const PosCashier: React.FC = () => {
                 onClick={() => setCfType('in')}
                 className={`py-2 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
                   cfType === 'in'
-                    ? 'bg-[#99F6E4] dark:bg-[#14B8A6] text-[#0F766E] dark:text-[#0F172A] shadow-sm'
-                    : 'text-[#6B7280] dark:text-[#94A3B8]'
+                    ? 'bg-[#C68B59] dark:bg-[#C68B59] text-[#A8703F] dark:text-[#2B1B14] shadow-sm'
+                    : 'text-[#5A4636] dark:text-[#D5C3B3]'
                 }`}
               >
                 Kas Masuk (Lainnya)
@@ -163,13 +163,13 @@ export const PosCashier: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                   Kategori
                 </label>
                 <select
                   value={cfCategory}
                   onChange={(e) => setCfCategory(e.target.value)}
-                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm"
+                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#4E372B] bg-[#F3F4F6] dark:bg-[#2B1B14] px-3.5 py-2.5 text-sm"
                 >
                   <option value="Operasional">Operasional (Listrik/Gas)</option>
                   <option value="Pembelian Bahan Baku">Pembelian Bahan Baku</option>
@@ -179,7 +179,7 @@ export const PosCashier: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                   Nominal (Rp)
                 </label>
                 <input
@@ -188,13 +188,13 @@ export const PosCashier: React.FC = () => {
                   step={5000}
                   value={cfAmount}
                   onChange={(e) => setCfAmount(Math.max(0, Number(e.target.value)))}
-                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm tabular-nums"
+                  className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#4E372B] bg-[#F3F4F6] dark:bg-[#2B1B14] px-3.5 py-2.5 text-sm tabular-nums"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+              <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                 Keterangan Transaksi
               </label>
               <input
@@ -203,7 +203,7 @@ export const PosCashier: React.FC = () => {
                 value={cfDesc}
                 onChange={(e) => setCfDesc(e.target.value)}
                 placeholder="mis. Beli gas LPG 3kg & sedotan"
-                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm"
+                className="w-full rounded-2xl border border-[#E5E7EB] dark:border-[#4E372B] bg-[#F3F4F6] dark:bg-[#2B1B14] px-3.5 py-2.5 text-sm"
               />
             </div>
 
@@ -216,7 +216,7 @@ export const PosCashier: React.FC = () => {
 
       <PointerCard className="p-6">
         <h2 className="text-base font-bold mb-4">Riwayat Arus Kas Terbaru</h2>
-        <div className="divide-y divide-[#E5E7EB] dark:divide-[#334155]">
+        <div className="divide-y divide-[#E5E7EB] dark:divide-[#4E372B]">
           {cashFlow.slice(0, 10).map((entry) => (
             <div key={entry.id} className="py-3 flex items-center justify-between gap-4 text-sm">
               <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ export const PosCashier: React.FC = () => {
                 </div>
                 <div>
                   <div className="font-semibold">{entry.description}</div>
-                  <div className="text-xs text-[#6B7280] dark:text-[#94A3B8]">
+                  <div className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                     {formatShortDate(entry.date)} • {entry.category}
                   </div>
                 </div>

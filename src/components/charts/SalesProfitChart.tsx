@@ -16,7 +16,7 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
 
   if (data.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center text-sm text-[#6B7280] dark:text-[#94A3B8]">
+      <div className="h-64 flex items-center justify-center text-sm text-[#5A4636] dark:text-[#D5C3B3]">
         Belum ada data transaksi 14 hari terakhir.
       </div>
     );
@@ -60,12 +60,12 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
       >
         <defs>
           <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0D9488" stopOpacity="0.24" />
-            <stop offset="100%" stopColor="#0D9488" stopOpacity="0.01" />
+            <stop offset="0%" stopColor="#C68B59" stopOpacity="0.24" />
+            <stop offset="100%" stopColor="#C68B59" stopOpacity="0.01" />
           </linearGradient>
           <linearGradient id="profGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#99F6E4" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#99F6E4" stopOpacity="0.03" />
+            <stop offset="0%" stopColor="#C68B59" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#C68B59" stopOpacity="0.03" />
           </linearGradient>
         </defs>
 
@@ -79,7 +79,7 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
                 x2={width - padRight}
                 y2={y}
                 stroke="currentColor"
-                className="text-[#DCECE9] dark:text-[#334155]"
+                className="text-[#E2D3C1] dark:text-[#4E372B]"
                 strokeDasharray="4 4"
                 strokeWidth={1}
               />
@@ -87,7 +87,7 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
                 x={padLeft - 8}
                 y={y + 4}
                 textAnchor="end"
-                className="fill-[#6B7280] dark:fill-[#94A3B8] text-[10px] font-medium"
+                className="fill-[#5A4636] dark:fill-[#D5C3B3] text-[10px] font-medium"
               >
                 {formatCompactIDR(val).replace('Rp ', '')}
               </text>
@@ -100,21 +100,21 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
 
         <polyline
           fill="none"
-          stroke="#0D9488"
+          stroke="#C68B59"
           strokeWidth={2.5}
           strokeLinejoin="round"
           strokeLinecap="round"
           points={revenuePoints}
-          className="dark:stroke-[#14B8A6]"
+          className="dark:stroke-[#C68B59]"
         />
         <polyline
           fill="none"
-          stroke="#5EEAD4"
+          stroke="#C68B59"
           strokeWidth={2.5}
           strokeLinejoin="round"
           strokeLinecap="round"
           points={profitPoints}
-          className="dark:stroke-[#99F6E4]"
+          className="dark:stroke-[#C68B59]"
         />
 
         {data.map((d, i) => {
@@ -125,7 +125,7 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
               x={getX(i)}
               y={height - 8}
               textAnchor="middle"
-              className="fill-[#6B7280] dark:fill-[#94A3B8] text-[10px] font-medium"
+              className="fill-[#5A4636] dark:fill-[#D5C3B3] text-[10px] font-medium"
             >
               {formatShortDate(d.date)}
             </text>
@@ -139,7 +139,7 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
               y1={padTop}
               x2={getX(hoverIdx)}
               y2={padTop + plotH}
-              stroke="#0D9488"
+              stroke="#C68B59"
               strokeOpacity={0.35}
               strokeDasharray="3 3"
               strokeWidth={1.5}
@@ -148,7 +148,7 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
               cx={getX(hoverIdx)}
               cy={getY(activePoint.revenue)}
               r={5}
-              fill="#0D9488"
+              fill="#C68B59"
               stroke="#ffffff"
               strokeWidth={2}
             />
@@ -156,8 +156,8 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
               cx={getX(hoverIdx)}
               cy={getY(activePoint.profit)}
               r={5}
-              fill="#5EEAD4"
-              stroke="#0F766E"
+              fill="#C68B59"
+              stroke="#A8703F"
               strokeWidth={2}
             />
           </g>
@@ -181,17 +181,17 @@ export const SalesProfitChart: React.FC<SalesProfitChartProps> = ({ data }) => {
       </svg>
 
       {hoverIdx !== null && activePoint && (
-        <div className="pointer-events-none absolute top-2 right-3 rounded-2xl bg-[#CCFBF1]/95 dark:bg-[#0F172A]/95 text-[#134E4A] dark:text-[#CBD5E1] px-3.5 py-2.5 text-xs shadow-lg border border-[#99F6E4] dark:border-[#334155]">
-          <div className="font-semibold text-[#0F766E] dark:text-[#5EEAD4] mb-1">
+        <div className="pointer-events-none absolute top-2 right-3 rounded-2xl bg-[#EFE3D3]/95 dark:bg-[#2B1B14]/95 text-[#2B1B14] dark:text-[#FAF6F0] px-3.5 py-2.5 text-xs shadow-lg border border-[#C68B59] dark:border-[#4E372B]">
+          <div className="font-semibold text-[#A8703F] dark:text-[#C68B59] mb-1">
             {formatShortDate(activePoint.date)}
           </div>
           <div className="flex items-center justify-between gap-4">
-            <span className="text-[#4B5563] dark:text-[#94A3B8]">Omzet:</span>
+            <span className="text-[#5A4636] dark:text-[#D5C3B3]">Omzet:</span>
             <span className="font-semibold tabular-nums">{formatIDR(activePoint.revenue)}</span>
           </div>
           <div className="flex items-center justify-between gap-4">
-            <span className="text-[#4B5563] dark:text-[#94A3B8]">Laba Kotor:</span>
-            <span className="font-semibold text-[#0D9488] dark:text-[#99F6E4] tabular-nums">
+            <span className="text-[#5A4636] dark:text-[#D5C3B3]">Laba Kotor:</span>
+            <span className="font-semibold text-[#C68B59] dark:text-[#C68B59] tabular-nums">
               {formatIDR(activePoint.profit)}
             </span>
           </div>

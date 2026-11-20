@@ -94,8 +94,8 @@ const CafeHero3DScene: React.FC<CafeSceneProps> = ({ onCupHoverChange }) => {
   const hoverFloatPhase = useRef(0);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-  // Base resting pose of the tilted central iced latte cup
-  const BASE_CLUSTER_Y = -0.22;
+  // Base resting pose of the tilted central iced latte cup (lowered so hover lift has ample top headroom)
+  const BASE_CLUSTER_Y = -0.54;
   const BASE_CUP_Y = -0.12;
   const BASE_CUP_ROT_X = 0.05;
   const BASE_CUP_ROT_Y = 0;
@@ -894,7 +894,7 @@ const CafeHero3DScene: React.FC<CafeSceneProps> = ({ onCupHoverChange }) => {
       {/* Static Raycast Hit Volume (stays anchored in world space so the cup never escapes the cursor when lifted) */}
       <mesh
         ref={staticHitProxyRef}
-        position={[0, 0.12, 0.1]}
+        position={[0, -0.14, 0.1]}
         onPointerDown={(e: ThreeEvent<PointerEvent>) => {
           e.stopPropagation();
           const next = !isCupHoveredRef.current;
@@ -1384,7 +1384,7 @@ export const CoffeeMarket3D: React.FC = () => {
         shadows
         frameloop={isVisible ? 'always' : 'never'}
         dpr={[1, 1.5]}
-        camera={{ position: [0, 0.14, 6.1], fov: 42 }}
+        camera={{ position: [0, 0.1, 6.35], fov: 42 }}
         gl={{
           antialias: true,
           alpha: true,

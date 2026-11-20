@@ -64,7 +64,7 @@ export const SensitivityChart: React.FC<SensitivityChartProps> = ({
           y1={getY(baselineProfit)}
           x2={width - padRight}
           y2={getY(baselineProfit)}
-          stroke="#0D9488"
+          stroke="#C68B59"
           strokeOpacity={0.35}
           strokeDasharray="4 4"
           strokeWidth={1.2}
@@ -76,7 +76,7 @@ export const SensitivityChart: React.FC<SensitivityChartProps> = ({
             x={padLeft - 8}
             y={getY(val) + 4}
             textAnchor="end"
-            className="fill-[#6B7280] dark:fill-[#94A3B8] text-[10px] font-medium"
+            className="fill-[#5A4636] dark:fill-[#D5C3B3] text-[10px] font-medium"
           >
             {formatCompactIDR(val).replace('Rp ', '')}
           </text>
@@ -84,12 +84,12 @@ export const SensitivityChart: React.FC<SensitivityChartProps> = ({
 
         <polyline
           fill="none"
-          stroke="#0D9488"
+          stroke="#C68B59"
           strokeWidth={2.5}
           strokeLinecap="round"
           strokeLinejoin="round"
           points={linePts}
-          className="dark:stroke-[#14B8A6]"
+          className="dark:stroke-[#C68B59]"
         />
 
         {points.map((p, i) => (
@@ -98,8 +98,8 @@ export const SensitivityChart: React.FC<SensitivityChartProps> = ({
               cx={getX(i)}
               cy={getY(p.projectedProfit)}
               r={hoverIdx === i ? 6 : 4.5}
-              fill={p.projectedProfit >= baselineProfit ? '#5EEAD4' : '#FDE68A'}
-              stroke="#0F766E"
+              fill={p.projectedProfit >= baselineProfit ? '#C68B59' : '#FDE68A'}
+              stroke="#A8703F"
               strokeWidth={1.8}
               className="transition-all duration-150"
             />
@@ -107,7 +107,7 @@ export const SensitivityChart: React.FC<SensitivityChartProps> = ({
               x={getX(i)}
               y={height - 8}
               textAnchor="middle"
-              className="fill-[#6B7280] dark:fill-[#94A3B8] text-[10px] font-medium"
+              className="fill-[#5A4636] dark:fill-[#D5C3B3] text-[10px] font-medium"
             >
               {p.label}
             </text>
@@ -125,8 +125,8 @@ export const SensitivityChart: React.FC<SensitivityChartProps> = ({
       </svg>
 
       {active && (
-        <div className="pointer-events-none absolute top-2 right-2 rounded-2xl bg-[#CCFBF1]/95 dark:bg-[#0F172A]/95 text-[#134E4A] dark:text-[#CBD5E1] px-3 py-2 text-xs shadow-lg border border-[#99F6E4] dark:border-[#334155]">
-          <div className="text-[#0F766E] dark:text-[#5EEAD4] font-semibold">
+        <div className="pointer-events-none absolute top-2 right-2 rounded-2xl bg-[#EFE3D3]/95 dark:bg-[#2B1B14]/95 text-[#2B1B14] dark:text-[#FAF6F0] px-3 py-2 text-xs shadow-lg border border-[#C68B59] dark:border-[#4E372B]">
+          <div className="text-[#A8703F] dark:text-[#C68B59] font-semibold">
             Perubahan Harga Jual {active.label}
           </div>
           <div className="mt-0.5 tabular-nums">Proyeksi Laba: {formatIDR(active.projectedProfit)}</div>

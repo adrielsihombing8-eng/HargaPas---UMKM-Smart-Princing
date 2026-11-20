@@ -8,8 +8,8 @@ export const Toast: React.FC = () => {
   if (!toastMessage) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-2xl bg-[#CCFBF1] dark:bg-[#1E293B] text-[#0F766E] dark:text-[#99F6E4] px-4 py-3 shadow-xl border border-[#99F6E4] dark:border-[#334155] animate-[fadeIn_180ms_ease-out]">
-      <CheckCircle2 className="w-4 h-4 text-[#0D9488] dark:text-[#5EEAD4] shrink-0" />
+    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0] px-4 py-3 shadow-xl border border-[#C68B59] dark:border-[#4E372B] animate-[fadeIn_180ms_ease-out]">
+      <CheckCircle2 className="w-4 h-4 text-[#A8703F] dark:text-[#C68B59] shrink-0" />
       <span className="text-sm font-medium">{toastMessage}</span>
     </div>
   );

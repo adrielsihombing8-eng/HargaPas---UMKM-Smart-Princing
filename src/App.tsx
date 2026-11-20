@@ -43,8 +43,8 @@ const BusinessSettings = lazy(() =>
 
 const ModuleLoadingFallback: React.FC = () => (
   <div className="min-h-[40vh] flex items-center justify-center">
-    <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#EFF9F7] dark:bg-[#1E293B] border border-[#CCE5DF] dark:border-[#334155] text-xs font-semibold text-[#0F766E] dark:text-[#99F6E4]">
-      <span className="w-4 h-4 rounded-full border-2 border-[#99F6E4] border-t-[#0D9488] animate-spin" />
+    <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-xs font-semibold text-[#A8703F] dark:text-[#C68B59]">
+      <span className="w-4 h-4 rounded-full border-2 border-[#C68B59] border-t-[#C68B59] animate-spin" />
       Memuat modul...
     </div>
   </div>
@@ -133,7 +133,7 @@ const AppShell: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#FAF9F6] dark:bg-[#0F172A] text-[#134E4A] dark:text-[#CBD5E1]">
+    <div className="min-h-screen flex bg-[#FAF6F0] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0]">
       <Sidebar
         activeModule={activeModule}
         onSelect={setActiveModule}
@@ -143,18 +143,18 @@ const AppShell: React.FC = () => {
 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar (Mobile + Beranda + Theme + Keluar) */}
-        <header className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-[#FAF9F6]/90 dark:bg-[#0F172A]/90 backdrop-blur-md border-b border-[#DCECE9] dark:border-[#334155]">
+        <header className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-[#FAF6F0]/90 dark:bg-[#2B1B14]/90 backdrop-blur-md border-b border-[#E2D3C1] dark:border-[#4E372B]">
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 rounded-xl bg-[#EFF9F7] dark:bg-[#1E293B] border border-[#CCE5DF] dark:border-[#334155] btn-press cursor-pointer"
+              className="lg:hidden p-2 rounded-xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] btn-press cursor-pointer"
               aria-label="Buka menu navigasi"
             >
-              <Menu className="w-5 h-5 text-[#0D9488] dark:text-[#5EEAD4]" />
+              <Menu className="w-5 h-5 text-[#C68B59] dark:text-[#C68B59]" />
             </button>
-            <div className="text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] truncate">
+            <div className="text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] truncate">
               HargaPas UMKM <span className="mx-1.5">/</span>{' '}
-              <span className="text-[#134E4A] dark:text-[#CBD5E1] font-semibold">
+              <span className="text-[#2B1B14] dark:text-[#FAF6F0] font-semibold">
                 {currentNav?.label}
               </span>
             </div>
@@ -166,7 +166,7 @@ const AppShell: React.FC = () => {
                 setShowLanding(true);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#EFF9F7] dark:bg-[#1E293B] border border-[#CCE5DF] dark:border-[#334155] text-xs font-semibold text-[#0F766E] dark:text-[#99F6E4] hover:bg-[#CCFBF1] dark:hover:bg-[#334155] btn-press cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-xs font-semibold text-[#A8703F] dark:text-[#C68B59] hover:bg-[#EFE3D3] dark:hover:bg-[#4E372B] btn-press cursor-pointer whitespace-nowrap"
               title="Kembali ke Landing Page"
             >
               <Home className="w-3.5 h-3.5" />
@@ -174,7 +174,7 @@ const AppShell: React.FC = () => {
             </button>
             <button
               onClick={() => updateSettings({ darkMode: !settings.darkMode })}
-              className="p-2 rounded-2xl bg-[#EFF9F7] dark:bg-[#1E293B] border border-[#CCE5DF] dark:border-[#334155] text-[#0D9488] dark:text-[#5EEAD4] btn-press cursor-pointer"
+              className="p-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-[#C68B59] dark:text-[#C68B59] btn-press cursor-pointer"
               aria-label="Ganti mode warna"
               title={settings.darkMode ? 'Mode Terang' : 'Mode Gelap'}
             >

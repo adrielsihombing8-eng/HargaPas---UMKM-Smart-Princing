@@ -97,7 +97,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Ringkasan Bisnis</h1>
-          <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
+          <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
             Pantau omzet, margin produk, dan kesehatan finansial {settings.businessName}.
           </p>
         </div>
@@ -119,68 +119,68 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <PointerCard lift className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#6B7280] dark:text-[#94A3B8]">
+            <span className="text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3]">
               Omzet Bulan Ini
             </span>
-            <div className="w-9 h-9 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] flex items-center justify-center text-[#0D9488] dark:text-[#14B8A6]">
+            <div className="w-9 h-9 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] flex items-center justify-center text-[#C68B59] dark:text-[#C68B59]">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-2xl font-bold tabular-nums tracking-tight">
             {formatCompactIDR(metrics.totalRevenue)}
           </div>
-          <div className="mt-1 text-xs text-[#6B7280] dark:text-[#94A3B8] tabular-nums">
+          <div className="mt-1 text-xs text-[#5A4636] dark:text-[#D5C3B3] tabular-nums">
             {formatIDR(metrics.totalRevenue)} dari target {formatCompactIDR(settings.monthlyRevenueTarget)}
           </div>
         </PointerCard>
 
         <PointerCard lift className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#6B7280] dark:text-[#94A3B8]">
+            <span className="text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3]">
               Total Laba Bersih
             </span>
-            <div className="w-9 h-9 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] flex items-center justify-center text-[#0D9488] dark:text-[#5EEAD4]">
+            <div className="w-9 h-9 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] flex items-center justify-center text-[#C68B59] dark:text-[#C68B59]">
               <Wallet className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-2xl font-bold tabular-nums tracking-tight">
             {formatCompactIDR(metrics.netProfit)}
           </div>
-          <div className="mt-1 text-xs text-[#6B7280] dark:text-[#94A3B8] tabular-nums">
+          <div className="mt-1 text-xs text-[#5A4636] dark:text-[#D5C3B3] tabular-nums">
             Setelah beban operasional {formatCompactIDR(metrics.opExpenses)}
           </div>
         </PointerCard>
 
         <PointerCard lift className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#6B7280] dark:text-[#94A3B8]">
+            <span className="text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3]">
               Rata-rata Margin
             </span>
-            <div className="w-9 h-9 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] flex items-center justify-center text-[#0D9488] dark:text-[#14B8A6]">
+            <div className="w-9 h-9 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] flex items-center justify-center text-[#C68B59] dark:text-[#C68B59]">
               <Percent className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-2xl font-bold tabular-nums tracking-tight">
             {formatPercent(metrics.avgMargin)}
           </div>
-          <div className="mt-1 text-xs text-[#6B7280] dark:text-[#94A3B8]">
+          <div className="mt-1 text-xs text-[#5A4636] dark:text-[#D5C3B3]">
             Batas aman usaha: {settings.marginThreshold}%
           </div>
         </PointerCard>
 
         <PointerCard lift className="p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#6B7280] dark:text-[#94A3B8]">
+            <span className="text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3]">
               Produk Aktif
             </span>
-            <div className="w-9 h-9 rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] flex items-center justify-center text-[#0D9488] dark:text-[#14B8A6]">
+            <div className="w-9 h-9 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] flex items-center justify-center text-[#C68B59] dark:text-[#C68B59]">
               <PackageCheck className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-2xl font-bold tabular-nums tracking-tight">
             {metrics.activeCount} Menu
           </div>
-          <div className="mt-1 text-xs text-[#6B7280] dark:text-[#94A3B8]">
+          <div className="mt-1 text-xs text-[#5A4636] dark:text-[#D5C3B3]">
             {ingredients.length} bahan baku terhubung BOM
           </div>
         </PointerCard>
@@ -192,17 +192,17 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <div>
               <h2 className="text-base font-bold">Penjualan & Laba 14 Hari Terakhir</h2>
-              <p className="text-xs text-[#6B7280] dark:text-[#94A3B8]">
+              <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                 Arahkan kursor pada grafik untuk melihat rincian harian.
               </p>
             </div>
             <div className="flex items-center gap-4 text-xs font-medium">
               <span className="inline-flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#C68B59] dark:bg-[#C68B59]" />
                 Omzet
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#5EEAD4] dark:bg-[#99F6E4]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#C68B59] dark:bg-[#C68B59]" />
                 Laba Kotor
               </span>
             </div>
@@ -213,7 +213,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
         <PointerCard className="p-6 flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#0D9488] dark:text-[#5EEAD4]" />
+              <Sparkles className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59]" />
               <h2 className="text-base font-bold">Peringatan Cerdas</h2>
             </div>
             <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#B45309] dark:bg-[#78350F] dark:text-[#FDE68A]">
@@ -222,7 +222,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
           </div>
 
           {smartAlerts.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-center py-8 text-sm text-[#6B7280] dark:text-[#94A3B8]">
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-8 text-sm text-[#5A4636] dark:text-[#D5C3B3]">
               <BadgeCheck className="w-8 h-8 text-[#16A34A] dark:text-[#22C55E] mb-2" />
               Semua margin produk dan stok bahan baku dalam kondisi aman.
             </div>
@@ -254,7 +254,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onNavigate
                           onClick={() =>
                             onNavigate(alert.productId ? 'what-if' : 'inventory')
                           }
-                          className="mt-2 font-semibold text-[#0F766E] dark:text-[#14B8A6] underline underline-offset-2 cursor-pointer"
+                          className="mt-2 font-semibold text-[#A8703F] dark:text-[#C68B59] underline underline-offset-2 cursor-pointer"
                         >
                           {alert.productId ? 'Simulasikan Harga Baru' : 'Cek Inventaris'}
                         </button>

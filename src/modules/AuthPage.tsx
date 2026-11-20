@@ -75,7 +75,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
   const [customGoogleName, setCustomGoogleName] = useState('');
 
   const inputClass =
-    'w-full rounded-2xl border border-[#CCE5DF] dark:border-[#334155] bg-[#E3F3F0] dark:bg-[#0F172A] pl-10 pr-3.5 py-2.5 text-sm text-[#134E4A] dark:text-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-[#0D9488] dark:focus:ring-[#14B8A6]';
+    'w-full rounded-2xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#EFE3D3] dark:bg-[#2B1B14] pl-10 pr-3.5 py-2.5 text-sm text-[#2B1B14] dark:text-[#FAF6F0] focus:outline-none focus:ring-2 focus:ring-[#C68B59] dark:focus:ring-[#C68B59]';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,7 +125,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F6] dark:bg-[#0F172A] text-[#134E4A] dark:text-[#CBD5E1]">
+    <div className="min-h-screen flex flex-col bg-[#FAF6F0] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0]">
       {/* Top Bar */}
       <header className="px-4 sm:px-8 py-4 flex items-center justify-between max-w-6xl w-full mx-auto">
         <PressButton variant="secondary" size="sm" onClick={onBackToLanding}>
@@ -135,7 +135,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
 
         <button
           onClick={() => updateSettings({ darkMode: !settings.darkMode })}
-          className="p-2 rounded-2xl bg-[#EFF9F7] dark:bg-[#1E293B] border border-[#CCE5DF] dark:border-[#334155] text-[#0D9488] dark:text-[#5EEAD4] btn-press cursor-pointer"
+          className="p-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-[#C68B59] dark:text-[#C68B59] btn-press cursor-pointer"
           aria-label="Ganti mode warna"
           title={settings.darkMode ? 'Mode Terang' : 'Mode Gelap'}
         >
@@ -147,36 +147,36 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
       <main className="flex-1 flex items-center justify-center px-4 py-6 sm:py-10">
         <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Left Intro Card */}
-          <PointerCard className="lg:col-span-5 p-7 bg-[#E6F6F3] dark:bg-[#1E293B] flex flex-col justify-between gap-6">
+          <PointerCard className="lg:col-span-5 p-7 bg-[#E6F6F3] dark:bg-[#2B1B14] flex flex-col justify-between gap-6">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#5EEAD4] dark:bg-[#14B8A6] text-[#0F172A] flex items-center justify-center shadow-sm">
+                <div className="w-10 h-10 rounded-2xl bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] flex items-center justify-center shadow-sm">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="font-bold text-base text-[#0F766E] dark:text-[#99F6E4]">
+                  <div className="font-bold text-base text-[#A8703F] dark:text-[#C68B59]">
                     HargaPas UMKM
                   </div>
-                  <div className="text-[11px] text-[#0D9488] dark:text-[#5EEAD4] font-medium">
+                  <div className="text-[11px] text-[#C68B59] dark:text-[#C68B59] font-medium">
                     Workspace Finansial Usaha
                   </div>
                 </div>
               </div>
 
-              <h1 className="text-2xl font-extrabold tracking-tight text-[#0F172A] dark:text-[#CBD5E1]">
+              <h1 className="text-2xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                 Masuk untuk Mengelola HPP, Stok, & Kas Usaha Anda
               </h1>
-              <p className="text-xs text-[#4B5563] dark:text-[#94A3B8] leading-relaxed">
+              <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed">
                 Setiap perubahan harga bahan baku, produk, resep BOM, dan transaksi POS tersimpan aman per sesi di browser Anda.
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#CCFBF1] dark:bg-[#115E59] border border-[#99F6E4] dark:border-[#14B8A6]/40 p-4 space-y-2.5">
-              <div className="flex items-center gap-2 text-xs font-bold text-[#0F766E] dark:text-[#99F6E4]">
+            <div className="rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] border border-[#C68B59] dark:border-[#C68B59]/40 p-4 space-y-2.5">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#A8703F] dark:text-[#C68B59]">
                 <ShieldCheck className="w-4 h-4 shrink-0" />
                 Akses Cepat Akun Demo
               </div>
-              <div className="text-[11px] text-[#134E4A] dark:text-[#CBD5E1] space-y-0.5">
+              <div className="text-[11px] text-[#2B1B14] dark:text-[#FAF6F0] space-y-0.5">
                 <div>
                   Email: <strong className="select-all">demo@hargapas.id</strong>
                 </div>
@@ -199,7 +199,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
           {/* Right Form Card */}
           <PointerCard className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-center">
             {/* Mode Switcher */}
-            <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] mb-5">
+            <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] mb-5">
               <button
                 type="button"
                 onClick={() => {
@@ -208,8 +208,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                 }}
                 className={`py-2.5 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
                   mode === 'login'
-                    ? 'bg-[#99F6E4] dark:bg-[#14B8A6] text-[#0F172A] shadow-xs'
-                    : 'text-[#4B5563] dark:text-[#94A3B8]'
+                    ? 'bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] shadow-xs'
+                    : 'text-[#5A4636] dark:text-[#D5C3B3]'
                 }`}
               >
                 Masuk Akun
@@ -224,8 +224,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                 }}
                 className={`py-2.5 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
                   mode === 'register'
-                    ? 'bg-[#99F6E4] dark:bg-[#14B8A6] text-[#0F172A] shadow-xs'
-                    : 'text-[#4B5563] dark:text-[#94A3B8]'
+                    ? 'bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] shadow-xs'
+                    : 'text-[#5A4636] dark:text-[#D5C3B3]'
                 }`}
               >
                 Daftar Baru
@@ -242,11 +242,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
               {mode === 'register' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                    <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                       Nama Pemilik
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 text-[#0D9488] dark:text-[#5EEAD4] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <User className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         required
@@ -258,11 +258,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                    <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                       Nama Usaha UMKM
                     </label>
                     <div className="relative">
-                      <Store className="w-4 h-4 text-[#0D9488] dark:text-[#5EEAD4] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <Store className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         required
@@ -277,11 +277,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
               )}
 
               <div>
-                <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                   Email Usaha
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-[#0D9488] dark:text-[#5EEAD4] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Mail className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
                     required
@@ -294,11 +294,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
                   Kata Sandi
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-[#0D9488] dark:text-[#5EEAD4] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -311,7 +311,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7280] dark:text-[#94A3B8] hover:text-[#0D9488] cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4636] dark:text-[#D5C3B3] hover:text-[#C68B59] cursor-pointer"
                     aria-label={showPassword ? 'Sembunyikan sandi' : 'Lihat sandi'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -324,11 +324,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
               </PressButton>
 
               <div className="relative py-2 flex items-center">
-                <div className="flex-1 border-t border-[#CCE5DF] dark:border-[#334155]" />
-                <span className="px-3 text-[11px] font-medium text-[#6B7280] dark:text-[#94A3B8]">
+                <div className="flex-1 border-t border-[#E2D3C1] dark:border-[#4E372B]" />
+                <span className="px-3 text-[11px] font-medium text-[#5A4636] dark:text-[#D5C3B3]">
                   atau
                 </span>
-                <div className="flex-1 border-t border-[#CCE5DF] dark:border-[#334155]" />
+                <div className="flex-1 border-t border-[#E2D3C1] dark:border-[#4E372B]" />
               </div>
 
               {/* Quick Login with Google */}
@@ -343,7 +343,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                 <span>Lanjutkan dengan Google</span>
               </PressButton>
 
-              <p className="text-[11px] text-center text-[#6B7280] dark:text-[#94A3B8] pt-1">
+              <p className="text-[11px] text-center text-[#5A4636] dark:text-[#D5C3B3] pt-1">
                 Mode autentikasi lokal (data dummy). Siap dihubungkan ke Supabase OAuth & Auth.
               </p>
             </form>
@@ -357,12 +357,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
           <PointerCard className="w-full max-w-md p-6 space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-2xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] flex items-center justify-center">
+                <div className="w-9 h-9 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] flex items-center justify-center">
                   <GoogleIcon className="w-5 h-5" />
                 </div>
                 <div>
                   <h2 className="text-base font-bold">Pilih Akun Google</h2>
-                  <p className="text-[11px] text-[#6B7280] dark:text-[#94A3B8]">
+                  <p className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3]">
                     Simulasi login Google (mode lokal sebelum Supabase OAuth)
                   </p>
                 </div>
@@ -370,7 +370,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
               <button
                 type="button"
                 onClick={() => setShowGoogleModal(false)}
-                className="p-1.5 rounded-xl bg-[#E3F3F0] dark:bg-[#0F172A] text-[#6B7280] dark:text-[#94A3B8] btn-press cursor-pointer"
+                className="p-1.5 rounded-xl bg-[#EFE3D3] dark:bg-[#2B1B14] text-[#5A4636] dark:text-[#D5C3B3] btn-press cursor-pointer"
                 aria-label="Tutup"
               >
                 <X className="w-4 h-4" />
@@ -383,14 +383,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                   key={acc.email}
                   type="button"
                   onClick={() => handleSelectGoogleAccount(acc)}
-                  className="btn-press w-full flex items-center gap-3 p-3 rounded-2xl bg-[#E3F3F0] dark:bg-[#0F172A] border border-[#CCE5DF] dark:border-[#334155] hover:bg-[#CCFBF1] dark:hover:bg-[#115E59] text-left cursor-pointer transition-colors"
+                  className="btn-press w-full flex items-center gap-3 p-3 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] hover:bg-[#EFE3D3] dark:hover:bg-[#3E2A20] text-left cursor-pointer transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-full bg-[#5EEAD4] dark:bg-[#14B8A6] text-[#0F172A] font-bold text-xs flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] font-bold text-xs flex items-center justify-center shrink-0">
                     {acc.initials}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-semibold truncate">{acc.name}</div>
-                    <div className="text-xs text-[#6B7280] dark:text-[#94A3B8] truncate">
+                    <div className="text-xs text-[#5A4636] dark:text-[#D5C3B3] truncate">
                       {acc.email}
                     </div>
                   </div>
@@ -400,9 +400,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
 
             <form
               onSubmit={handleCustomGoogleSubmit}
-              className="pt-3 border-t border-[#CCE5DF] dark:border-[#334155] space-y-2.5"
+              className="pt-3 border-t border-[#E2D3C1] dark:border-[#4E372B] space-y-2.5"
             >
-              <div className="text-xs font-semibold text-[#0F766E] dark:text-[#99F6E4]">
+              <div className="text-xs font-semibold text-[#A8703F] dark:text-[#C68B59]">
                 Atau pakai akun Gmail lain:
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -411,7 +411,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                   placeholder="Nama Anda"
                   value={customGoogleName}
                   onChange={(e) => setCustomGoogleName(e.target.value)}
-                  className="rounded-xl border border-[#CCE5DF] dark:border-[#334155] bg-[#E3F3F0] dark:bg-[#0F172A] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
+                  className="rounded-xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#EFE3D3] dark:bg-[#2B1B14] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#C68B59]"
                 />
                 <input
                   type="email"
@@ -419,7 +419,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                   placeholder="email@gmail.com"
                   value={customGoogleEmail}
                   onChange={(e) => setCustomGoogleEmail(e.target.value)}
-                  className="rounded-xl border border-[#CCE5DF] dark:border-[#334155] bg-[#E3F3F0] dark:bg-[#0F172A] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
+                  className="rounded-xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#EFE3D3] dark:bg-[#2B1B14] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#C68B59]"
                 />
               </div>
               <PressButton type="submit" variant="primary" size="sm" className="w-full">

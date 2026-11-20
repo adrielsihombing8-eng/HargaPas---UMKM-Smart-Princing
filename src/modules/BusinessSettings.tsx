@@ -19,13 +19,13 @@ export const BusinessSettings: React.FC = () => {
   const { settings, updateSettings, resetToSeed, showToast } = useHargaPas();
 
   const inputClass =
-    'w-full rounded-2xl border border-[#E5E7EB] dark:border-[#334155] bg-[#F3F4F6] dark:bg-[#0F172A] px-3.5 py-2.5 text-sm';
+    'w-full rounded-2xl border border-[#E5E7EB] dark:border-[#4E372B] bg-[#F3F4F6] dark:bg-[#2B1B14] px-3.5 py-2.5 text-sm';
 
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Pengaturan Usaha</h1>
-        <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
+        <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
           Sesuaikan profil UMKM, batas aman margin, dan preferensi tampilan aplikasi.
         </p>
       </div>
@@ -35,7 +35,7 @@ export const BusinessSettings: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+            <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
               Nama Usaha
             </label>
             <input
@@ -47,7 +47,7 @@ export const BusinessSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+            <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
               Kategori Bisnis
             </label>
             <select
@@ -64,7 +64,7 @@ export const BusinessSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+            <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
               Wilayah Usaha (Benchmark Pasar)
             </label>
             <select
@@ -81,7 +81,7 @@ export const BusinessSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+            <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
               Target Omzet Bulanan (Rp)
             </label>
             <input
@@ -96,7 +96,7 @@ export const BusinessSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#6B7280] dark:text-[#94A3B8] mb-1.5">
+            <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
               Target Laba Bersih Bulanan (Rp)
             </label>
             <input
@@ -114,7 +114,7 @@ export const BusinessSettings: React.FC = () => {
         <div className="pt-2">
           <div className="flex justify-between text-xs font-medium mb-2">
             <span>Ambang Batas Toleransi Margin Aman (%)</span>
-            <span className="font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
+            <span className="font-bold text-[#C68B59] dark:text-[#C68B59] tabular-nums">
               {settings.marginThreshold}%
             </span>
           </div>
@@ -126,7 +126,7 @@ export const BusinessSettings: React.FC = () => {
             onChange={(e) => updateSettings({ marginThreshold: Number(e.target.value) })}
             className="w-full mint-slider"
           />
-          <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] mt-1.5">
+          <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] mt-1.5">
             Produk dengan margin di bawah nilai ini akan memicu Peringatan Cerdas di Dashboard.
           </p>
         </div>
@@ -144,7 +144,7 @@ export const BusinessSettings: React.FC = () => {
       <PointerCard className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="min-w-0 flex-1">
           <h3 className="text-sm font-bold">Mode Tampilan & Data Lokal</h3>
-          <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
+          <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
             Ganti tema terang/gelap atau kembalikan data dummy ke kondisi awal.
           </p>
         </div>

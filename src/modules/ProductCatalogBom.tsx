@@ -25,7 +25,7 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Katalog Produk & Resep (BOM)</h1>
-        <p className="text-sm text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
+        <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
           Pantau status margin setiap menu dan rincian takaran bahan baku per porsi.
         </p>
       </div>
@@ -54,20 +54,20 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <h2 className="text-base font-bold">{product.name}</h2>
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#99F6E4] font-medium">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] font-medium">
                       {product.category}
                     </span>
                     <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${statusStyle}`}>
                       {statusLabel} ({formatPercent(margin)})
                     </span>
                   </div>
-                  <div className="text-xs text-[#6B7280] dark:text-[#94A3B8] flex flex-wrap gap-x-4 gap-y-1">
+                  <div className="text-xs text-[#5A4636] dark:text-[#D5C3B3] flex flex-wrap gap-x-4 gap-y-1">
                     <span>
-                      HPP: <strong className="text-[#134E4A] dark:text-[#CBD5E1] tabular-nums">{formatIDR(hpp)}</strong>
+                      HPP: <strong className="text-[#2B1B14] dark:text-[#FAF6F0] tabular-nums">{formatIDR(hpp)}</strong>
                     </span>
                     <span>
                       Harga Jual:{' '}
-                      <strong className="text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
+                      <strong className="text-[#C68B59] dark:text-[#C68B59] tabular-nums">
                         {formatIDR(product.sellingPrice)}
                       </strong>
                     </span>
@@ -86,7 +86,7 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
                         step={500}
                         value={editPrice}
                         onChange={(e) => setEditPrice(Math.max(0, Number(e.target.value)))}
-                        className="w-28 rounded-xl border border-[#CCE5DF] dark:border-[#334155] px-3 py-1.5 text-sm tabular-nums bg-[#FAF9F6] dark:bg-[#0F172A]"
+                        className="w-28 rounded-xl border border-[#E2D3C1] dark:border-[#4E372B] px-3 py-1.5 text-sm tabular-nums bg-[#FAF6F0] dark:bg-[#2B1B14]"
                       />
                       <PressButton
                         size="sm"
@@ -155,21 +155,21 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
               </div>
 
               {isExpanded && (
-                <div className="mt-5 pt-4 border-t border-[#E5E7EB] dark:border-[#334155]">
-                  <div className="text-xs font-semibold text-[#6B7280] dark:text-[#94A3B8] mb-3">
+                <div className="mt-5 pt-4 border-t border-[#E5E7EB] dark:border-[#4E372B]">
+                  <div className="text-xs font-semibold text-[#5A4636] dark:text-[#D5C3B3] mb-3">
                     Komposisi Bill of Materials (BOM) per 1 Porsi
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs">
                       <thead>
-                        <tr className="text-left text-[#6B7280] dark:text-[#94A3B8] border-b border-[#E5E7EB] dark:border-[#334155]">
+                        <tr className="text-left text-[#5A4636] dark:text-[#D5C3B3] border-b border-[#E5E7EB] dark:border-[#4E372B]">
                           <th className="pb-2 font-medium">Bahan Baku</th>
                           <th className="pb-2 font-medium">Takaran</th>
                           <th className="pb-2 font-medium">Harga Satuan</th>
                           <th className="pb-2 font-medium text-right">Biaya / Porsi</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#334155]">
+                      <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#4E372B]">
                         {product.bom.map((item) => {
                           const ing = ingredients.find((i) => i.id === item.ingredientId);
                           if (!ing) return null;
@@ -189,7 +189,7 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
                             </tr>
                           );
                         })}
-                        <tr className="bg-[#E3F3F0] dark:bg-[#0F172A]/60">
+                        <tr className="bg-[#EFE3D3] dark:bg-[#2B1B14]/60">
                           <td className="py-2 font-medium" colSpan={3}>
                             Subtotal Bahan Baku
                           </td>
@@ -198,7 +198,7 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
                           </td>
                         </tr>
                         <tr>
-                          <td className="py-2 text-[#6B7280] dark:text-[#94A3B8]" colSpan={3}>
+                          <td className="py-2 text-[#5A4636] dark:text-[#D5C3B3]" colSpan={3}>
                             Tenaga Kerja + Operasional per Porsi
                           </td>
                           <td className="py-2 text-right tabular-nums">

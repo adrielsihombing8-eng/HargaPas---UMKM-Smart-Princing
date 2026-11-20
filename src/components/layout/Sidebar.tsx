@@ -118,18 +118,18 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
   };
 
   return (
-    <aside className="flex flex-col h-full w-68 xl:w-72 bg-[#E6F6F3] dark:bg-[#1E293B] text-[#134E4A] dark:text-[#CBD5E1] border-r border-[#CCE5DF] dark:border-[#334155] select-none">
+    <aside className="flex flex-col h-full w-68 xl:w-72 bg-[#EFE3D3] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0] border-r border-[#E2D3C1] dark:border-[#4E372B] select-none">
       {/* Brand Header */}
-      <div className="px-5 xl:px-6 pt-5 pb-4 flex items-center justify-between border-b border-[#CCE5DF] dark:border-[#334155] shrink-0">
+      <div className="px-5 xl:px-6 pt-5 pb-4 flex items-center justify-between border-b border-[#E2D3C1] dark:border-[#4E372B] shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-2xl bg-[#5EEAD4] dark:bg-[#14B8A6] text-[#0F172A] flex items-center justify-center shadow-sm">
+          <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-2xl bg-[#C68B59] dark:bg-[#C68B59] text-[#FFFDF9] flex items-center justify-center shadow-sm">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <div className="font-bold text-base tracking-tight leading-tight text-[#0F766E] dark:text-[#99F6E4]">
+            <div className="font-bold text-base tracking-tight leading-tight text-[#2B1B14] dark:text-[#FAF6F0]">
               HargaPas
             </div>
-            <div className="text-[11px] text-[#0D9488] dark:text-[#5EEAD4] font-medium">
+            <div className="text-[11px] text-[#A8703F] dark:text-[#C68B59] font-medium">
               UMKM Smart Finance
             </div>
           </div>
@@ -137,7 +137,7 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
         {isMobile && onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="p-1.5 rounded-xl bg-[#CCFBF1] dark:bg-[#334155] text-[#0F766E] dark:text-[#CBD5E1] btn-press cursor-pointer"
+            className="p-1.5 rounded-xl bg-[#FFFDF9] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#FAF6F0] btn-press cursor-pointer"
             aria-label="Tutup menu"
           >
             <X className="w-4 h-4" />
@@ -147,19 +147,19 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
 
       {/* Business & User Pill */}
       <div className="px-4 pt-3.5 pb-1.5 shrink-0">
-        <div className="rounded-2xl bg-[#D6F1EC] dark:bg-[#0F172A] border border-[#BDE4DC] dark:border-[#334155] px-3.5 py-2.5">
+        <div className="rounded-2xl bg-[#FFFDF9] dark:bg-[#3E2A20] border border-[#E2D3C1] dark:border-[#4E372B] px-3.5 py-2.5">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[11px] text-[#0D9488] dark:text-[#94A3B8]">
+            <span className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3]">
               {currentUser ? currentUser.name : 'Usaha Aktif'}
             </span>
-            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#99F6E4]">
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EFE3D3] dark:bg-[#2B1B14] text-[#A8703F] dark:text-[#C68B59]">
               {currentUser?.role ?? 'Owner'}
             </span>
           </div>
-          <div className="text-xs font-semibold truncate mt-0.5 text-[#134E4A] dark:text-[#CBD5E1]">
+          <div className="text-xs font-semibold truncate mt-0.5 text-[#2B1B14] dark:text-[#FAF6F0]">
             {settings.businessName}
           </div>
-          <div className="flex items-center gap-2 mt-1 text-[11px] text-[#0F766E] dark:text-[#5EEAD4]">
+          <div className="flex items-center gap-2 mt-1 text-[11px] text-[#A8703F] dark:text-[#C68B59]">
             <span>{settings.category}</span>
             <span>•</span>
             <span>{settings.region}</span>
@@ -172,7 +172,7 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
         <div ref={containerRef} className="relative space-y-3.5">
           {/* Spring Physics Active Indicator */}
           <div
-            className="nav-spring-pill absolute left-0 right-0 rounded-2xl bg-[#99F6E4] dark:bg-[#5EEAD4] shadow-sm pointer-events-none"
+            className="nav-spring-pill absolute left-0 right-0 rounded-2xl bg-[#C68B59] dark:bg-[#C68B59] shadow-sm pointer-events-none"
             style={{
               transform: `translate3d(0, ${pillStyle.top}px, 0)`,
               height: `${pillStyle.height}px`,
@@ -183,7 +183,7 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
 
           {GROUPS.map((group) => (
             <div key={group}>
-              <div className="relative z-10 px-3 mb-1 text-[11px] font-semibold tracking-wide text-[#0D9488]/75 dark:text-[#64748B]">
+              <div className="relative z-10 px-3 mb-1 text-[11px] font-semibold tracking-wide text-[#C68B59]/75 dark:text-[#A38D7B]">
                 {group}
               </div>
               <div className="space-y-0.5">
@@ -206,16 +206,16 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
                       }}
                       className={`btn-press pointer-track z-10 w-full flex items-center justify-between px-3.5 py-2 xl:py-2.5 rounded-2xl text-sm font-medium cursor-pointer transition-colors duration-150 ${
                         isActive
-                          ? 'text-[#0F172A] font-semibold'
-                          : 'text-[#134E4A] dark:text-[#94A3B8] hover:bg-[#D6F1EC] dark:hover:bg-[#115E59]/70 hover:text-[#0F766E] dark:hover:text-[#CBD5E1]'
+                          ? 'text-[#FFFDF9] font-semibold'
+                          : 'text-[#2B1B14] dark:text-[#D5C3B3] hover:bg-[#FFFDF9]/75 dark:hover:bg-[#3E2A20]/70 hover:text-[#A8703F] dark:hover:text-[#FAF6F0]'
                       }`}
                     >
                       <span className="flex items-center gap-3 min-w-0">
                         <Icon
                           className={`w-4 h-4 shrink-0 ${
                             isActive
-                              ? 'text-[#0F766E] dark:text-[#0F172A]'
-                              : 'text-[#0D9488] dark:text-[#5EEAD4]'
+                              ? 'text-[#FFFDF9]'
+                              : 'text-[#A8703F] dark:text-[#C68B59]'
                           }`}
                         />
                         <span className="truncate">{item.label}</span>
@@ -235,10 +235,10 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-3 border-t border-[#CCE5DF] dark:border-[#334155] flex items-center justify-between gap-2 shrink-0">
-        <div className="text-[11px] text-[#0D9488] dark:text-[#94A3B8] truncate">
-          <span className="inline-flex items-center gap-1.5 text-[#0F766E] dark:text-[#5EEAD4] font-medium">
-            <span className="w-2 h-2 rounded-full bg-[#0D9488] dark:bg-[#5EEAD4] animate-pulse" />
+      <div className="px-4 py-3 border-t border-[#E2D3C1] dark:border-[#4E372B] flex items-center justify-between gap-2 shrink-0">
+        <div className="text-[11px] text-[#C68B59] dark:text-[#D5C3B3] truncate">
+          <span className="inline-flex items-center gap-1.5 text-[#A8703F] dark:text-[#C68B59] font-medium">
+            <span className="w-2 h-2 rounded-full bg-[#C68B59] dark:bg-[#C68B59] animate-pulse" />
             Mode Lokal
           </span>
         </div>
