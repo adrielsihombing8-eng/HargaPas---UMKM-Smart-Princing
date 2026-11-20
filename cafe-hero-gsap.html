@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floating Café 3D Hero — Three.js + GLTFLoader + Raycaster + GSAP</title>
+  <style>
+    :root {
+      --bg-mint: #e6f6f2;
+      --bg-cream: #faf7f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 32% 28%, var(--bg-mint), var(--bg-cream) 74%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    #hero-canvas-container {
+      position: relative;
+      width: min(94vw, 640px);
+      aspect-ratio: 4 / 5;
+      will-change: transform;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
+        "gsap": "https://unpkg.com/gsap@3.12.5/index.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="hero-canvas-container" aria-label="3D Floating Café Treats Interactive Showcase"></div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+    import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+    import gsap from 'gsap';
+
+    const container = document.getElementById('hero-canvas-container');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ----------------------------------------------------------------------
+     * 1. Renderer, Scene, Static Camera & Studio Environment Map
+     * ---------------------------------------------------------------------- */
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    container.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(
+      40,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      50
+    );
+    camera.position.set(0, 0.1, 5.8);
+    camera.lookAt(0, 0, 0);
+
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator.compileEquirectangularShader();
+    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.035).texture;
+
+    /* ----------------------------------------------------------------------
+     * 2. Soft Studio Lighting
+     * ---------------------------------------------------------------------- */
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+
+    const keyLight = new THREE.DirectionalLight(0xfffdf9, 2.25);
+    keyLight.position.set(-4.5, 8.5, 6.2);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.bias = -0.0005;
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0xe6f7f3, 0.85);
+    fillLight.position.set(5.2, 2.8, 4.2);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xffffff, 2.35);
+    rimLight.position.set(0.4, 5.2, -5.5);
+    scene.add(rimLight);
+
+    const causticLight = new THREE.PointLight(0xffe4c2, 1.15, 3.5);
+    causticLight.position.set(0.25, 0.2, 1.15);
+    scene.add(causticLight);
+
+    /* ----------------------------------------------------------------------
+     * 3. Static Raycast Hit Proxy + Iced Latte Cup Lift & Float Groups
+     * ---------------------------------------------------------------------- */
+    const staticHitProxy = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.5, 1.4, 3.0, 24),
+      new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
+    );
+    staticHitProxy.position.set(0, 0.1, 0.1);
+    scene.add(staticHitProxy);
+
+    const BASE_CUP_Y = -0.1;
+    const BASE_CUP_ROT_Y = 0;
+
+    // Outer group: controlled by GSAP timeline (rotate slightly & rise up, then stop; reverse on leave)
+    const cupLiftGroup = new THREE.Group();
+    cupLiftGroup.position.set(0.04, BASE_CUP_Y, 0);
+    cupLiftGroup.rotation.set(0.05, BASE_CUP_ROT_Y, -0.2);
+    scene.add(cupLiftGroup);
+
+    // Inner group: controlled by render loop for mid-air floating ("berhenti dan ngambang")
+    const cupFloatGroup = new THREE.Group();
+    cupLiftGroup.add(cupFloatGroup);
+
+    const cupModelGroup = new THREE.Group();
+    cupFloatGroup.add(cupModelGroup);
+
+    function buildProceduralIcedLatteCup() {
+      const fallback = new THREE.Group();
+
+      const liquidMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.56, 0.39, 1.36, 64),
+        new THREE.MeshPhysicalMaterial({
+          color: 0x8b4c20,
+          roughness: 0.16,
+          clearcoat: 0.88,
+          transmission: 0.22,
+          thickness: 0.25,
+          ior: 1.36,
+        })
+      );
+      liquidMesh.position.y = -0.12;
+      fallback.add(liquidMesh);
+
+      const foamMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.57, 40, 20, 0, Math.PI * 2, 0, Math.PI / 2),
+        new THREE.MeshPhysicalMaterial({ color: 0xf5e9d9, roughness: 0.15, clearcoat: 0.9 })
+      );
+      foamMesh.position.y = 0.56;
+      foamMesh.scale.set(1, 0.26, 1);
+      fallback.add(foamMesh);
+
+      const iceGeo = new RoundedBoxGeometry(0.26, 0.25, 0.26, 6, 0.05);
+      const iceMat = new THREE.MeshPhysicalMaterial({
+        color: 0xfffdf9,
+        transmission: 0.92,
+        thickness: 0.32,
+        ior: 1.309,
+        roughness: 0.05,
+        clearcoat: 1,
+      });
+      [
+        [-0.16, 0.67, 0.12, 0.3, 0.4, -0.2],
+        [0.16, 0.68, 0.14, -0.25, 0.6, 0.25],
+        [0.01, 0.72, -0.14, 0.2, -0.3, 0.35],
+      ].forEach(([x, y, z, rx, ry, rz]) => {
+        const ice = new THREE.Mesh(iceGeo, iceMat);
+        ice.position.set(x, y, z);
+        ice.rotation.set(rx, ry, rz);
+        fallback.add(ice);
+      });
+
+      const cupMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transmission: 0.94,
+        thickness: 0.2,
+        ior: 1.49,
+        roughness: 0.04,
+        clearcoat: 1,
+      });
+      const clearCupMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.61, 0.42, 1.48, 64),
+        cupMat
+      );
+      clearCupMesh.position.y = -0.08;
+      fallback.add(clearCupMesh);
+
+      const rimMesh = new THREE.Mesh(
+        new THREE.TorusGeometry(0.62, 0.032, 18, 64),
+        cupMat
+      );
+      rimMesh.position.y = 0.66;
+      rimMesh.rotation.x = Math.PI / 2;
+      fallback.add(rimMesh);
+
+      const domeLid = new THREE.Mesh(
+        new THREE.SphereGeometry(0.62, 48, 24, 0, Math.PI * 2, 0, Math.PI * 0.46),
+        cupMat
+      );
+      domeLid.position.set(0.16, 1.24, 0.02);
+      domeLid.rotation.set(0.18, 0.08, -0.24);
+      fallback.add(domeLid);
+
+      return fallback;
+    }
+
+    cupModelGroup.add(buildProceduralIcedLatteCup());
+
+    // Load cup.glb via GLTFLoader if present
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load(
+      'cup.glb',
+      (gltf) => {
+        cupModelGroup.clear();
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+        cupModelGroup.add(gltf.scene);
+      },
+      undefined,
+      () => {}
+    );
+
+    /* ----------------------------------------------------------------------
+     * 4. Thick Glossy Liquid Splash & Tiny Satellite Droplets
+     * ---------------------------------------------------------------------- */
+    const splashGroup = new THREE.Group();
+    splashGroup.position.set(0, 0.56, 0);
+    splashGroup.scale.set(0.001, 0.001, 0.001);
+    cupFloatGroup.add(splashGroup);
+
+    const glossyMilkMat = new THREE.MeshPhysicalMaterial({
+      color: 0xf5e9d9,
+      transmission: 0.2,
+      thickness: 0.24,
+      ior: 1.36,
+      attenuationColor: new THREE.Color(0xd99b60),
+      attenuationDistance: 0.32,
+      roughness: 0.08,
+      clearcoat: 1,
+      clearcoatRoughness: 0.03,
+    });
+
+    const glossyCaramelMat = new THREE.MeshPhysicalMaterial({
+      color: 0xc8864b,
+      transmission: 0.24,
+      thickness: 0.2,
+      ior: 1.36,
+      attenuationColor: new THREE.Color(0x6e320c),
+      attenuationDistance: 0.25,
+      roughness: 0.07,
+      clearcoat: 1,
+    });
+
+    function createSplashWave(points, baseR, material) {
+      const curve = new THREE.CatmullRomCurve3(points);
+      const geo = new THREE.TubeGeometry(curve, 48, baseR, 20, false);
+      const mesh = new THREE.Mesh(geo, material);
+      mesh.castShadow = true;
+      return mesh;
+    }
+
+    splashGroup.add(
+      createSplashWave(
+        [
+          new THREE.Vector3(0.1, 0.02, 0.08),
+          new THREE.Vector3(0.52, 0.28, 0.22),
+          new THREE.Vector3(0.95, 0.38, 0.16),
+          new THREE.Vector3(1.22, 0.64, 0.05),
+        ],
+        0.1,
+        glossyMilkMat
+      ),
+      createSplashWave(
+        [
+          new THREE.Vector3(-0.2, 0.04, 0.12),
+          new THREE.Vector3(-0.04, 0.34, 0.25),
+          new THREE.Vector3(0.28, 0.52, 0.18),
+        ],
+        0.085,
+        glossyMilkMat
+      ),
+      createSplashWave(
+        [
+          new THREE.Vector3(0.05, 0.02, 0.16),
+          new THREE.Vector3(0.45, 0.24, 0.28),
+          new THREE.Vector3(0.84, 0.34, 0.22),
+          new THREE.Vector3(1.04, 0.54, 0.11),
+        ],
+        0.065,
+        glossyCaramelMat
+      )
+    );
+
+    const dropletTargets = [
+      { pos: [1.14, 0.92, -0.04], r: 0.052, caramel: false },
+      { pos: [1.34, 0.72, 0.08], r: 0.038, caramel: false },
+      { pos: [1.26, 0.42, 0.18], r: 0.03, caramel: true },
+      { pos: [0.88, 0.64, 0.22], r: 0.035, caramel: false },
+      { pos: [0.44, 0.58, 0.25], r: 0.032, caramel: false },
+      { pos: [-0.52, 0.58, -0.08], r: 0.038, caramel: false },
+      { pos: [-0.64, 0.38, -0.14], r: 0.026, caramel: true },
+      { pos: [1.02, 0.3, -0.16], r: 0.03, caramel: false },
+    ];
+
+    const dropletGeo = new THREE.SphereGeometry(1, 20, 20);
+    const dropletMeshes = dropletTargets.map((d) => {
+      const m = new THREE.Mesh(
+        dropletGeo,
+        d.caramel ? glossyCaramelMat : glossyMilkMat
+      );
+      m.position.set(0, 0.05, 0);
+      m.scale.set(0.001, 0.001, 0.001);
+      splashGroup.add(m);
+      return m;
+    });
+
+    /* ----------------------------------------------------------------------
+     * 5. Surrounding Café Items (Gentle Slow Idle Float)
+     * ---------------------------------------------------------------------- */
+    const idleItems = [];
+
+    const takeawayGroup = new THREE.Group();
+    takeawayGroup.position.set(-1.18, 0.56, -0.1);
+    takeawayGroup.rotation.set(0.18, 0.25, 0.34);
+    takeawayGroup.scale.setScalar(0.84);
+    const paperBody = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.52, 0.38, 1.1, 48),
+      new THREE.MeshPhysicalMaterial({ color: 0xf4f0ea, roughness: 0.55 })
+    );
+    const blackLid = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.56, 0.58, 0.22, 48),
+      new THREE.MeshPhysicalMaterial({ color: 0x1f2023, roughness: 0.3, clearcoat: 0.35 })
+    );
+    blackLid.position.y = 0.62;
+    takeawayGroup.add(paperBody, blackLid);
+    scene.add(takeawayGroup);
+    idleItems.push(takeawayGroup);
+
+    const donutGroup = new THREE.Group();
+    donutGroup.position.set(-1.1, -0.88, 0.25);
+    donutGroup.rotation.set(0.58, 0.18, 0.24);
+    const doughMesh = new THREE.Mesh(
+      new THREE.TorusGeometry(0.42, 0.19, 40, 80),
+      new THREE.MeshPhysicalMaterial({ color: 0xd89648, roughness: 0.48 })
+    );
+    const icingMesh = new THREE.Mesh(
+      new THREE.TorusGeometry(0.42, 0.196, 40, 80),
+      new THREE.MeshPhysicalMaterial({ color: 0xf468ae, roughness: 0.12, clearcoat: 1 })
+    );
+    icingMesh.position.z = 0.02;
+    donutGroup.add(doughMesh, icingMesh);
+    scene.add(donutGroup);
+    idleItems.push(donutGroup);
+
+    const friesGroup = new THREE.Group();
+    friesGroup.position.set(1.15, -0.68, 0.2);
+    friesGroup.rotation.set(0.14, -0.28, -0.24);
+    friesGroup.add(
+      new THREE.Mesh(
+        new RoundedBoxGeometry(0.76, 0.82, 0.44, 6, 0.06),
+        new THREE.MeshPhysicalMaterial({ color: 0xe32920, roughness: 0.52, clearcoat: 0.12 })
+      )
+    );
+    const fryMat = new THREE.MeshPhysicalMaterial({ color: 0xf4be3b, roughness: 0.6 });
+    [-0.22, -0.11, 0, 0.11, 0.22].forEach((fx, idx) => {
+      const fry = new THREE.Mesh(
+        new RoundedBoxGeometry(0.12, 0.85 + (idx % 2) * 0.12, 0.11, 4, 0.025),
+        fryMat
+      );
+      fry.position.set(fx, 0.36, (idx % 2) * 0.06 - 0.03);
+      fry.rotation.z = -fx * 0.45;
+      friesGroup.add(fry);
+    });
+    scene.add(friesGroup);
+    idleItems.push(friesGroup);
+
+    if (!prefersReducedMotion) {
+      idleItems.forEach((group, i) => {
+        const baseY = group.position.y;
+        const dir = i % 2 === 0 ? 1 : -1;
+        gsap.fromTo(
+          group.position,
+          { y: baseY - 0.06 * dir },
+          {
+            y: baseY + 0.06 * dir,
+            duration: 3.2 + i * 0.35,
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: -1,
+          }
+        );
+      });
+    }
+
+    /* ----------------------------------------------------------------------
+     * 6. ONE Paused GSAP Timeline (Rotate Slightly + Rise Up -> Stop & Float)
+     * ---------------------------------------------------------------------- */
+    const tl = gsap.timeline({ paused: true });
+
+    if (!prefersReducedMotion) {
+      tl.to(
+        cupLiftGroup.position,
+        { y: BASE_CUP_Y + 0.68, duration: 0.85, ease: 'power3.out' },
+        0
+      )
+      .to(
+        cupLiftGroup.rotation,
+        { x: 0.14, y: BASE_CUP_ROT_Y + 0.92, z: -0.06, duration: 0.85, ease: 'power3.out' },
+        0
+      )
+      .addLabel('peak', 0.48)
+      .to(
+        splashGroup.scale,
+        { x: 1, y: 1, z: 1, duration: 0.52, ease: 'back.out(1.7)' },
+        'peak'
+      );
+
+      dropletMeshes.forEach((mesh, i) => {
+        const d = dropletTargets[i];
+        tl.to(
+          mesh.position,
+          { x: d.pos[0], y: d.pos[1], z: d.pos[2], duration: 0.48, ease: 'power3.out' },
+          `peak+=${0.03 + i * 0.025}`
+        ).to(
+          mesh.scale,
+          { x: d.r, y: d.r * 1.25, z: d.r, duration: 0.42, ease: 'back.out(1.7)' },
+          `peak+=${0.03 + i * 0.025}`
+        );
+      });
+    }
+
+    /* ----------------------------------------------------------------------
+     * 7. Raycast on pointermove + Mid-Air Levitation ("Berhenti dan Ngambang")
+     * ---------------------------------------------------------------------- */
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2(-99, -99);
+    let isHoveringCup = false;
+    let hoverFloatWeight = 0;
+    let hoverFloatPhase = 0;
+
+    function updateRaycast(clientX, clientY) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObject(staticHitProxy, false).length > 0;
+
+      if (hit !== isHoveringCup) {
+        isHoveringCup = hit;
+        renderer.domElement.style.cursor = hit ? 'pointer' : 'default';
+        if (hit) {
+          tl.timeScale(1).play();
+        } else {
+          tl.timeScale(1.15).reverse();
+        }
+      }
+    }
+
+    renderer.domElement.addEventListener('pointermove', (e) => {
+      updateRaycast(e.clientX, e.clientY);
+    });
+
+    renderer.domElement.addEventListener('pointerdown', (e) => {
+      updateRaycast(e.clientX, e.clientY);
+    });
+
+    renderer.domElement.addEventListener('pointerleave', () => {
+      if (isHoveringCup) {
+        isHoveringCup = false;
+        renderer.domElement.style.cursor = 'default';
+        tl.timeScale(1.15).reverse();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = Math.min(clock.getDelta(), 0.05);
+
+      if (!prefersReducedMotion) {
+        // Blend mid-air floating weight (0 when pointer away -> 1 while hovering)
+        hoverFloatWeight = THREE.MathUtils.lerp(
+          hoverFloatWeight,
+          isHoveringCup ? 1 : 0,
+          dt * 4.2
+        );
+
+        if (hoverFloatWeight > 0.001) {
+          hoverFloatPhase += dt * 2.3;
+        } else {
+          hoverFloatPhase = 0;
+        }
+
+        // Gentle mid-air floating ("ngambang") at the top while hovered
+        cupFloatGroup.position.y = Math.sin(hoverFloatPhase) * 0.075 * hoverFloatWeight;
+        cupFloatGroup.rotation.y = Math.sin(hoverFloatPhase * 0.75) * 0.055 * hoverFloatWeight;
+        cupFloatGroup.rotation.z = Math.cos(hoverFloatPhase * 0.9) * 0.032 * hoverFloatWeight;
+      }
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>

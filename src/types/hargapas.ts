@@ -103,3 +103,11 @@ export interface MarketPriceRange {
   medianPrice: number;
   maxPrice: number;
 }
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  businessName: string;
+  role: 'Owner UMKM' | 'Kasir';
+}

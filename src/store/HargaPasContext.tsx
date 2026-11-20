@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import {
+  AuthUser,
   BusinessSettings,
   CashFlowEntry,
   Ingredient,
@@ -24,10 +25,31 @@ interface HargaPasState {
   settings: BusinessSettings;
 }
 
+interface StoredAccount {
+  user: AuthUser;
+  password: string;
+}
+
+interface AuthResult {
+  ok: boolean;
+  error?: string;
+}
+
 interface HargaPasContextValue extends HargaPasState {
+  currentUser: AuthUser | null;
   smartAlerts: SmartAlert[];
   toastMessage: string | null;
   showToast: (msg: string) => void;
+  login: (email: string, password: string) => AuthResult;
+  register: (params: {
+    name: string;
+    email: string;
+    password: string;
+    businessName: string;
+  }) => AuthResult;
+  loginDemo: () => void;
+  loginWithGoogle: (params: { name: string; email: string; businessName?: string }) => void;
+  logout: () => void;
   updateSettings: (partial: Partial<BusinessSettings>) => void;
   updateIngredientPrice: (ingredientId: string, newPrice: number, note?: string) => void;
   restockIngredient: (ingredientId: string, addedQty: number) => void;
@@ -46,6 +68,43 @@ interface HargaPasContextValue extends HargaPasState {
 }
 
 const STORAGE_KEY = 'hargapas_umkm_v1';
+const AUTH_SESSION_KEY = 'hargapas_auth_session_v1';
+const AUTH_ACCOUNTS_KEY = 'hargapas_auth_accounts_v1';
+
+const DEMO_ACCOUNT: StoredAccount = {
+  user: {
+    id: 'user-demo',
+    name: 'Budi Santoso',
+    email: 'demo@hargapas.id',
+    businessName: SEED_SETTINGS.businessName,
+    role: 'Owner UMKM',
+  },
+  password: 'hargapas123',
+};
+
+function loadInitialUser(): AuthUser | null {
+  try {
+    const raw = localStorage.getItem(AUTH_SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as AuthUser;
+  } catch {
+    return null;
+  }
+}
+
+function loadStoredAccounts(): StoredAccount[] {
+  try {
+    const raw = localStorage.getItem(AUTH_ACCOUNTS_KEY);
+    if (!raw) return [DEMO_ACCOUNT];
+    const parsed = JSON.parse(raw) as StoredAccount[];
+    const hasDemo = parsed.some(
+      (a) => a.user.email.toLowerCase() === DEMO_ACCOUNT.user.email.toLowerCase()
+    );
+    return hasDemo ? parsed : [DEMO_ACCOUNT, ...parsed];
+  } catch {
+    return [DEMO_ACCOUNT];
+  }
+}
 
 const defaultState: HargaPasState = {
   ingredients: SEED_INGREDIENTS,
@@ -76,6 +135,7 @@ const HargaPasContext = createContext<HargaPasContextValue | null>(null);
 
 export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<HargaPasState>(loadInitialState);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(loadInitialUser);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -102,6 +162,129 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     window.setTimeout(() => {
       setToastMessage((prev) => (prev === msg ? null : prev));
     }, 3200);
+  };
+
+  const login = (email: string, password: string): AuthResult => {
+    const normalized = email.trim().toLowerCase();
+    if (!normalized || !password) {
+      return { ok: false, error: 'Email dan kata sandi wajib diisi.' };
+    }
+    const accounts = loadStoredAccounts();
+    const matched = accounts.find(
+      (a) => a.user.email.toLowerCase() === normalized
+    );
+    if (!matched || matched.password !== password) {
+      return { ok: false, error: 'Email atau kata sandi belum sesuai.' };
+    }
+    setCurrentUser(matched.user);
+    try {
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(matched.user));
+    } catch {
+      // Ignore storage errors
+    }
+    showToast(`Selamat datang kembali, ${matched.user.name}`);
+    return { ok: true };
+  };
+
+  const register: HargaPasContextValue['register'] = ({
+    name,
+    email,
+    password,
+    businessName,
+  }) => {
+    const cleanName = name.trim();
+    const normalizedEmail = email.trim().toLowerCase();
+    const cleanBiz = businessName.trim();
+
+    if (!cleanName || !normalizedEmail || !cleanBiz) {
+      return { ok: false, error: 'Nama lengkap, nama usaha, dan email wajib diisi.' };
+    }
+    if (!normalizedEmail.includes('@')) {
+      return { ok: false, error: 'Format email belum valid.' };
+    }
+    if (password.length < 6) {
+      return { ok: false, error: 'Kata sandi minimal 6 karakter.' };
+    }
+
+    const accounts = loadStoredAccounts();
+    if (accounts.some((a) => a.user.email.toLowerCase() === normalizedEmail)) {
+      return { ok: false, error: 'Email tersebut sudah terdaftar. Silakan masuk.' };
+    }
+
+    const newUser: AuthUser = {
+      id: `user-${Date.now()}`,
+      name: cleanName,
+      email: normalizedEmail,
+      businessName: cleanBiz,
+      role: 'Owner UMKM',
+    };
+
+    try {
+      localStorage.setItem(
+        AUTH_ACCOUNTS_KEY,
+        JSON.stringify([...accounts, { user: newUser, password }])
+      );
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(newUser));
+    } catch {
+      // Ignore storage errors
+    }
+
+    setCurrentUser(newUser);
+    setState((prev) => ({
+      ...prev,
+      settings: { ...prev.settings, businessName: cleanBiz },
+    }));
+    showToast(`Akun "${cleanName}" berhasil dibuat!`);
+    return { ok: true };
+  };
+
+  const loginDemo = () => {
+    setCurrentUser(DEMO_ACCOUNT.user);
+    try {
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(DEMO_ACCOUNT.user));
+    } catch {
+      // Ignore storage errors
+    }
+    showToast(`Masuk sebagai akun demo (${DEMO_ACCOUNT.user.name})`);
+  };
+
+  const loginWithGoogle: HargaPasContextValue['loginWithGoogle'] = ({
+    name,
+    email,
+    businessName,
+  }) => {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = name.trim() || 'Pengguna Google';
+    const googleUser: AuthUser = {
+      id: `google-${Date.now()}`,
+      name: cleanName,
+      email: cleanEmail,
+      businessName: businessName?.trim() || state.settings.businessName,
+      role: 'Owner UMKM',
+    };
+    setCurrentUser(googleUser);
+    if (businessName?.trim()) {
+      setState((prev) => ({
+        ...prev,
+        settings: { ...prev.settings, businessName: businessName.trim() },
+      }));
+    }
+    try {
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(googleUser));
+    } catch {
+      // Ignore storage errors
+    }
+    showToast(`Berhasil masuk dengan Google (${cleanEmail})`);
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem(AUTH_SESSION_KEY);
+    } catch {
+      // Ignore storage errors
+    }
+    showToast('Anda telah keluar dari sesi aplikasi');
   };
 
   const smartAlerts = useMemo(
@@ -267,9 +450,15 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     <HargaPasContext.Provider
       value={{
         ...state,
+        currentUser,
         smartAlerts,
         toastMessage,
         showToast,
+        login,
+        register,
+        loginDemo,
+        loginWithGoogle,
+        logout,
         updateSettings,
         updateIngredientPrice,
         restockIngredient,

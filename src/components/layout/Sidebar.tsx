@@ -9,6 +9,7 @@ import {
   Store,
   ShoppingCart,
   FileSpreadsheet,
+  LogOut,
   Settings,
   Sparkles,
   X,
@@ -58,7 +59,7 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
   onCloseMobile,
   isMobile = false,
 }) => {
-  const { settings, smartAlerts } = useHargaPas();
+  const { currentUser, logout, settings, smartAlerts } = useHargaPas();
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [pillStyle, setPillStyle] = useState<{
@@ -144,10 +145,17 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
         )}
       </div>
 
-      {/* Business Pill */}
+      {/* Business & User Pill */}
       <div className="px-4 pt-3.5 pb-1.5 shrink-0">
         <div className="rounded-2xl bg-[#D6F1EC] dark:bg-[#0F172A] border border-[#BDE4DC] dark:border-[#334155] px-3.5 py-2.5">
-          <div className="text-[11px] text-[#0D9488] dark:text-[#94A3B8]">Usaha Aktif</div>
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[11px] text-[#0D9488] dark:text-[#94A3B8]">
+              {currentUser ? currentUser.name : 'Usaha Aktif'}
+            </span>
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#CCFBF1] dark:bg-[#115E59] text-[#0F766E] dark:text-[#99F6E4]">
+              {currentUser?.role ?? 'Owner'}
+            </span>
+          </div>
           <div className="text-xs font-semibold truncate mt-0.5 text-[#134E4A] dark:text-[#CBD5E1]">
             {settings.businessName}
           </div>
@@ -227,12 +235,23 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="px-5 py-3.5 border-t border-[#CCE5DF] dark:border-[#334155] text-[11px] text-[#0D9488] dark:text-[#94A3B8] flex items-center justify-between shrink-0">
-        <span>Mode Lokal (Dummy)</span>
-        <span className="inline-flex items-center gap-1.5 text-[#0F766E] dark:text-[#5EEAD4] font-medium">
-          <span className="w-2 h-2 rounded-full bg-[#0D9488] dark:bg-[#5EEAD4] animate-pulse" />
-          Siap Supabase
-        </span>
+      <div className="px-4 py-3 border-t border-[#CCE5DF] dark:border-[#334155] flex items-center justify-between gap-2 shrink-0">
+        <div className="text-[11px] text-[#0D9488] dark:text-[#94A3B8] truncate">
+          <span className="inline-flex items-center gap-1.5 text-[#0F766E] dark:text-[#5EEAD4] font-medium">
+            <span className="w-2 h-2 rounded-full bg-[#0D9488] dark:bg-[#5EEAD4] animate-pulse" />
+            Mode Lokal
+          </span>
+        </div>
+        <button
+          onClick={() => {
+            logout();
+            onCloseMobile?.();
+          }}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFE4E6] dark:bg-[#7F1D1D] text-[#BE123C] dark:text-[#FDA4AF] text-xs font-semibold hover:bg-[#FECDD3] dark:hover:bg-[#991B1B] btn-press cursor-pointer shrink-0"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          Keluar
+        </button>
       </div>
     </aside>
   );

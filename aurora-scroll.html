@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll-Driven Northern Lights Aurora Current — SVG + GSAP ScrollTrigger</title>
+  <style>
+    :root {
+      --bg-navy-top: #050a24;
+      --bg-navy-bottom: #0a1240;
+      --aurora-cyan: #4fd8ff;
+      --aurora-blue: #3b6cff;
+      --aurora-violet: #a66bff;
+      --aurora-green: #5dffb0;
+      --aurora-pink: #ff6b9d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 500vh;
+      background: linear-gradient(180deg, var(--bg-navy-top) 0%, var(--bg-navy-bottom) 100%);
+      color: #dbeafe;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Fixed full-screen aurora layer behind page content */
+    .aurora-container {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .aurora-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      mix-blend-mode: screen;
+    }
+
+    .ribbon-parallax-group {
+      will-change: transform;
+    }
+
+    .ribbon-sway-group {
+      will-change: transform, opacity;
+      mix-blend-mode: screen;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .card {
+      max-width: 580px;
+      padding: 2.5rem 2.25rem;
+      border-radius: 1.5rem;
+      background: rgba(10, 18, 64, 0.45);
+      border: 1px solid rgba(79, 216, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 24px 60px rgba(2, 6, 23, 0.55);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      margin-bottom: 1rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--aurora-cyan);
+      background: rgba(79, 216, 255, 0.12);
+      border: 1px solid rgba(79, 216, 255, 0.3);
+    }
+
+    h1, h2 {
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.85rem;
+      background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: rgba(219, 234, 254, 0.8);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ribbon-parallax-group,
+      .ribbon-sway-group {
+        will-change: auto !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed Full-Screen SVG Aurora Current Container -->
+  <div class="aurora-container" aria-hidden="true">
+    <svg
+      id="aurora-svg"
+      class="aurora-svg"
+      viewBox="0 0 1440 1000"
+      preserveAspectRatio="none"
+    >
+      <defs id="aurora-defs">
+        <filter id="blur-back" x="-25%" y="-25%" width="150%" height="150%">
+          <feGaussianBlur stdDeviation="23" />
+        </filter>
+        <filter id="blur-mid" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="17" />
+        </filter>
+        <filter id="blur-front" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="13" />
+        </filter>
+
+        <linearGradient id="curtain-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#7DD3FC" stop-opacity="0" />
+          <stop offset="40%" stop-color="#BAE6FD" stop-opacity="0.38" />
+          <stop offset="75%" stop-color="#93C5FD" stop-opacity="0.24" />
+          <stop offset="100%" stop-color="#BFDBFE" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <g id="aurora-stage"></g>
+    </svg>
+  </div>
+
+  <!-- 500vh Scrollable Page Content -->
+  <main>
+    <section class="section">
+      <div class="card">
+        <span class="badge">Pojok Kiri Atas · 01 / 05</span>
+        <h1>Northern Lights River Current</h1>
+        <p>
+          Aliran aurora masuk dari pojok kiri atas lalu meliuk kanan-kiri menuju bagian tengah
+          seiring halaman di-scroll ke bawah.
+        </p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="card">
+        <span class="badge">Meander Kanan-Kiri · 02 / 05</span>
+        <h2>Menuju Bagian Tengah</h2>
+        <p>
+          Enam pita aurora berlapis dengan inti tipis terang, halo blur lebar, dan tirai cahaya vertikal
+          mengalir menyatu menuju tengah layar.
+        </p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="card">
+        <span class="badge">Bagian Tengah ke Pojok Kanan · 03 / 05</span>
+        <h2>Menyapu ke Pojok Kanan</h2>
+        <p>
+          Dari bagian tengah, arus aurora berbelok lebar menyapu hingga ke tepi pojok kanan layar.
+        </p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="card">
+        <span class="badge">Kanan-Kiri Lagi · 04 / 05</span>
+        <h2>Meliuk Kembali</h2>
+        <p>
+          Setelah menyentuh pojok kanan, pita aurora kembali meliuk kiri dan kanan sebelum turun ke bawah.
+        </p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="card">
+        <span class="badge">Pojok Kiri Bawah · 05 / 05</span>
+        <h2>Berakhir di Pojok Kiri Bawah</h2>
+        <p>
+          Aliran tiba di ujung pojok kiri bawah. Scroll kembali ke atas untuk membalikkan aliran aurora secara mulus.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- GSAP + ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ======================================================================
+     * TWEAKABLE CONFIGURATION VARIABLES
+     * ====================================================================== */
+    const CONFIG = {
+      colors: {
+        skyPastel: '#7DD3FC',
+        bluePastel: '#93C5FD',
+        icePastel: '#BAE6FD',
+        babyBlue: '#BFDBFE',
+        softAzure: '#60A5FA',
+      },
+      ribbonCount: 6,
+      scrollScrub: 1,
+      swayDistancePx: 15,
+      swayDurationRange: [6, 10],
+      breathingOpacity: [0.7, 1.0],
+    };
+
+    /**
+     * Generates a C1-continuous cubic bezier river path following the exact course:
+     * Top-Left Corner -> Right-Left -> Middle -> Far-Right Edge -> Left-Right -> Bottom-Left Corner
+     */
+    function buildBraidedRiverPath(dx, dy, spread) {
+      const p = (x, y) => `${(x + dx).toFixed(1)} ${(y + dy).toFixed(1)}`;
+      const xRight1 = 620 + spread * 0.7;
+      const xLeft1 = 210 - spread * 0.6;
+      const xCenter = 720 + spread * 0.5;
+      const xFarRight = Math.min(1425, 1380 + spread * 0.45);
+      const xLeft2 = 430 - spread * 0.65;
+      const xRight2 = 1030 + spread * 0.7;
+
+      return [
+        `M ${p(-25, -18)}`,
+        `C ${p(220, 18)}, ${p(xRight1, 90)}, ${p(xRight1, 175)}`,
+        `C ${p(xRight1, 260)}, ${p(xLeft1, 240)}, ${p(xLeft1, 320)}`,
+        `C ${p(xLeft1, 400)}, ${p(xCenter - 200, 430)}, ${p(xCenter, 460)}`,
+        `C ${p(xCenter + 200, 490)}, ${p(xFarRight, 495)}, ${p(xFarRight, 580)}`,
+        `C ${p(xFarRight, 665)}, ${p(xLeft2, 640)}, ${p(xLeft2, 720)}`,
+        `C ${p(xLeft2, 800)}, ${p(xRight2, 775)}, ${p(xRight2, 855)}`,
+        `C ${p(xRight2, 935)}, ${p(310, 975)}, ${p(-25, 1012)}`,
+      ].join(' ');
+    }
+
+    const RIBBONS = [
+      {
+        id: 'ribbon-1',
+        d: buildBraidedRiverPath(0, 0, 0),
+        colors: [CONFIG.colors.softAzure, CONFIG.colors.skyPastel, CONFIG.colors.icePastel, '#E0F2FE'],
+        coreWidth: 5.0,
+        haloWidth: 44,
+        filter: 'url(#blur-front)',
+        scrollRange: [0.0, 0.92],
+        parallaxY: 28,
+        curtains: [[110, 35, 110], [605, 175, 145], [225, 320, 140], [720, 460, 150], [1365, 580, 155], [445, 720, 145], [1010, 855, 140], [340, 965, 125]],
+      },
+      {
+        id: 'ribbon-2',
+        d: buildBraidedRiverPath(28, -18, 42),
+        colors: [CONFIG.colors.skyPastel, CONFIG.colors.bluePastel, CONFIG.colors.babyBlue, '#EFF6FF'],
+        coreWidth: 4.4,
+        haloWidth: 48,
+        filter: 'url(#blur-mid)',
+        scrollRange: [0.02, 0.95],
+        parallaxY: 18,
+        curtains: [[240, 55, 120], [645, 165, 140], [745, 445, 140], [1390, 565, 150], [420, 705, 135], [1050, 840, 145]],
+      },
+      {
+        id: 'ribbon-3',
+        d: buildBraidedRiverPath(-32, 22, -48),
+        colors: [CONFIG.colors.softAzure, CONFIG.colors.bluePastel, CONFIG.colors.icePastel, '#DBEAFE'],
+        coreWidth: 3.4,
+        haloWidth: 58,
+        filter: 'url(#blur-back)',
+        scrollRange: [0.0, 0.98],
+        parallaxY: 10,
+        curtains: [[510, 130, 150], [240, 340, 145], [690, 480, 155], [1330, 600, 160], [470, 740, 145], [970, 875, 150]],
+      },
+      {
+        id: 'ribbon-4',
+        d: buildBraidedRiverPath(-16, 12, 28),
+        colors: ['#38BDF8', CONFIG.colors.skyPastel, CONFIG.colors.icePastel, '#F0F9FF'],
+        coreWidth: 4.2,
+        haloWidth: 50,
+        filter: 'url(#blur-mid)',
+        scrollRange: [0.05, 0.97],
+        parallaxY: 22,
+        curtains: [[165, 48, 115], [590, 190, 135], [1040, 515, 140], [1370, 590, 150], [1025, 865, 140], [260, 975, 120]],
+      },
+      {
+        id: 'ribbon-5',
+        d: buildBraidedRiverPath(18, 26, -34),
+        colors: [CONFIG.colors.bluePastel, CONFIG.colors.skyPastel, '#A5F3FC', '#E0F2FE'],
+        coreWidth: 3.8,
+        haloWidth: 52,
+        filter: 'url(#blur-back)',
+        scrollRange: [0.08, 1.0],
+        parallaxY: 14,
+        curtains: [[460, 115, 130], [310, 290, 135], [735, 485, 140], [1350, 605, 145], [455, 745, 135], [995, 880, 140]],
+      },
+      {
+        id: 'ribbon-6',
+        d: buildBraidedRiverPath(10, -8, -18),
+        colors: [CONFIG.colors.skyPastel, CONFIG.colors.icePastel, '#E0F2FE', '#F0F9FF'],
+        coreWidth: 3.6,
+        haloWidth: 34,
+        filter: 'url(#blur-front)',
+        scrollRange: [0.03, 0.94],
+        parallaxY: 34,
+        curtains: [[295, 72, 110], [610, 168, 125], [215, 312, 125], [725, 452, 130], [1375, 572, 135], [435, 712, 125], [1015, 848, 130]],
+      },
+    ].slice(0, CONFIG.ribbonCount);
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const defs = document.getElementById('aurora-defs');
+    const stage = document.getElementById('aurora-stage');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const ribbonNodes = RIBBONS.map((cfg, index) => {
+      const grad = document.createElementNS(svgNS, 'linearGradient');
+      grad.setAttribute('id', `grad-${cfg.id}`);
+      grad.setAttribute('x1', '0%');
+      grad.setAttribute('y1', '0%');
+      grad.setAttribute('x2', '0%');
+      grad.setAttribute('y2', '100%');
+
+      const stops = [
+        { offset: '0%', color: cfg.colors[0], opacity: '0.05' },
+        { offset: '35%', color: cfg.colors[0], opacity: '0.45' },
+        { offset: '72%', color: cfg.colors[1], opacity: '0.88' },
+        { offset: '93%', color: cfg.colors[2], opacity: '1.0' },
+        { offset: '100%', color: cfg.colors[3], opacity: '0.96' },
+      ];
+      stops.forEach((s) => {
+        const stop = document.createElementNS(svgNS, 'stop');
+        stop.setAttribute('offset', s.offset);
+        stop.setAttribute('stop-color', s.color);
+        stop.setAttribute('stop-opacity', s.opacity);
+        grad.appendChild(stop);
+      });
+      defs.appendChild(grad);
+
+      const parallaxGroup = document.createElementNS(svgNS, 'g');
+      parallaxGroup.setAttribute('class', 'ribbon-parallax-group');
+
+      const swayGroup = document.createElementNS(svgNS, 'g');
+      swayGroup.setAttribute('class', 'ribbon-sway-group');
+
+      const curtainGroup = document.createElementNS(svgNS, 'g');
+      curtainGroup.style.opacity = prefersReducedMotion ? '0.65' : '0';
+      cfg.curtains.forEach(([cx, cy, ch]) => {
+        [-12, 0, 13].forEach((dx, k) => {
+          const line = document.createElementNS(svgNS, 'line');
+          line.setAttribute('x1', cx + dx);
+          line.setAttribute('y1', cy - ch * (0.6 - k * 0.08));
+          line.setAttribute('x2', cx + dx);
+          line.setAttribute('y2', cy + ch * 0.35);
+          line.setAttribute('stroke', 'url(#curtain-grad)');
+          line.setAttribute('stroke-width', k === 1 ? '9' : '5');
+          line.setAttribute('stroke-linecap', 'round');
+          line.setAttribute('opacity', k === 1 ? '0.32' : '0.2');
+          curtainGroup.appendChild(line);
+        });
+      });
+
+      const haloPath = document.createElementNS(svgNS, 'path');
+      haloPath.setAttribute('d', cfg.d);
+      haloPath.setAttribute('fill', 'none');
+      haloPath.setAttribute('stroke', `url(#grad-${cfg.id})`);
+      haloPath.setAttribute('stroke-width', cfg.haloWidth);
+      haloPath.setAttribute('stroke-linecap', 'round');
+      haloPath.setAttribute('filter', cfg.filter);
+
+      const corePath = document.createElementNS(svgNS, 'path');
+      corePath.setAttribute('d', cfg.d);
+      corePath.setAttribute('fill', 'none');
+      corePath.setAttribute('stroke', `url(#grad-${cfg.id})`);
+      corePath.setAttribute('stroke-width', cfg.coreWidth);
+      corePath.setAttribute('stroke-linecap', 'round');
+
+      swayGroup.appendChild(curtainGroup);
+      swayGroup.appendChild(haloPath);
+      swayGroup.appendChild(corePath);
+      parallaxGroup.appendChild(swayGroup);
+      stage.appendChild(parallaxGroup);
+
+      const length = corePath.getTotalLength();
+      haloPath.style.strokeDasharray = `${length}`;
+      corePath.style.strokeDasharray = `${length}`;
+
+      const initialOffset = prefersReducedMotion ? 0 : length;
+      haloPath.style.strokeDashoffset = `${initialOffset}`;
+      corePath.style.strokeDashoffset = `${initialOffset}`;
+
+      return {
+        cfg,
+        index,
+        grad,
+        parallaxGroup,
+        swayGroup,
+        curtainGroup,
+        haloPath,
+        corePath,
+        length,
+      };
+    });
+
+    if (!prefersReducedMotion) {
+      ribbonNodes.forEach(({ swayGroup, index }) => {
+        const dir = index % 2 === 0 ? 1 : -1;
+        const duration = gsap.utils.random(
+          CONFIG.swayDurationRange[0],
+          CONFIG.swayDurationRange[1]
+        );
+        const delay = gsap.utils.random(0, 2.5);
+
+        gsap.fromTo(
+          swayGroup,
+          {
+            x: -CONFIG.swayDistancePx * dir,
+            opacity: CONFIG.breathingOpacity[0],
+          },
+          {
+            x: CONFIG.swayDistancePx * dir,
+            opacity: CONFIG.breathingOpacity[1],
+            duration,
+            delay,
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: -1,
+          }
+        );
+      });
+
+      ScrollTrigger.create({
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: CONFIG.scrollScrub,
+        onUpdate: (self) => {
+          const globalProgress = self.progress;
+
+          ribbonNodes.forEach(({ cfg, grad, parallaxGroup, curtainGroup, haloPath, corePath, length }) => {
+            const [startP, endP] = cfg.scrollRange;
+            const span = Math.max(0.01, endP - startP);
+            const localP = gsap.utils.clamp(0, 1, (globalProgress - startP) / span);
+
+            const dashOffset = length * (1 - localP);
+            haloPath.style.strokeDashoffset = `${dashOffset}`;
+            corePath.style.strokeDashoffset = `${dashOffset}`;
+
+            const py = (0.5 - globalProgress) * cfg.parallaxY;
+            parallaxGroup.style.transform = `translate3d(0, ${py.toFixed(1)}px, 0)`;
+
+            curtainGroup.style.opacity = `${(localP * 0.85).toFixed(2)}`;
+
+            const headY = Math.max(5, localP * 105);
+            const tailY = Math.max(0, headY - 75);
+            grad.setAttribute('y1', `${tailY.toFixed(1)}%`);
+            grad.setAttribute('y2', `${headY.toFixed(1)}%`);
+          });
+        },
+      });
+    }
+  </script>
+</body>
+</html>
