@@ -6,7 +6,7 @@ import { Toast } from './components/ui/Toast';
 import { NavModuleId } from './types/hargapas';
 import { LandingPage } from './modules/LandingPage';
 
-// Lazy-load AuthPage and all 10 workspace modules so the Landing Page bundle stays super fast
+// Lazy-load AuthPage (Login Modal Dialog) and all 10 workspace modules
 const AuthPage = lazy(() =>
   import('./modules/AuthPage').then((m) => ({ default: m.AuthPage }))
 );
@@ -44,7 +44,7 @@ const BusinessSettings = lazy(() =>
 const ModuleLoadingFallback: React.FC = () => (
   <div className="min-h-[40vh] flex items-center justify-center">
     <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-xs font-semibold text-[#A8703F] dark:text-[#C68B59]">
-      <span className="w-4 h-4 rounded-full border-2 border-[#C68B59] border-t-[#C68B59] animate-spin" />
+      <span className="w-4 h-4 rounded-full border-2 border-[#EFE3D3] border-t-[#C68B59] animate-spin" />
       Memuat modul...
     </div>
   </div>
@@ -52,6 +52,7 @@ const ModuleLoadingFallback: React.FC = () => (
 
 const AppShell: React.FC = () => {
   const [showLanding, setShowLanding] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingModule, setPendingModule] = useState<NavModuleId>('dashboard');
   const [activeModule, setActiveModule] = useState<NavModuleId>('dashboard');
   const [hppEditProductId, setHppEditProductId] = useState<string | null>(null);
@@ -62,6 +63,11 @@ const AppShell: React.FC = () => {
 
   const handleEnterApp = (initialModule: NavModuleId = 'dashboard') => {
     setPendingModule(initialModule);
+    if (!currentUser) {
+      // Open Login Modal Dialog on top of the current page instead of navigating to a new page
+      setShowAuthModal(true);
+      return;
+    }
     setActiveModule(initialModule);
     setShowLanding(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -72,31 +78,23 @@ const AppShell: React.FC = () => {
     setActiveModule('hpp-calculator');
   };
 
-  if (showLanding) {
+  if (showLanding || !currentUser) {
     return (
       <>
         <LandingPage onEnterApp={handleEnterApp} />
-        <Toast />
-      </>
-    );
-  }
-
-  // Wajib login sebelum masuk ke workspace aplikasi
-  if (!currentUser) {
-    return (
-      <>
-        <Suspense fallback={<ModuleLoadingFallback />}>
-          <AuthPage
-            onSuccess={() => {
-              setActiveModule(pendingModule);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            onBackToLanding={() => {
-              setShowLanding(true);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          />
-        </Suspense>
+        {showAuthModal && (
+          <Suspense fallback={null}>
+            <AuthPage
+              onSuccess={() => {
+                setShowAuthModal(false);
+                setActiveModule(pendingModule);
+                setShowLanding(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onClose={() => setShowAuthModal(false)}
+            />
+          </Suspense>
+        )}
         <Toast />
       </>
     );
@@ -133,7 +131,7 @@ const AppShell: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#FAF6F0] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0]">
+    <div className="min-h-screen flex bg-[#FAF6F0] dark:bg-[#1B120D] text-[#2B1B14] dark:text-[#FAF6F0]">
       <Sidebar
         activeModule={activeModule}
         onSelect={setActiveModule}
@@ -143,14 +141,14 @@ const AppShell: React.FC = () => {
 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar (Mobile + Beranda + Theme + Keluar) */}
-        <header className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-[#FAF6F0]/90 dark:bg-[#2B1B14]/90 backdrop-blur-md border-b border-[#E2D3C1] dark:border-[#4E372B]">
+        <header className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-[#FAF6F0]/90 dark:bg-[#1B120D]/90 backdrop-blur-md border-b border-[#E2D3C1] dark:border-[#4E372B]">
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setMobileOpen(true)}
               className="lg:hidden p-2 rounded-xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] btn-press cursor-pointer"
               aria-label="Buka menu navigasi"
             >
-              <Menu className="w-5 h-5 text-[#C68B59] dark:text-[#C68B59]" />
+              <Menu className="w-5 h-5 text-[#A8703F] dark:text-[#C68B59]" />
             </button>
             <div className="text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] truncate">
               HargaPas UMKM <span className="mx-1.5">/</span>{' '}
@@ -166,22 +164,25 @@ const AppShell: React.FC = () => {
                 setShowLanding(true);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-xs font-semibold text-[#A8703F] dark:text-[#C68B59] hover:bg-[#EFE3D3] dark:hover:bg-[#4E372B] btn-press cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-xs font-semibold text-[#2B1B14] dark:text-[#FAF6F0] hover:bg-[#EFE3D3] dark:hover:bg-[#3E2A20] btn-press cursor-pointer whitespace-nowrap"
               title="Kembali ke Landing Page"
             >
-              <Home className="w-3.5 h-3.5" />
+              <Home className="w-3.5 h-3.5 text-[#A8703F] dark:text-[#C68B59]" />
               <span className="hidden sm:inline">Beranda</span>
             </button>
             <button
               onClick={() => updateSettings({ darkMode: !settings.darkMode })}
-              className="p-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-[#C68B59] dark:text-[#C68B59] btn-press cursor-pointer"
+              className="p-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-[#A8703F] dark:text-[#C68B59] btn-press cursor-pointer"
               aria-label="Ganti mode warna"
               title={settings.darkMode ? 'Mode Terang' : 'Mode Gelap'}
             >
               {settings.darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
-              onClick={logout}
+              onClick={() => {
+                logout();
+                setShowLanding(true);
+              }}
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FFE4E6] dark:bg-[#7F1D1D] text-xs font-semibold text-[#BE123C] dark:text-[#FDA4AF] hover:bg-[#FECDD3] dark:hover:bg-[#991B1B] btn-press cursor-pointer whitespace-nowrap"
               title="Keluar dari akun"
             >

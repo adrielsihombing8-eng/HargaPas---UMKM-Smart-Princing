@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   Eye,
   EyeOff,
   Lock,
   Mail,
-  Moon,
   ShieldCheck,
   Sparkles,
   Store,
-  Sun,
   User,
   X,
 } from 'lucide-react';
 import { useHargaPas } from '../store/HargaPasContext';
-import { PointerCard } from '../components/ui/PointerCard';
 import { PressButton } from '../components/ui/PressButton';
 
 interface AuthPageProps {
   onSuccess: () => void;
-  onBackToLanding: () => void;
+  onClose: () => void;
 }
 
 const GoogleIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
@@ -58,8 +55,12 @@ const GOOGLE_PRESET_ACCOUNTS = [
   },
 ];
 
-export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }) => {
-  const { login, register, loginDemo, loginWithGoogle, settings, updateSettings } = useHargaPas();
+/**
+ * Login & Register Modal Dialog (Overlay above Landing Page without page navigation).
+ * Styled in Caffe Klasik theme (#FFFDF9 Foam card, #EFE3D3 Cappuccino, #C68B59 Caramel, #2B1B14 Espresso).
+ */
+export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
+  const { login, register, loginDemo, loginWithGoogle } = useHargaPas();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [name, setName] = useState('');
@@ -69,13 +70,33 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Google Sign-In Modal state (prototype local simulation)
-  const [showGoogleModal, setShowGoogleModal] = useState(false);
+  // Google account picker view inside the modal
+  const [showGoogleView, setShowGoogleView] = useState(false);
   const [customGoogleEmail, setCustomGoogleEmail] = useState('');
   const [customGoogleName, setCustomGoogleName] = useState('');
 
+  // Close modal on Escape key & lock body scroll while open
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (showGoogleView) {
+          setShowGoogleView(false);
+        } else {
+          onClose();
+        }
+      }
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose, showGoogleView]);
+
   const inputClass =
-    'w-full rounded-2xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#EFE3D3] dark:bg-[#2B1B14] pl-10 pr-3.5 py-2.5 text-sm text-[#2B1B14] dark:text-[#FAF6F0] focus:outline-none focus:ring-2 focus:ring-[#C68B59] dark:focus:ring-[#C68B59]';
+    'w-full rounded-2xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#FAF6F0] dark:bg-[#1B120D] pl-10 pr-3.5 py-2.5 text-sm text-[#2B1B14] dark:text-[#FAF6F0] placeholder:text-[#5A4636]/55 dark:placeholder:text-[#D5C3B3]/50 focus:outline-none focus:ring-2 focus:ring-[#C68B59]';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,7 +131,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
     email: string;
     businessName?: string;
   }) => {
-    setShowGoogleModal(false);
+    setShowGoogleView(false);
     loginWithGoogle(acc);
     onSuccess();
   };
@@ -125,273 +146,73 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF6F0] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0]">
-      {/* Top Bar */}
-      <header className="px-4 sm:px-8 py-4 flex items-center justify-between max-w-6xl w-full mx-auto">
-        <PressButton variant="secondary" size="sm" onClick={onBackToLanding}>
-          <ArrowLeft className="w-4 h-4" />
-          Kembali ke Beranda
-        </PressButton>
-
-        <button
-          onClick={() => updateSettings({ darkMode: !settings.darkMode })}
-          className="p-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] text-[#C68B59] dark:text-[#C68B59] btn-press cursor-pointer"
-          aria-label="Ganti mode warna"
-          title={settings.darkMode ? 'Mode Terang' : 'Mode Gelap'}
-        >
-          {settings.darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
-      </header>
-
-      {/* Main Auth Container */}
-      <main className="flex-1 flex items-center justify-center px-4 py-6 sm:py-10">
-        <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Left Intro Card */}
-          <PointerCard className="lg:col-span-5 p-7 bg-[#E6F6F3] dark:bg-[#2B1B14] flex flex-col justify-between gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] flex items-center justify-center shadow-sm">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="font-bold text-base text-[#A8703F] dark:text-[#C68B59]">
-                    HargaPas UMKM
-                  </div>
-                  <div className="text-[11px] text-[#C68B59] dark:text-[#C68B59] font-medium">
-                    Workspace Finansial Usaha
-                  </div>
-                </div>
-              </div>
-
-              <h1 className="text-2xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
-                Masuk untuk Mengelola HPP, Stok, & Kas Usaha Anda
-              </h1>
-              <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed">
-                Setiap perubahan harga bahan baku, produk, resep BOM, dan transaksi POS tersimpan aman per sesi di browser Anda.
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="auth-modal-title"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-[#2B1B14]/60 dark:bg-black/70 backdrop-blur-sm animate-[fadeIn_160ms_ease-out]"
+      onClick={onClose}
+    >
+      {/* Modal Dialog Card */}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto no-scrollbar rounded-[2rem] bg-[#FFFDF9] dark:bg-[#2B1B14] text-[#2B1B14] dark:text-[#FAF6F0] border border-[#E2D3C1] dark:border-[#4E372B] shadow-[0_28px_64px_-16px_rgba(43,27,20,0.45)] p-6 sm:p-7"
+      >
+        {/* Modal Header */}
+        <div className="flex items-start justify-between gap-3 pb-4 mb-5 border-b border-[#E2D3C1] dark:border-[#4E372B]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-[#C68B59] text-[#FFFDF9] flex items-center justify-center shadow-sm shrink-0">
+              {showGoogleView ? <GoogleIcon className="w-5 h-5" /> : <Sparkles className="w-5 h-5" />}
+            </div>
+            <div>
+              <h2
+                id="auth-modal-title"
+                className="text-lg font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]"
+              >
+                {showGoogleView
+                  ? 'Pilih Akun Google'
+                  : mode === 'login'
+                  ? 'Masuk ke HargaPas UMKM'
+                  : 'Daftar Akun Usaha Baru'}
+              </h2>
+              <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
+                {showGoogleView
+                  ? 'Simulasi login Google (mode lokal sebelum Supabase OAuth)'
+                  : 'Kelola HPP, stok BOM, & simulasi harga dalam satu workspace'}
               </p>
             </div>
+          </div>
 
-            <div className="rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] border border-[#C68B59] dark:border-[#C68B59]/40 p-4 space-y-2.5">
-              <div className="flex items-center gap-2 text-xs font-bold text-[#A8703F] dark:text-[#C68B59]">
-                <ShieldCheck className="w-4 h-4 shrink-0" />
-                Akses Cepat Akun Demo
-              </div>
-              <div className="text-[11px] text-[#2B1B14] dark:text-[#FAF6F0] space-y-0.5">
-                <div>
-                  Email: <strong className="select-all">demo@hargapas.id</strong>
-                </div>
-                <div>
-                  Sandi: <strong className="select-all">hargapas123</strong>
-                </div>
-              </div>
-              <PressButton
-                type="button"
-                variant="primary"
-                size="sm"
-                className="w-full mt-1"
-                onClick={handleDemoLogin}
-              >
-                Masuk 1-Klik dengan Akun Demo
-              </PressButton>
-            </div>
-          </PointerCard>
-
-          {/* Right Form Card */}
-          <PointerCard className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-center">
-            {/* Mode Switcher */}
-            <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] mb-5">
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('login');
-                  setError(null);
-                }}
-                className={`py-2.5 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
-                  mode === 'login'
-                    ? 'bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] shadow-xs'
-                    : 'text-[#5A4636] dark:text-[#D5C3B3]'
-                }`}
-              >
-                Masuk Akun
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('register');
-                  setError(null);
-                  setEmail('');
-                  setPassword('');
-                }}
-                className={`py-2.5 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
-                  mode === 'register'
-                    ? 'bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] shadow-xs'
-                    : 'text-[#5A4636] dark:text-[#D5C3B3]'
-                }`}
-              >
-                Daftar Baru
-              </button>
-            </div>
-
-            {error && (
-              <div className="mb-4 rounded-2xl bg-[#FFE4E6] dark:bg-[#7F1D1D] border border-[#FDA4AF]/70 dark:border-[#FDA4AF]/35 px-4 py-3 text-xs font-medium text-[#BE123C] dark:text-[#FDA4AF]">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {mode === 'register' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
-                      Nama Pemilik
-                    </label>
-                    <div className="relative">
-                      <User className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                      <input
-                        type="text"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="mis. Siti Aminah"
-                        className={inputClass}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
-                      Nama Usaha UMKM
-                    </label>
-                    <div className="relative">
-                      <Store className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                      <input
-                        type="text"
-                        required
-                        value={businessName}
-                        onChange={(e) => setBusinessName(e.target.value)}
-                        placeholder="mis. Warung Kopi Senja"
-                        className={inputClass}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
-                  Email Usaha
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="nama@usahaanda.com"
-                    className={inputClass}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
-                  Kata Sandi
-                </label>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    minLength={6}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Minimal 6 karakter"
-                    className={`${inputClass} pr-10`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4636] dark:text-[#D5C3B3] hover:text-[#C68B59] cursor-pointer"
-                    aria-label={showPassword ? 'Sembunyikan sandi' : 'Lihat sandi'}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              <PressButton type="submit" variant="primary" size="lg" className="w-full mt-2">
-                {mode === 'login' ? 'Masuk ke Workspace' : 'Buat Akun & Masuk'}
-              </PressButton>
-
-              <div className="relative py-2 flex items-center">
-                <div className="flex-1 border-t border-[#E2D3C1] dark:border-[#4E372B]" />
-                <span className="px-3 text-[11px] font-medium text-[#5A4636] dark:text-[#D5C3B3]">
-                  atau
-                </span>
-                <div className="flex-1 border-t border-[#E2D3C1] dark:border-[#4E372B]" />
-              </div>
-
-              {/* Quick Login with Google */}
-              <PressButton
-                type="button"
-                variant="secondary"
-                size="lg"
-                className="w-full"
-                onClick={() => setShowGoogleModal(true)}
-              >
-                <GoogleIcon className="w-4 h-4 shrink-0" />
-                <span>Lanjutkan dengan Google</span>
-              </PressButton>
-
-              <p className="text-[11px] text-center text-[#5A4636] dark:text-[#D5C3B3] pt-1">
-                Mode autentikasi lokal (data dummy). Siap dihubungkan ke Supabase OAuth & Auth.
-              </p>
-            </form>
-          </PointerCard>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#5A4636] dark:text-[#FAF6F0] hover:bg-[#C68B59] hover:text-[#FFFDF9] btn-press cursor-pointer shrink-0 transition-colors"
+            aria-label="Tutup dialog login"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
-      </main>
 
-      {/* Google Account Picker Modal (Local Prototype Simulation) */}
-      {showGoogleModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <PointerCard className="w-full max-w-md p-6 space-y-4">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] flex items-center justify-center">
-                  <GoogleIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <h2 className="text-base font-bold">Pilih Akun Google</h2>
-                  <p className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3]">
-                    Simulasi login Google (mode lokal sebelum Supabase OAuth)
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowGoogleModal(false)}
-                className="p-1.5 rounded-xl bg-[#EFE3D3] dark:bg-[#2B1B14] text-[#5A4636] dark:text-[#D5C3B3] btn-press cursor-pointer"
-                aria-label="Tutup"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
+        {showGoogleView ? (
+          /* Google Account Picker View inside Modal */
+          <div className="space-y-4">
             <div className="space-y-2">
               {GOOGLE_PRESET_ACCOUNTS.map((acc) => (
                 <button
                   key={acc.email}
                   type="button"
                   onClick={() => handleSelectGoogleAccount(acc)}
-                  className="btn-press w-full flex items-center gap-3 p-3 rounded-2xl bg-[#EFE3D3] dark:bg-[#2B1B14] border border-[#E2D3C1] dark:border-[#4E372B] hover:bg-[#EFE3D3] dark:hover:bg-[#3E2A20] text-left cursor-pointer transition-colors"
+                  className="btn-press w-full flex items-center gap-3 p-3.5 rounded-2xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] hover:bg-[#EFE3D3] dark:hover:bg-[#3E2A20] text-left cursor-pointer transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-full bg-[#C68B59] dark:bg-[#C68B59] text-[#2B1B14] font-bold text-xs flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-[#C68B59] text-[#FFFDF9] font-bold text-xs flex items-center justify-center shrink-0">
                     {acc.initials}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-semibold truncate">{acc.name}</div>
+                    <div className="text-sm font-semibold truncate text-[#2B1B14] dark:text-[#FAF6F0]">
+                      {acc.name}
+                    </div>
                     <div className="text-xs text-[#5A4636] dark:text-[#D5C3B3] truncate">
-                      {acc.email}
+                      {acc.email} • {acc.businessName}
                     </div>
                   </div>
                 </button>
@@ -411,7 +232,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                   placeholder="Nama Anda"
                   value={customGoogleName}
                   onChange={(e) => setCustomGoogleName(e.target.value)}
-                  className="rounded-xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#EFE3D3] dark:bg-[#2B1B14] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#C68B59]"
+                  className="rounded-xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#FAF6F0] dark:bg-[#1B120D] px-3 py-2 text-xs text-[#2B1B14] dark:text-[#FAF6F0] focus:outline-none focus:ring-2 focus:ring-[#C68B59]"
                 />
                 <input
                   type="email"
@@ -419,16 +240,199 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onBackToLanding }
                   placeholder="email@gmail.com"
                   value={customGoogleEmail}
                   onChange={(e) => setCustomGoogleEmail(e.target.value)}
-                  className="rounded-xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#EFE3D3] dark:bg-[#2B1B14] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#C68B59]"
+                  className="rounded-xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#FAF6F0] dark:bg-[#1B120D] px-3 py-2 text-xs text-[#2B1B14] dark:text-[#FAF6F0] focus:outline-none focus:ring-2 focus:ring-[#C68B59]"
                 />
               </div>
-              <PressButton type="submit" variant="primary" size="sm" className="w-full">
-                Masuk dengan Gmail Ini
+              <div className="flex items-center gap-2 pt-1">
+                <PressButton
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setShowGoogleView(false)}
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  Kembali
+                </PressButton>
+                <PressButton type="submit" variant="primary" size="sm" className="flex-1">
+                  Masuk dengan Gmail Ini
+                </PressButton>
+              </div>
+            </form>
+          </div>
+        ) : (
+          /* Standard Login / Register + 1-Click Demo View */
+          <div className="space-y-4">
+            {/* Quick 1-Click Demo Account Banner */}
+            <div className="rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] border border-[#C68B59]/45 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#A8703F] dark:text-[#C68B59]">
+                  <ShieldCheck className="w-4 h-4 shrink-0" />
+                  Akses Cepat Akun Demo
+                </div>
+                <div className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3]">
+                  <strong className="text-[#2B1B14] dark:text-[#FAF6F0]">demo@hargapas.id</strong> • sandi:{' '}
+                  <strong className="text-[#2B1B14] dark:text-[#FAF6F0]">hargapas123</strong>
+                </div>
+              </div>
+              <PressButton
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={handleDemoLogin}
+                className="shrink-0"
+              >
+                Masuk 1-Klik Demo
+              </PressButton>
+            </div>
+
+            {/* Mode Switcher Tabs */}
+            <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[#EFE3D3] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B]">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('login');
+                  setError(null);
+                }}
+                className={`py-2 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
+                  mode === 'login'
+                    ? 'bg-[#C68B59] text-[#FFFDF9] shadow-xs'
+                    : 'text-[#5A4636] dark:text-[#D5C3B3] hover:text-[#2B1B14] dark:hover:text-[#FAF6F0]'
+                }`}
+              >
+                Masuk Akun
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('register');
+                  setError(null);
+                  setEmail('');
+                  setPassword('');
+                }}
+                className={`py-2 rounded-xl text-xs font-semibold cursor-pointer btn-press ${
+                  mode === 'register'
+                    ? 'bg-[#C68B59] text-[#FFFDF9] shadow-xs'
+                    : 'text-[#5A4636] dark:text-[#D5C3B3] hover:text-[#2B1B14] dark:hover:text-[#FAF6F0]'
+                }`}
+              >
+                Daftar Baru
+              </button>
+            </div>
+
+            {error && (
+              <div className="rounded-2xl bg-[#FFE4E6] dark:bg-[#7F1D1D] border border-[#FDA4AF]/70 dark:border-[#FDA4AF]/35 px-4 py-2.5 text-xs font-medium text-[#BE123C] dark:text-[#FDA4AF]">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-3.5">
+              {mode === 'register' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1">
+                      Nama Pemilik
+                    </label>
+                    <div className="relative">
+                      <User className="w-4 h-4 text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="mis. Siti Aminah"
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1">
+                      Nama Usaha UMKM
+                    </label>
+                    <div className="relative">
+                      <Store className="w-4 h-4 text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        required
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        placeholder="mis. Warung Kopi Senja"
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1">
+                  Email Usaha
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="nama@usahaanda.com"
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1">
+                  Kata Sandi
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-[#C68B59] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Minimal 6 karakter"
+                    className={`${inputClass} pr-10`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4636] dark:text-[#D5C3B3] hover:text-[#A8703F] cursor-pointer"
+                    aria-label={showPassword ? 'Sembunyikan sandi' : 'Lihat sandi'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <PressButton type="submit" variant="primary" size="lg" className="w-full">
+                {mode === 'login' ? 'Masuk ke Workspace' : 'Buat Akun & Masuk'}
+              </PressButton>
+
+              <div className="relative py-1 flex items-center">
+                <div className="flex-1 border-t border-[#E2D3C1] dark:border-[#4E372B]" />
+                <span className="px-3 text-[11px] font-medium text-[#5A4636] dark:text-[#D5C3B3]">
+                  atau
+                </span>
+                <div className="flex-1 border-t border-[#E2D3C1] dark:border-[#4E372B]" />
+              </div>
+
+              {/* Quick Login with Google */}
+              <PressButton
+                type="button"
+                variant="secondary"
+                size="lg"
+                className="w-full"
+                onClick={() => setShowGoogleView(true)}
+              >
+                <GoogleIcon className="w-4 h-4 shrink-0" />
+                <span>Lanjutkan dengan Google</span>
               </PressButton>
             </form>
-          </PointerCard>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
