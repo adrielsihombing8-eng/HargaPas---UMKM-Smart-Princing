@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, History, PackagePlus, TrendingUp } from 'lucide-react';
+import { AlertCircle, History, PackagePlus, TrendingUp, Warehouse } from 'lucide-react';
 import { useHargaPas } from '../store/HargaPasContext';
 import { formatIDR, formatShortDate } from '../utils/format';
 import { PointerCard } from '../components/ui/PointerCard';
@@ -127,6 +127,27 @@ export const IngredientInventory: React.FC = () => {
         </PointerCard>
       )}
 
+      {ingredients.length === 0 ? (
+        <PointerCard className="p-10 text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] flex items-center justify-center mx-auto">
+            <Warehouse className="w-6 h-6" />
+          </div>
+          <h2 className="text-base font-bold text-[#2B1B14] dark:text-[#FAF6F0]">
+            Belum Ada Bahan Baku di Inventaris
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] max-w-md mx-auto">
+            Mulai catat bahan baku usaha Anda (seperti kopi, susu, gula, atau kemasan) beserta harga beli dan stok awalnya agar bisa dipakai di Kalkulator HPP.
+          </p>
+          {!showAddForm && (
+            <div className="pt-1">
+              <PressButton variant="primary" size="md" onClick={() => setShowAddForm(true)}>
+                <PackagePlus className="w-4 h-4" />
+                Tambah Bahan Pertama
+              </PressButton>
+            </div>
+          )}
+        </PointerCard>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {ingredients.map((ing) => {
           const isOut = ing.stock <= 0;
@@ -253,6 +274,7 @@ export const IngredientInventory: React.FC = () => {
           );
         })}
       </div>
+      )}
 
       {/* Price History Modal */}
       {historyTarget && (

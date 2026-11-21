@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
+import { Calculator, ChevronDown, ChevronUp, Package, Pencil, Trash2 } from 'lucide-react';
 import { useHargaPas } from '../store/HargaPasContext';
 import {
   calculateMarginPercent,
@@ -13,9 +13,13 @@ import { PressButton } from '../components/ui/PressButton';
 
 interface ProductCatalogBomProps {
   onEditHpp?: (productId: string) => void;
+  onCreateNew?: () => void;
 }
 
-export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp }) => {
+export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({
+  onEditHpp,
+  onCreateNew,
+}) => {
   const { products, ingredients, settings, updateProduct, deleteProduct } = useHargaPas();
   const [expandedId, setExpandedId] = useState<string | null>(products[0]?.id ?? null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -31,7 +35,28 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
       </div>
 
       <div className="space-y-4">
-        {products.map((product) => {
+        {products.length === 0 ? (
+          <PointerCard className="p-10 text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] flex items-center justify-center mx-auto">
+              <Package className="w-6 h-6" />
+            </div>
+            <h2 className="text-base font-bold text-[#2B1B14] dark:text-[#FAF6F0]">
+              Belum Ada Produk di Katalog
+            </h2>
+            <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] max-w-md mx-auto">
+              Tambahkan bahan baku di menu Inventaris Bahan terlebih dahulu, lalu susun resep dan hitung HPP produk pertama Anda di Kalkulator HPP.
+            </p>
+            {onCreateNew && (
+              <div className="pt-1">
+                <PressButton variant="primary" size="md" onClick={onCreateNew}>
+                  <Calculator className="w-4 h-4" />
+                  Buat Produk di Kalkulator HPP
+                </PressButton>
+              </div>
+            )}
+          </PointerCard>
+        ) : (
+          products.map((product) => {
           const materialCost = calculateProductMaterialCost(product, ingredients);
           const hpp = calculateProductHpp(product, ingredients);
           const margin = calculateMarginPercent(product.sellingPrice, hpp);
@@ -212,7 +237,8 @@ export const ProductCatalogBom: React.FC<ProductCatalogBomProps> = ({ onEditHpp 
               )}
             </PointerCard>
           );
-        })}
+        })
+        )}
       </div>
     </div>
   );

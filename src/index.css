@@ -182,10 +182,34 @@ input[type='range'].mint-slider::-webkit-slider-thumb:active {
   transform: scale(0.95);
 }
 
+/* Gentle up-and-down float for 3D hero organic backdrop ornaments */
+@keyframes ornamentFloat {
+  0% {
+    transform: translate3d(0, -10px, 0);
+  }
+  100% {
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+.ornament-float-blob {
+  animation: ornamentFloat 4.4s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.ornament-float-loop {
+  animation: ornamentFloat 5.2s ease-in-out -1.6s infinite alternate;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav-spring-pill,
   .card-surface,
   .btn-press {
     transition: none !important;
+  }
+  .ornament-float-blob,
+  .ornament-float-loop {
+    animation: none !important;
   }
 }

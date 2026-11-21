@@ -40,6 +40,21 @@ export const MarketplaceCalculator: React.FC = () => {
         </p>
       </div>
 
+      {products.length === 0 ? (
+        <PointerCard className="p-10 text-center space-y-2.5">
+          <div className="w-12 h-12 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] flex items-center justify-center mx-auto">
+            <Store className="w-6 h-6" />
+          </div>
+          <h2 className="text-base font-bold text-[#2B1B14] dark:text-[#FAF6F0]">
+            Belum Ada Produk untuk Dihitung
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] max-w-md mx-auto">
+            Tambahkan produk terlebih dahulu melalui menu Kalkulator HPP untuk mensimulasikan harga jual GoFood, GrabFood, ShopeeFood, dan TikTok Shop.
+          </p>
+        </PointerCard>
+      ) : (
+      <>
+
       <PointerCard className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <div>
@@ -140,6 +155,8 @@ export const MarketplaceCalculator: React.FC = () => {
           );
         })}
       </div>
+      </>
+      )}
     </div>
   );
 };

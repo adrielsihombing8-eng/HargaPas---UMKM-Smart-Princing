@@ -311,10 +311,7 @@ export async function fetchWorkspaceSnapshot(userId: string): Promise<WorkspaceS
     supabase.from('cash_flow_entries').select('*').eq('user_id', userId).order('date', { ascending: false }),
   ]);
 
-  // First-time user: seed starter café dataset so the dashboard is immediately useful
-  if ((ingRows?.length ?? 0) === 0 && (prodRows?.length ?? 0) === 0) {
-    return seedStarterWorkspaceInDb(userId, settingsRow?.business_name);
-  }
+  // New user starts with a clean empty workspace (ingredients, products, sales, cashFlow = [])
 
   const settings: BusinessSettings = settingsRow
     ? {

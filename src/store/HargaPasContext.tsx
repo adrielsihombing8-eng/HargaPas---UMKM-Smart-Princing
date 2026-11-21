@@ -129,7 +129,7 @@ function loadStoredAccounts(): StoredAccount[] {
   }
 }
 
-const defaultState: HargaPasState = {
+const demoState: HargaPasState = {
   ingredients: SEED_INGREDIENTS,
   products: SEED_PRODUCTS,
   transactions: SEED_TRANSACTIONS,
@@ -137,39 +137,68 @@ const defaultState: HargaPasState = {
   settings: SEED_SETTINGS,
 };
 
-function loadInitialState(): HargaPasState {
+function createEmptyState(businessName = 'Usaha UMKM Saya'): HargaPasState {
+  return {
+    ingredients: [],
+    products: [],
+    transactions: [],
+    cashFlow: [],
+    settings: {
+      ...SEED_SETTINGS,
+      businessName,
+    },
+  };
+}
+
+function getUserStorageKey(userId?: string | null): string {
+  return userId ? `${STORAGE_KEY}_${userId}` : STORAGE_KEY;
+}
+
+function loadStateForUser(user: AuthUser | null): HargaPasState {
+  if (!user) return createEmptyState();
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaultState;
+    const raw = localStorage.getItem(getUserStorageKey(user.id));
+    if (!raw) {
+      return user.id === DEMO_ACCOUNT.user.id
+        ? demoState
+        : createEmptyState(user.businessName);
+    }
     const parsed = JSON.parse(raw) as Partial<HargaPasState>;
+    const fallback =
+      user.id === DEMO_ACCOUNT.user.id
+        ? demoState
+        : createEmptyState(user.businessName);
     return {
-      ingredients: parsed.ingredients ?? SEED_INGREDIENTS,
-      products: parsed.products ?? SEED_PRODUCTS,
-      transactions: parsed.transactions ?? SEED_TRANSACTIONS,
-      cashFlow: parsed.cashFlow ?? SEED_CASHFLOW,
-      settings: { ...SEED_SETTINGS, ...(parsed.settings ?? {}) },
+      ingredients: parsed.ingredients ?? fallback.ingredients,
+      products: parsed.products ?? fallback.products,
+      transactions: parsed.transactions ?? fallback.transactions,
+      cashFlow: parsed.cashFlow ?? fallback.cashFlow,
+      settings: { ...fallback.settings, ...(parsed.settings ?? {}) },
     };
   } catch {
-    return defaultState;
+    return user.id === DEMO_ACCOUNT.user.id
+      ? demoState
+      : createEmptyState(user.businessName);
   }
 }
 
 const HargaPasContext = createContext<HargaPasContextValue | null>(null);
 
 export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, setState] = useState<HargaPasState>(loadInitialState);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(loadInitialUser);
+  const [state, setState] = useState<HargaPasState>(() => loadStateForUser(loadInitialUser()));
   const [isSyncing, setIsSyncing] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Persist local cache
+  // Persist local cache scoped per user ID
   useEffect(() => {
+    if (!currentUser) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(getUserStorageKey(currentUser.id), JSON.stringify(state));
     } catch {
       // Ignore storage quota errors
     }
-  }, [state]);
+  }, [state, currentUser]);
 
   // Apply Dark / Light theme attribute
   useEffect(() => {
@@ -254,6 +283,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       return { ok: false, error: 'Email atau kata sandi belum sesuai.' };
     }
     setCurrentUser(matched.user);
+    setState(loadStateForUser(matched.user));
     try {
       localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(matched.user));
     } catch {
@@ -323,16 +353,14 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
 
     setCurrentUser(newUser);
-    setState((prev) => ({
-      ...prev,
-      settings: { ...prev.settings, businessName: cleanBiz },
-    }));
+    setState(createEmptyState(cleanBiz));
     showToast(`Akun "${cleanName}" berhasil dibuat!`);
     return { ok: true };
   };
 
   const loginDemo = () => {
     setCurrentUser(DEMO_ACCOUNT.user);
+    setState(loadStateForUser(DEMO_ACCOUNT.user));
     try {
       localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(DEMO_ACCOUNT.user));
     } catch {
@@ -353,19 +381,14 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const cleanEmail = (params?.email ?? 'andi.pratama@gmail.com').trim().toLowerCase();
     const cleanName = (params?.name ?? 'Pengguna Google').trim() || 'Pengguna Google';
     const googleUser: AuthUser = {
-      id: `google-${Date.now()}`,
+      id: `google-${cleanEmail}`,
       name: cleanName,
       email: cleanEmail,
-      businessName: params?.businessName?.trim() || state.settings.businessName,
+      businessName: params?.businessName?.trim() || `Usaha ${cleanName}`,
       role: 'Owner UMKM',
     };
     setCurrentUser(googleUser);
-    if (params?.businessName?.trim()) {
-      setState((prev) => ({
-        ...prev,
-        settings: { ...prev.settings, businessName: params.businessName!.trim() },
-      }));
-    }
+    setState(loadStateForUser(googleUser));
     try {
       localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(googleUser));
     } catch {
@@ -380,6 +403,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       await signOutSupabase();
     }
     setCurrentUser(null);
+    setState(createEmptyState());
     try {
       localStorage.removeItem(AUTH_SESSION_KEY);
     } catch {
@@ -600,6 +624,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const resetToSeed = () => {
+    const isDemo = currentUser?.id === DEMO_ACCOUNT.user.id;
     if (isRealSupabaseUser && currentUser) {
       void resetUserWorkspaceInDb(currentUser.id).then((snapshot) => {
         setState(snapshot);
@@ -607,8 +632,11 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       });
       return;
     }
-    setState(defaultState);
-    localStorage.removeItem(STORAGE_KEY);
+    const next = isDemo
+      ? demoState
+      : createEmptyState(currentUser?.businessName);
+    setState(next);
+    localStorage.removeItem(getUserStorageKey(currentUser?.id));
     showToast('Data usaha berhasil direset ke kondisi awal');
   };
 

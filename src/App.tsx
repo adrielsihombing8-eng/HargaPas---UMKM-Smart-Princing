@@ -116,7 +116,12 @@ const AppShell: React.FC = () => {
       case 'bep':
         return <BepAnalysis />;
       case 'products':
-        return <ProductCatalogBom onEditHpp={handleEditHppFromCatalog} />;
+        return (
+          <ProductCatalogBom
+            onEditHpp={handleEditHppFromCatalog}
+            onCreateNew={() => setActiveModule('hpp-calculator')}
+          />
+        );
       case 'inventory':
         return <IngredientInventory />;
       case 'marketplace':

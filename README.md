@@ -1,8 +1,8 @@
 # HargaPas UMKM — Smart Pricing & Financial Simulation Prototype
 
-> **Project Status: Dual-Mode (Local Prototype & Supabase Ready)**
+> **Project Status: Dual-Mode (Local Prototype & Supabase Connected)**
 >
-> By default (without `.env`), this application runs on **local dummy/seed data** persisted in browser `localStorage` for instant evaluation. When configured with `.env` credentials, it automatically connects to **Supabase** (PostgreSQL + Row Level Security + Email/Password Auth + **Google OAuth**). See **[SUPABASE_SETUP.md](file:///d:/Kuliah%20Semester%203/Interaksi%20Manusia%20dan%20Komputer/HargaKu/SUPABASE_SETUP.md)** for the full step-by-step backend & Google OAuth setup guide.
+> By default (without `.env`), this application runs on **local dummy/seed data** persisted in browser `localStorage` for instant evaluation. When configured with `.env` / Vercel Environment Variables (`VITE_SUPABASE_URL` & `VITE_SUPABASE_ANON_KEY`), it automatically connects to **Supabase** (PostgreSQL + Row Level Security + Email/Password Auth + **Google OAuth**). Backend SQL & setup documentation are stored separately in the **`Hargaku Backend`** folder.
 
 ---
 
@@ -83,7 +83,7 @@ The entire UI is styled around a warm **Caffe Klasik** palette (`src/index.css` 
 - **3D & Animation:** Three.js (`three`), `@react-three/fiber`, and **GSAP 3** (`gsap` + `ScrollTrigger`)
 - **Styling:** Tailwind CSS v4 + custom CSS variables (`src/index.css`)
 - **Icons:** `lucide-react`
-- **Backend & Auth (Optional / Ready):** Supabase (`@supabase/supabase-js`) — PostgreSQL, RLS, Email/Password & Google OAuth (`supabase/schema.sql`, `src/lib/supabase.ts`, `src/services/supabaseService.ts`)
+- **Backend & Auth Client:** Supabase (`@supabase/supabase-js`) — PostgreSQL, RLS, Email/Password & Google OAuth (`src/lib/supabase.ts`, `src/services/supabaseService.ts`)
 - **Persistence Fallback:** Browser `localStorage` (`hargapas_umkm_v1`, `hargapas_auth_session_v1`, `hargapas_auth_users_v1`)
 
 ---

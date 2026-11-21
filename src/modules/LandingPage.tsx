@@ -17,6 +17,7 @@ import {
   Warehouse,
 } from 'lucide-react';
 import { useHargaPas } from '../store/HargaPasContext';
+import { SEED_INGREDIENTS, SEED_PRODUCTS } from '../data/seedData';
 import {
   calculateMarginPercent,
   calculateOnlinePrice,
@@ -121,11 +122,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
   const visibleFeatures = showAllFeatures ? FEATURE_CARDS : FEATURE_CARDS.slice(0, 6);
 
-  const demoProduct = products[demoProdIdx] ?? products[0];
+  const simProducts = products.length > 0 ? products : SEED_PRODUCTS;
+  const simIngredients = ingredients.length > 0 ? ingredients : SEED_INGREDIENTS;
+  const demoProduct = simProducts[demoProdIdx] ?? simProducts[0];
 
   const demoCalc = useMemo(() => {
     const baseHpp = demoProduct
-      ? calculateProductHpp(demoProduct, ingredients)
+      ? calculateProductHpp(demoProduct, simIngredients)
       : 8950;
     const rawPrice = calculateSellingPriceFromMargin(baseHpp, demoMargin);
     const sellingPrice = Math.ceil(rawPrice / 500) * 500;
@@ -140,7 +143,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       profitPerUnit,
       gofoodPrice,
     };
-  }, [demoProduct, ingredients, demoMargin]);
+  }, [demoProduct, simIngredients, demoMargin]);
 
   return (
     <div className="relative min-h-screen bg-[#FAF6F0] dark:bg-[#1B120D] text-[#2B1B14] dark:text-[#FAF6F0]">
@@ -303,7 +306,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
               <div className="lg:col-span-7 space-y-4">
                 <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-[#EFE3D3] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B]">
-                  {products.slice(0, 2).map((prod, idx) => {
+                  {simProducts.slice(0, 2).map((prod, idx) => {
                     const active = demoProdIdx === idx;
                     return (
                       <button

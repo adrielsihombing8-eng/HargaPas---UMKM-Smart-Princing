@@ -61,6 +61,16 @@ export const PosCashier: React.FC = () => {
             <ShoppingBag className="w-4 h-4 text-[#C68B59] dark:text-[#C68B59]" />
             Catat Penjualan Produk
           </h2>
+          {products.length === 0 ? (
+            <div className="rounded-2xl bg-[#EFE3D3]/60 dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-6 text-center space-y-1.5">
+              <div className="text-sm font-bold text-[#2B1B14] dark:text-[#FAF6F0]">
+                Belum Ada Menu Produk
+              </div>
+              <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
+                Tambahkan produk terlebih dahulu di Kalkulator HPP agar dapat mencatat penjualan dan memotong stok bahan otomatis.
+              </p>
+            </div>
+          ) : (
           <form onSubmit={handleRecordSale} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-[#5A4636] dark:text-[#D5C3B3] mb-1.5">
@@ -131,6 +141,7 @@ export const PosCashier: React.FC = () => {
               Catat Penjualan & Potong Stok
             </PressButton>
           </form>
+          )}
         </PointerCard>
 
         <PointerCard className="p-6">

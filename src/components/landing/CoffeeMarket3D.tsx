@@ -1379,9 +1379,58 @@ export const CoffeeMarket3D: React.FC = () => {
         cupHovered ? 'cursor-pointer' : 'cursor-default'
       }`}
     >
+      {/* Organic Café Backdrop Ornament (Blob + Thin Loop) that rotates subtly on hover */}
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 600 560"
+        className="pointer-events-none absolute inset-0 w-full h-full z-0 overflow-visible"
+      >
+        {/* Soft Filled Organic Caramel/Latte Blob (outer float + inner slow hover rotation) */}
+        <g className="ornament-float-blob">
+          <g
+            style={{
+              transformOrigin: '305px 295px',
+              transform: cupHovered
+                ? 'rotate(98deg) scale(1.07) translate(12px, -14px)'
+                : 'rotate(0deg) scale(1) translate(0px, 0px)',
+              transition: 'transform 1650ms cubic-bezier(0.22, 1, 0.36, 1)',
+            }}
+          >
+            <path
+              d="M 105 268 C 92 206, 148 164, 212 152 C 266 142, 314 102, 380 112 C 446 122, 488 172, 496 226 C 504 278, 542 322, 514 378 C 484 438, 412 454, 344 452 C 280 450, 224 476, 166 446 C 108 416, 118 332, 105 268 Z"
+              fill="#C68B59"
+              fillOpacity="0.44"
+            />
+          </g>
+        </g>
+
+        {/* Thin Organic Café Outline Loop (outer offset float + inner counter-rotation) */}
+        <g className="ornament-float-loop">
+          <g
+            style={{
+              transformOrigin: '295px 285px',
+              transform: cupHovered
+                ? 'rotate(-44deg) scale(1.06) translate(-10px, 10px)'
+                : 'rotate(0deg) scale(1) translate(0px, 0px)',
+              transition: 'transform 1650ms cubic-bezier(0.22, 1, 0.36, 1)',
+            }}
+          >
+            <path
+              d="M 120 148 C 192 86, 304 82, 392 126 C 474 166, 486 244, 466 322 C 444 406, 434 494, 354 508 C 282 520, 248 446, 226 382 C 204 316, 112 318, 86 254 C 66 204, 78 184, 120 148 Z"
+              fill="none"
+              stroke="#9D7550"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeOpacity="0.82"
+            />
+          </g>
+        </g>
+      </svg>
+
       {/* Static Camera, Soft Studio Lighting, Capped DPR & Viewport-Aware Frameloop */}
       <Canvas
         shadows
+        className="relative z-10"
         frameloop={isVisible ? 'always' : 'never'}
         dpr={[1, 1.5]}
         camera={{ position: [0, 0.1, 6.35], fov: 42 }}
