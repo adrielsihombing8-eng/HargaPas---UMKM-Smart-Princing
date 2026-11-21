@@ -217,7 +217,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
               </h2>
               <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3]">
                 {showGoogleView
-                  ? 'Simulasi login Google (mode lokal sebelum Supabase OAuth)'
+                  ? 'Pilih akun Google untuk masuk ke workspace'
                   : 'Kelola HPP, stok BOM, & simulasi harga dalam satu workspace'}
               </p>
             </div>

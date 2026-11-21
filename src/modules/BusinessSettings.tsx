@@ -143,9 +143,9 @@ export const BusinessSettings: React.FC = () => {
 
       <PointerCard className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-bold">Mode Tampilan & Data Lokal</h3>
+          <h3 className="text-sm font-bold">Mode Tampilan & Data Usaha</h3>
           <p className="text-xs text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
-            Ganti tema terang/gelap atau kembalikan data dummy ke kondisi awal.
+            Ganti tema terang/gelap atau kembalikan data usaha ke kondisi awal.
           </p>
         </div>
         <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap shrink-0">
@@ -158,7 +158,7 @@ export const BusinessSettings: React.FC = () => {
           </PressButton>
           <PressButton variant="danger" onClick={resetToSeed}>
             <RotateCcw className="w-4 h-4" />
-            Reset Data Dummy
+            Reset Data Awal
           </PressButton>
         </div>
       </PointerCard>

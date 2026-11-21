@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BellRing,
   Calculator,
-  CheckCircle2,
   ChevronDown,
   ChevronUp,
   FileSpreadsheet,
@@ -547,14 +546,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           {/* Card 05: Final CTA */}
           <StackedSection index={4}>
             <div className="py-4 text-center space-y-4">
-              <div className="flex flex-col items-center gap-2.5">
-                <div className="font-card-title text-4xl sm:text-5xl leading-none font-bold text-[#A8703F] dark:text-[#C68B59]">
-                  Mulai Sekarang
-                </div>
-                <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#2B1B14] dark:text-[#FAF6F0] bg-[#F4B9C8]/40 dark:bg-[#3E2A20] border border-[#F4B9C8] dark:border-[#C68B59]/40 px-3 py-1 rounded-full">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#A8703F] dark:text-[#C68B59]" />
-                  Siap Dicoba Langsung di Browser (LocalStorage)
-                </div>
+              <div className="font-card-title text-4xl sm:text-5xl leading-none font-bold text-[#A8703F] dark:text-[#C68B59]">
+                Mulai Sekarang
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                 Siap Menentukan Harga yang Pas untuk Bisnis Anda?
@@ -577,7 +570,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       </main>
 
       <footer className="relative z-10 border-t border-[#E2D3C1] dark:border-[#4E372B] bg-[#FAF6F0]/90 dark:bg-[#1B120D]/90 backdrop-blur-md py-6 px-4 sm:px-8 text-center text-xs text-[#5A4636] dark:text-[#D5C3B3]">
-        HargaPas UMKM • Prototipe Aplikasi Web Manajemen Harga & Finansial UMKM (Mode Data Dummy Lokal)
+        HargaPas UMKM • Aplikasi Web Manajemen Harga, HPP & Finansial UMKM
       </footer>
     </div>
   );

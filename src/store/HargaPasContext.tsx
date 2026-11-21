@@ -609,7 +609,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
     setState(defaultState);
     localStorage.removeItem(STORAGE_KEY);
-    showToast('Data dummy berhasil direset ke kondisi awal');
+    showToast('Data usaha berhasil direset ke kondisi awal');
   };
 
   return (

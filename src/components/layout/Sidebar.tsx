@@ -148,14 +148,27 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
         )}
       </div>
 
-      {/* Business & User Pill */}
+      {/* Business & User Pill (Clickable -> Profil & Pengaturan Usaha) */}
       <div className="px-4 pt-3.5 pb-1.5 shrink-0">
-        <div className="rounded-2xl bg-[#FFFDF9] dark:bg-[#3E2A20] border border-[#E2D3C1] dark:border-[#4E372B] px-3.5 py-2.5">
+        <button
+          type="button"
+          onPointerMove={handlePointerMove}
+          onClick={() => {
+            onSelect('settings');
+            onCloseMobile?.();
+          }}
+          title="Buka Profil & Pengaturan Usaha"
+          className={`btn-press pointer-track w-full text-left rounded-2xl bg-[#FFFDF9] dark:bg-[#3E2A20] border px-3.5 py-2.5 cursor-pointer transition-colors ${
+            activeModule === 'settings'
+              ? 'border-[#C68B59] ring-2 ring-[#C68B59]/25'
+              : 'border-[#E2D3C1] dark:border-[#4E372B] hover:border-[#C68B59] dark:hover:border-[#C68B59]'
+          }`}
+        >
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3]">
+            <span className="text-[11px] text-[#5A4636] dark:text-[#D5C3B3] truncate">
               {currentUser ? currentUser.name : 'Usaha Aktif'}
             </span>
-            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EFE3D3] dark:bg-[#2B1B14] text-[#A8703F] dark:text-[#C68B59]">
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EFE3D3] dark:bg-[#2B1B14] text-[#A8703F] dark:text-[#C68B59] shrink-0">
               {currentUser?.role ?? 'Owner'}
             </span>
           </div>
@@ -167,7 +180,7 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
             <span>•</span>
             <span>{settings.region}</span>
           </div>
-        </div>
+        </button>
       </div>
 
       {/* Scrollable Navigation with Anti-Scrollbar & Spring Pill */}
@@ -238,19 +251,13 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-3 border-t border-[#E2D3C1] dark:border-[#4E372B] flex items-center justify-between gap-2 shrink-0">
-        <div className="text-[11px] text-[#C68B59] dark:text-[#D5C3B3] truncate">
-          <span className="inline-flex items-center gap-1.5 text-[#A8703F] dark:text-[#C68B59] font-medium">
-            <span className="w-2 h-2 rounded-full bg-[#C68B59] dark:bg-[#C68B59] animate-pulse" />
-            Mode Lokal
-          </span>
-        </div>
+      <div className="px-4 py-3 border-t border-[#E2D3C1] dark:border-[#4E372B] shrink-0">
         <button
           onClick={() => {
             logout();
             onCloseMobile?.();
           }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFE4E6] dark:bg-[#7F1D1D] text-[#BE123C] dark:text-[#FDA4AF] text-xs font-semibold hover:bg-[#FECDD3] dark:hover:bg-[#991B1B] btn-press cursor-pointer shrink-0"
+          className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#FFE4E6] dark:bg-[#7F1D1D] text-[#BE123C] dark:text-[#FDA4AF] text-xs font-semibold hover:bg-[#FECDD3] dark:hover:bg-[#991B1B] btn-press cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           Keluar
