@@ -59,7 +59,7 @@ const GOOGLE_PRESET_ACCOUNTS = [
  * Styled in Caffe Klasik theme (#FFFDF9 Foam card, #EFE3D3 Cappuccino, #C68B59 Caramel, #2B1B14 Espresso).
  */
 export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
-  const { login, register, loginDemo, loginWithGoogle } = useHargaPas();
+  const { login, register, loginDemo, loginWithGoogle, isSupabaseReady } = useHargaPas();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [name, setName] = useState('');
@@ -68,6 +68,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
   const [password, setPassword] = useState('hargapas123');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [infoMsg, setInfoMsg] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   // Google account picker view inside the modal
   const [showGoogleView, setShowGoogleView] = useState(false);
@@ -97,41 +99,66 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
   const inputClass =
     'w-full rounded-2xl border border-[#E2D3C1] dark:border-[#4E372B] bg-[#FAF6F0] dark:bg-[#1B120D] pl-10 pr-3.5 py-2.5 text-sm text-[#2B1B14] dark:text-[#FAF6F0] placeholder:text-[#5A4636]/55 dark:placeholder:text-[#D5C3B3]/50 focus:outline-none focus:ring-2 focus:ring-[#C68B59]';
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setInfoMsg(null);
+    setSubmitting(true);
 
-    if (mode === 'login') {
-      const res = login(email, password);
+    try {
+      if (mode === 'login') {
+        const res = await login(email, password);
+        if (!res.ok) {
+          setError(res.error ?? 'Gagal masuk.');
+          return;
+        }
+        onSuccess();
+        return;
+      }
+
+      const res = await register({ name, email, password, businessName });
       if (!res.ok) {
-        setError(res.error ?? 'Gagal masuk.');
+        setError(res.error ?? 'Gagal mendaftar.');
+        return;
+      }
+      if (res.needsEmailConfirmation) {
+        setInfoMsg('Pendaftaran berhasil! Silakan cek kotak masuk email Anda untuk konfirmasi sebelum masuk.');
         return;
       }
       onSuccess();
-      return;
+    } finally {
+      setSubmitting(false);
     }
-
-    const res = register({ name, email, password, businessName });
-    if (!res.ok) {
-      setError(res.error ?? 'Gagal mendaftar.');
-      return;
-    }
-    onSuccess();
   };
 
   const handleDemoLogin = () => {
     setError(null);
+    setInfoMsg(null);
     loginDemo();
     onSuccess();
   };
 
-  const handleSelectGoogleAccount = (acc: {
+  const handleGoogleButtonClick = async () => {
+    setError(null);
+    if (isSupabaseReady) {
+      setSubmitting(true);
+      const res = await loginWithGoogle();
+      setSubmitting(false);
+      if (!res.ok) {
+        setError(res.error ?? 'Gagal memulai login Google.');
+      }
+      return;
+    }
+    setShowGoogleView(true);
+  };
+
+  const handleSelectGoogleAccount = async (acc: {
     name: string;
     email: string;
     businessName?: string;
   }) => {
     setShowGoogleView(false);
-    loginWithGoogle(acc);
+    await loginWithGoogle(acc);
     onSuccess();
   };
 
@@ -338,6 +365,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
               </div>
             )}
 
+            {infoMsg && (
+              <div className="rounded-2xl bg-[#DCFCE7] dark:bg-[#14532D] border border-[#4ADE80]/50 px-4 py-2.5 text-xs font-medium text-[#15803D] dark:text-[#4ADE80]">
+                {infoMsg}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-3.5">
               {mode === 'register' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -419,8 +452,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
                 </div>
               </div>
 
-              <PressButton type="submit" variant="primary" size="lg" className="w-full">
-                {mode === 'login' ? 'Masuk ke Workspace' : 'Buat Akun & Masuk'}
+              <PressButton type="submit" variant="primary" size="lg" className="w-full" disabled={submitting}>
+                {submitting
+                  ? 'Memproses...'
+                  : mode === 'login'
+                  ? 'Masuk ke Workspace'
+                  : 'Buat Akun & Masuk'}
               </PressButton>
 
               <div className="relative py-1 flex items-center">
@@ -431,13 +468,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
                 <div className="flex-1 border-t border-[#E2D3C1] dark:border-[#4E372B]" />
               </div>
 
-              {/* Quick Login with Google */}
+              {/* Quick Login with Google (Real OAuth when Supabase .env is set, local picker otherwise) */}
               <PressButton
                 type="button"
                 variant="secondary"
                 size="lg"
                 className="w-full"
-                onClick={() => setShowGoogleView(true)}
+                disabled={submitting}
+                onClick={handleGoogleButtonClick}
               >
                 <GoogleIcon className="w-4 h-4 shrink-0" />
                 <span>Lanjutkan dengan Google</span>

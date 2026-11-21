@@ -16,6 +16,25 @@ import {
   SEED_TRANSACTIONS,
 } from '../data/seedData';
 import { calculateProductHpp, generateSmartAlerts } from '../utils/finance';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import {
+  addIngredientToDb,
+  addProductToDb,
+  deleteProductInDb,
+  fetchUserProfile,
+  fetchWorkspaceSnapshot,
+  insertCashFlowInDb,
+  insertSaleInDb,
+  resetUserWorkspaceInDb,
+  signInWithEmailPassword,
+  signInWithGoogleOAuth,
+  signOutSupabase,
+  signUpWithEmailPassword,
+  syncSettingsToDb,
+  updateIngredientPriceInDb,
+  updateIngredientStockInDb,
+  updateProductInDb,
+} from '../services/supabaseService';
 
 interface HargaPasState {
   ingredients: Ingredient[];
@@ -30,26 +49,29 @@ interface StoredAccount {
   password: string;
 }
 
-interface AuthResult {
+export interface AuthResult {
   ok: boolean;
+  needsEmailConfirmation?: boolean;
   error?: string;
 }
 
 interface HargaPasContextValue extends HargaPasState {
   currentUser: AuthUser | null;
+  isSupabaseReady: boolean;
+  isSyncing: boolean;
   smartAlerts: SmartAlert[];
   toastMessage: string | null;
   showToast: (msg: string) => void;
-  login: (email: string, password: string) => AuthResult;
+  login: (email: string, password: string) => Promise<AuthResult>;
   register: (params: {
     name: string;
     email: string;
     password: string;
     businessName: string;
-  }) => AuthResult;
+  }) => Promise<AuthResult>;
   loginDemo: () => void;
-  loginWithGoogle: (params: { name: string; email: string; businessName?: string }) => void;
-  logout: () => void;
+  loginWithGoogle: (params?: { name: string; email: string; businessName?: string }) => Promise<AuthResult>;
+  logout: () => Promise<void>;
   updateSettings: (partial: Partial<BusinessSettings>) => void;
   updateIngredientPrice: (ingredientId: string, newPrice: number, note?: string) => void;
   restockIngredient: (ingredientId: string, addedQty: number) => void;
@@ -83,6 +105,7 @@ const DEMO_ACCOUNT: StoredAccount = {
 };
 
 function loadInitialUser(): AuthUser | null {
+  if (isSupabaseConfigured) return null;
   try {
     const raw = localStorage.getItem(AUTH_SESSION_KEY);
     if (!raw) return null;
@@ -136,8 +159,10 @@ const HargaPasContext = createContext<HargaPasContextValue | null>(null);
 export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<HargaPasState>(loadInitialState);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(loadInitialUser);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Persist local cache
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -146,6 +171,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [state]);
 
+  // Apply Dark / Light theme attribute
   useEffect(() => {
     const root = document.documentElement;
     if (state.settings.darkMode) {
@@ -157,6 +183,49 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [state.settings.darkMode]);
 
+  // Subscribe to Supabase Auth state changes (Email/Password + Google OAuth callback)
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+
+    let isMounted = true;
+
+    const hydrateFromSupabase = async (userId: string, email: string) => {
+      setIsSyncing(true);
+      try {
+        const [profile, snapshot] = await Promise.all([
+          fetchUserProfile(userId, email),
+          fetchWorkspaceSnapshot(userId),
+        ]);
+        if (!isMounted) return;
+        setCurrentUser(profile);
+        setState(snapshot);
+      } finally {
+        if (isMounted) setIsSyncing(false);
+      }
+    };
+
+    supabase.auth.getSession().then(({ data }) => {
+      const sessionUser = data.session?.user;
+      if (sessionUser && isMounted) {
+        hydrateFromSupabase(sessionUser.id, sessionUser.email ?? '');
+      }
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!isMounted) return;
+      if (session?.user) {
+        hydrateFromSupabase(session.user.id, session.user.email ?? '');
+      } else if (event === 'SIGNED_OUT') {
+        setCurrentUser(null);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     window.setTimeout(() => {
@@ -164,11 +233,19 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, 3200);
   };
 
-  const login = (email: string, password: string): AuthResult => {
+  const login = async (email: string, password: string): Promise<AuthResult> => {
     const normalized = email.trim().toLowerCase();
     if (!normalized || !password) {
       return { ok: false, error: 'Email dan kata sandi wajib diisi.' };
     }
+
+    if (isSupabaseConfigured) {
+      const res = await signInWithEmailPassword(normalized, password);
+      if (!res.ok) return res;
+      showToast('Berhasil masuk ke workspace Supabase');
+      return { ok: true };
+    }
+
     const accounts = loadStoredAccounts();
     const matched = accounts.find(
       (a) => a.user.email.toLowerCase() === normalized
@@ -186,7 +263,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return { ok: true };
   };
 
-  const register: HargaPasContextValue['register'] = ({
+  const register: HargaPasContextValue['register'] = async ({
     name,
     email,
     password,
@@ -204,6 +281,22 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
     if (password.length < 6) {
       return { ok: false, error: 'Kata sandi minimal 6 karakter.' };
+    }
+
+    if (isSupabaseConfigured) {
+      const res = await signUpWithEmailPassword({
+        name: cleanName,
+        email: normalizedEmail,
+        password,
+        businessName: cleanBiz,
+      });
+      if (!res.ok) return res;
+      if (res.needsEmailConfirmation) {
+        showToast('Cek email Anda untuk konfirmasi pendaftaran Supabase.');
+      } else {
+        showToast(`Akun "${cleanName}" berhasil dibuat!`);
+      }
+      return res;
     }
 
     const accounts = loadStoredAccounts();
@@ -248,25 +341,29 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     showToast(`Masuk sebagai akun demo (${DEMO_ACCOUNT.user.name})`);
   };
 
-  const loginWithGoogle: HargaPasContextValue['loginWithGoogle'] = ({
-    name,
-    email,
-    businessName,
-  }) => {
-    const cleanEmail = email.trim().toLowerCase();
-    const cleanName = name.trim() || 'Pengguna Google';
+  const loginWithGoogle: HargaPasContextValue['loginWithGoogle'] = async (params) => {
+    if (isSupabaseConfigured) {
+      const res = await signInWithGoogleOAuth();
+      if (!res.ok) {
+        showToast(res.error ?? 'Gagal membuka login Google');
+      }
+      return res;
+    }
+
+    const cleanEmail = (params?.email ?? 'andi.pratama@gmail.com').trim().toLowerCase();
+    const cleanName = (params?.name ?? 'Pengguna Google').trim() || 'Pengguna Google';
     const googleUser: AuthUser = {
       id: `google-${Date.now()}`,
       name: cleanName,
       email: cleanEmail,
-      businessName: businessName?.trim() || state.settings.businessName,
+      businessName: params?.businessName?.trim() || state.settings.businessName,
       role: 'Owner UMKM',
     };
     setCurrentUser(googleUser);
-    if (businessName?.trim()) {
+    if (params?.businessName?.trim()) {
       setState((prev) => ({
         ...prev,
-        settings: { ...prev.settings, businessName: businessName.trim() },
+        settings: { ...prev.settings, businessName: params.businessName!.trim() },
       }));
     }
     try {
@@ -275,9 +372,13 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // Ignore storage errors
     }
     showToast(`Berhasil masuk dengan Google (${cleanEmail})`);
+    return { ok: true };
   };
 
-  const logout = () => {
+  const logout = async () => {
+    if (isSupabaseConfigured) {
+      await signOutSupabase();
+    }
     setCurrentUser(null);
     try {
       localStorage.removeItem(AUTH_SESSION_KEY);
@@ -292,11 +393,20 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [state.products, state.ingredients, state.settings.marginThreshold]
   );
 
+  const isRealSupabaseUser =
+    isSupabaseConfigured && Boolean(currentUser && currentUser.id !== DEMO_ACCOUNT.user.id);
+
   const updateSettings = (partial: Partial<BusinessSettings>) => {
-    setState((prev) => ({
-      ...prev,
-      settings: { ...prev.settings, ...partial },
-    }));
+    setState((prev) => {
+      const nextSettings = { ...prev.settings, ...partial };
+      if (isRealSupabaseUser && currentUser) {
+        void syncSettingsToDb(currentUser.id, nextSettings);
+      }
+      return {
+        ...prev,
+        settings: nextSettings,
+      };
+    });
   };
 
   const updateIngredientPrice = (ingredientId: string, newPrice: number, note = 'Update harga pasar') => {
@@ -316,26 +426,35 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           : ing
       ),
     }));
+    if (isRealSupabaseUser && currentUser) {
+      void updateIngredientPriceInDb(currentUser.id, ingredientId, newPrice, note);
+    }
     showToast('Harga bahan baku diperbarui & HPP otomatis dihitung ulang');
   };
 
   const restockIngredient = (ingredientId: string, addedQty: number) => {
-    setState((prev) => ({
-      ...prev,
-      ingredients: prev.ingredients.map((ing) =>
-        ing.id === ingredientId
-          ? { ...ing, stock: Number((ing.stock + addedQty).toFixed(3)) }
-          : ing
-      ),
-    }));
+    setState((prev) => {
+      const target = prev.ingredients.find((i) => i.id === ingredientId);
+      const nextStock = target ? Number((target.stock + addedQty).toFixed(3)) : addedQty;
+      if (isRealSupabaseUser && currentUser) {
+        void updateIngredientStockInDb(currentUser.id, ingredientId, nextStock);
+      }
+      return {
+        ...prev,
+        ingredients: prev.ingredients.map((ing) =>
+          ing.id === ingredientId ? { ...ing, stock: nextStock } : ing
+        ),
+      };
+    });
     showToast('Stok bahan baku berhasil ditambahkan');
   };
 
   const addIngredient = (ing: Omit<Ingredient, 'id' | 'priceHistory'>) => {
     const today = new Date().toISOString().slice(0, 10);
+    const tempId = `ing-${Date.now()}`;
     const newIng: Ingredient = {
       ...ing,
-      id: `ing-${Date.now()}`,
+      id: tempId,
       priceHistory: [
         { id: `ph-${Date.now()}`, date: today, pricePerUnit: ing.pricePerUnit, note: 'Stok awal' },
       ],
@@ -344,15 +463,40 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ...prev,
       ingredients: [...prev.ingredients, newIng],
     }));
+
+    if (isRealSupabaseUser && currentUser) {
+      void addIngredientToDb(currentUser.id, ing).then((realId) => {
+        if (!realId) return;
+        setState((prev) => ({
+          ...prev,
+          ingredients: prev.ingredients.map((item) =>
+            item.id === tempId ? { ...item, id: realId } : item
+          ),
+        }));
+      });
+    }
     showToast(`${ing.name} ditambahkan ke inventaris`);
   };
 
   const addProduct = (prod: Omit<Product, 'id'>) => {
-    const newProd: Product = { ...prod, id: `prod-${Date.now()}` };
+    const tempId = `prod-${Date.now()}`;
+    const newProd: Product = { ...prod, id: tempId };
     setState((prev) => ({
       ...prev,
       products: [...prev.products, newProd],
     }));
+
+    if (isRealSupabaseUser && currentUser) {
+      void addProductToDb(currentUser.id, prod).then((realId) => {
+        if (!realId) return;
+        setState((prev) => ({
+          ...prev,
+          products: prev.products.map((item) =>
+            item.id === tempId ? { ...item, id: realId } : item
+          ),
+        }));
+      });
+    }
     showToast(`Produk "${prod.name}" disimpan ke katalog`);
   };
 
@@ -361,6 +505,9 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ...prev,
       products: prev.products.map((p) => (p.id === prod.id ? prod : p)),
     }));
+    if (isRealSupabaseUser && currentUser) {
+      void updateProductInDb(currentUser.id, prod);
+    }
     showToast(`Produk "${prod.name}" diperbarui`);
   };
 
@@ -369,6 +516,9 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ...prev,
       products: prev.products.filter((p) => p.id !== productId),
     }));
+    if (isRealSupabaseUser && currentUser) {
+      void deleteProductInDb(currentUser.id, productId);
+    }
     showToast('Produk dihapus dari katalog');
   };
 
@@ -388,8 +538,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const profit = totalRevenue - totalHpp;
     const today = new Date().toISOString().slice(0, 10);
 
-    const newTx: SaleTransaction = {
-      id: `tx-${Date.now()}`,
+    const txPayload: Omit<SaleTransaction, 'id'> = {
       date: today,
       productId: product.id,
       productName: product.name,
@@ -402,8 +551,7 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       profit,
     };
 
-    const newCash: CashFlowEntry = {
-      id: `cf-${Date.now()}`,
+    const cashPayload: Omit<CashFlowEntry, 'id'> = {
       date: today,
       type: 'in',
       category: `Penjualan (${channel})`,
@@ -411,22 +559,30 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       amount: totalRevenue,
     };
 
-    // Auto-deduct ingredient stock based on product BOM
     const updatedIngredients = state.ingredients.map((ing) => {
       const bomItem = product.bom.find((b) => b.ingredientId === ing.id);
       if (!bomItem) return ing;
       const deducted = bomItem.qtyPerUnit * qty;
+      const nextStock = Math.max(0, Number((ing.stock - deducted).toFixed(3)));
+      if (isRealSupabaseUser && currentUser) {
+        void updateIngredientStockInDb(currentUser.id, ing.id, nextStock);
+      }
       return {
         ...ing,
-        stock: Math.max(0, Number((ing.stock - deducted).toFixed(3))),
+        stock: nextStock,
       };
     });
+
+    if (isRealSupabaseUser && currentUser) {
+      void insertSaleInDb(currentUser.id, txPayload);
+      void insertCashFlowInDb(currentUser.id, cashPayload);
+    }
 
     setState((prev) => ({
       ...prev,
       ingredients: updatedIngredients,
-      transactions: [...prev.transactions, newTx],
-      cashFlow: [newCash, ...prev.cashFlow],
+      transactions: [...prev.transactions, { ...txPayload, id: `tx-${Date.now()}` }],
+      cashFlow: [{ ...cashPayload, id: `cf-${Date.now()}` }, ...prev.cashFlow],
     }));
 
     showToast(`Penjualan ${qty}x ${product.name} tercatat & stok bahan berkurang otomatis`);
@@ -437,10 +593,20 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ...prev,
       cashFlow: [{ ...entry, id: `cf-${Date.now()}` }, ...prev.cashFlow],
     }));
+    if (isRealSupabaseUser && currentUser) {
+      void insertCashFlowInDb(currentUser.id, entry);
+    }
     showToast('Transaksi kas berhasil dicatat');
   };
 
   const resetToSeed = () => {
+    if (isRealSupabaseUser && currentUser) {
+      void resetUserWorkspaceInDb(currentUser.id).then((snapshot) => {
+        setState(snapshot);
+        showToast('Database Supabase berhasil direset ke data awal');
+      });
+      return;
+    }
     setState(defaultState);
     localStorage.removeItem(STORAGE_KEY);
     showToast('Data dummy berhasil direset ke kondisi awal');
@@ -451,6 +617,8 @@ export const HargaPasProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       value={{
         ...state,
         currentUser,
+        isSupabaseReady: isSupabaseConfigured,
+        isSyncing,
         smartAlerts,
         toastMessage,
         showToast,
