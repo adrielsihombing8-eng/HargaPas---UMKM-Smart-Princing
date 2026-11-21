@@ -24,7 +24,9 @@
   - Hardware-accelerated 2D `<canvas>` renderer (replacing heavy SVG `feGaussianBlur` filters for 60–120fps scrolling).
   - Flows along a $C^1$-continuous meandering river trajectory: **Top-Left Corner → Right/Left → Middle → Far-Right Edge → Right/Left → Bottom-Left Corner** as the user scrolls down.
 - **Sticky Stacked Card Deck (`src/components/landing/StackedSection.tsx`)**:
-  - GPU-isolated (`contain: layout style paint`) stacked sections that land cleanly over each other like a uniform deck of cards (`01` to `05`), including a real-time **Mini Price Simulator** and an expandable **9+ Financial Modules Bento Grid** with a *"Lihat Selengkapnya / Tampilkan Lebih Sedikit"* toggle.
+  - GPU-isolated (`contain: layout style paint`) stacked sections that land cleanly over each other like a uniform deck of cards, styled with oversized **Caveat** handwritten café script titles, a real-time **Mini Price Simulator**, and an expandable **9+ Financial Modules Bento Grid** with a *"Lihat Selengkapnya / Tampilkan Lebih Sedikit"* toggle.
+- **Custom Café Branding (`public/logo-kopi.jpg`)**:
+  - Hand-drawn coffee cup brand logo & browser favicon blended cleanly onto warm Cappuccino (`#EFE3D3`) / Krem Susu (`#FAF6F0`) badges across the navbar, sidebar, and login modal.
 
 ### 2. Overlay Login & Register Modal Dialog (`src/modules/AuthPage.tsx`)
 - Opens as an accessible **Modal Dialog** directly over the Landing Page without full-page navigation (supports `Esc` key, backdrop click, and top-right `X` close button).
@@ -91,6 +93,8 @@ The entire UI is styled around a warm **Caffe Klasik** palette (`src/index.css` 
 ├── index.html
 ├── aurora-scroll.html          # Standalone scroll-driven Aurora River demo
 ├── cafe-hero-gsap.html         # Standalone 3D Café Hero + GSAP hover demo
+├── public/
+│   └── logo-kopi.jpg           # Hand-drawn coffee cup brand logo & favicon
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
