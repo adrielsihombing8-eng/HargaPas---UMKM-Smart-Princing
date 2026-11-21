@@ -7,13 +7,11 @@ import {
   ChevronDown,
   ChevronUp,
   FileSpreadsheet,
-  Layers,
   LogIn,
   Moon,
   Package,
   ShoppingCart,
   SlidersHorizontal,
-  Sparkles,
   Store,
   Sun,
   Target,
@@ -154,8 +152,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       <header className="sticky top-0 z-50 bg-[#FAF6F0]/88 dark:bg-[#1B120D]/88 backdrop-blur-md border-b border-[#E2D3C1] dark:border-[#4E372B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-[#C68B59] text-[#FFFDF9] flex items-center justify-center shadow-sm">
-              <Sparkles className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-[#EFE3D3] border border-[#C68B59]/45 flex items-center justify-center shadow-sm overflow-hidden p-1 shrink-0">
+              <img
+                src="/logo-kopi.jpg"
+                alt="Logo HargaPas UMKM"
+                className="w-full h-full object-contain mix-blend-multiply"
+              />
             </div>
             <div>
               <div className="font-bold text-base tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
@@ -210,11 +212,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       <section className="relative bg-[#EFE3D3] dark:bg-[#2B1B14] border-b border-[#E2D3C1] dark:border-[#4E372B]">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-14 lg:pb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFFDF9]/90 dark:bg-[#3E2A20]/90 border border-[#C68B59]/40 text-xs font-semibold text-[#A8703F] dark:text-[#FAF6F0]">
-              <Layers className="w-3.5 h-3.5 text-[#C68B59]" />
-              Prototipe Interaktif • Data Dummy Lokal
-            </div>
-
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12] text-[#2B1B14] dark:text-[#FAF6F0]">
               Hitung HPP, jaga margin, dan tentukan harga jual UMKM tanpa tebak-tebakan.
             </h1>
@@ -283,9 +280,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         {/* Stacked Card Deck Sections (Latar Card Foam #FFFDF9) */}
         <div className="space-y-12 lg:space-y-20">
           {/* Card 01: Interactive Mini Price Simulator */}
-          <StackedSection id="simulasi" index={0} label="SIMULASI MINI LANGSUNG">
+          <StackedSection id="simulasi" index={0}>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
               <div className="lg:col-span-5 space-y-3">
+                <div className="font-card-title text-4xl sm:text-5xl leading-none font-bold text-[#A8703F] dark:text-[#C68B59]">
+                  Simulasi Mini Langsung
+                </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                   Uji Penetapan Harga Jual Secara Real-Time
                 </h2>
@@ -375,20 +375,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           </StackedSection>
 
           {/* Card 02: Pain Points */}
-          <StackedSection id="masalah" index={1} label="MENGAPA HARGAPAS">
+          <StackedSection id="masalah" index={1}>
             <div className="space-y-6">
-              <div className="max-w-2xl">
+              <div className="max-w-2xl space-y-2">
+                <div className="font-card-title text-4xl sm:text-5xl leading-none font-bold text-[#A8703F] dark:text-[#C68B59]">
+                  Mengapa HargaPas
+                </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                   Masalah Klasik UMKM yang Diselesaikan HargaPas
                 </h2>
-                <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-1">
+                <p className="text-sm text-[#5A4636] dark:text-[#D5C3B3]">
                   Banyak usaha ramai pembeli, tetapi kas menipis karena harga jual belum memperhitungkan komponen biaya tersembunyi.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="rounded-3xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-6 space-y-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-[#EF7A5A]/20 text-[#EF7A5A] flex items-center justify-center font-bold text-sm">
+                  <div className="font-card-title w-10 h-10 rounded-2xl bg-[#EF7A5A]/20 text-[#EF7A5A] flex items-center justify-center font-bold text-2xl leading-none">
                     01
                   </div>
                   <h3 className="font-bold text-base text-[#2B1B14] dark:text-[#FAF6F0]">
@@ -400,7 +403,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 </div>
 
                 <div className="rounded-3xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-6 space-y-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-[#F4B9C8]/35 text-[#2B1B14] dark:text-[#F4B9C8] flex items-center justify-center font-bold text-sm">
+                  <div className="font-card-title w-10 h-10 rounded-2xl bg-[#F4B9C8]/35 text-[#2B1B14] dark:text-[#F4B9C8] flex items-center justify-center font-bold text-2xl leading-none">
                     02
                   </div>
                   <h3 className="font-bold text-base text-[#2B1B14] dark:text-[#FAF6F0]">
@@ -412,7 +415,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 </div>
 
                 <div className="rounded-3xl bg-[#FAF6F0] dark:bg-[#1B120D] border border-[#E2D3C1] dark:border-[#4E372B] p-6 space-y-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] flex items-center justify-center font-bold text-sm">
+                  <div className="font-card-title w-10 h-10 rounded-2xl bg-[#EFE3D3] dark:bg-[#3E2A20] text-[#A8703F] dark:text-[#C68B59] flex items-center justify-center font-bold text-2xl leading-none">
                     03
                   </div>
                   <h3 className="font-bold text-base text-[#2B1B14] dark:text-[#FAF6F0]">
@@ -427,14 +430,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           </StackedSection>
 
           {/* Card 03: Feature Bento Grid */}
-          <StackedSection id="fitur" index={2} label="EKSPLORASI MODUL SISTEM">
+          <StackedSection id="fitur" index={2}>
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-                <div>
+                <div className="space-y-1.5">
+                  <div className="font-card-title text-4xl sm:text-5xl leading-none font-bold text-[#A8703F] dark:text-[#C68B59]">
+                    Eksplorasi Modul Sistem
+                  </div>
                   <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                     9+ Modul Finansial Terintegrasi
                   </h2>
-                  <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-0.5">
+                  <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3]">
                     Klik kartu mana saja untuk langsung mencoba modul terkait di dalam aplikasi.
                   </p>
                 </div>
@@ -498,13 +504,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           </StackedSection>
 
           {/* Card 04: How It Works */}
-          <StackedSection id="alur" index={3} label="ALUR PENGGUNAAN">
+          <StackedSection id="alur" index={3}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-              <div>
+              <div className="space-y-2.5">
+                <div className="font-card-title text-4xl sm:text-5xl leading-none font-bold text-[#A8703F] dark:text-[#C68B59]">
+                  Alur Penggunaan
+                </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                   3 Langkah Mulai Mengelola Harga Usaha
                 </h2>
-                <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] mt-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#5A4636] dark:text-[#D5C3B3] leading-relaxed">
                   Semua data awal sudah terisi otomatis dengan contoh kedai minuman sehingga Anda bisa langsung mencoba setiap fitur.
                 </p>
               </div>
@@ -536,11 +545,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           </StackedSection>
 
           {/* Card 05: Final CTA */}
-          <StackedSection index={4} label="MULAI SEKARANG">
+          <StackedSection index={4}>
             <div className="py-4 text-center space-y-4">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#2B1B14] dark:text-[#FAF6F0] bg-[#F4B9C8]/40 dark:bg-[#3E2A20] border border-[#F4B9C8] dark:border-[#C68B59]/40 px-3 py-1 rounded-full">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#A8703F] dark:text-[#C68B59]" />
-                Siap Dicoba Langsung di Browser (LocalStorage)
+              <div className="flex flex-col items-center gap-2.5">
+                <div className="font-card-title text-4xl sm:text-5xl leading-none font-bold text-[#A8703F] dark:text-[#C68B59]">
+                  Mulai Sekarang
+                </div>
+                <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#2B1B14] dark:text-[#FAF6F0] bg-[#F4B9C8]/40 dark:bg-[#3E2A20] border border-[#F4B9C8] dark:border-[#C68B59]/40 px-3 py-1 rounded-full">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#A8703F] dark:text-[#C68B59]" />
+                  Siap Dicoba Langsung di Browser (LocalStorage)
+                </div>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2B1B14] dark:text-[#FAF6F0]">
                 Siap Menentukan Harga yang Pas untuk Bisnis Anda?

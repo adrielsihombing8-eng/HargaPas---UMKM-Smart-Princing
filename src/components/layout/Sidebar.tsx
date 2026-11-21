@@ -11,7 +11,6 @@ import {
   FileSpreadsheet,
   LogOut,
   Settings,
-  Sparkles,
   X,
 } from 'lucide-react';
 import { NavModuleId } from '../../types/hargapas';
@@ -122,8 +121,12 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
       {/* Brand Header */}
       <div className="px-5 xl:px-6 pt-5 pb-4 flex items-center justify-between border-b border-[#E2D3C1] dark:border-[#4E372B] shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-2xl bg-[#C68B59] dark:bg-[#C68B59] text-[#FFFDF9] flex items-center justify-center shadow-sm">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-2xl bg-[#FAF6F0] dark:bg-[#EFE3D3] border border-[#C68B59]/45 flex items-center justify-center shadow-sm overflow-hidden p-1 shrink-0">
+            <img
+              src="/logo-kopi.jpg"
+              alt="Logo HargaPas"
+              className="w-full h-full object-contain mix-blend-multiply"
+            />
           </div>
           <div>
             <div className="font-bold text-base tracking-tight leading-tight text-[#2B1B14] dark:text-[#FAF6F0]">

@@ -6,7 +6,6 @@ import {
   Lock,
   Mail,
   ShieldCheck,
-  Sparkles,
   Store,
   User,
   X,
@@ -161,8 +160,22 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, onClose }) => {
         {/* Modal Header */}
         <div className="flex items-start justify-between gap-3 pb-4 mb-5 border-b border-[#E2D3C1] dark:border-[#4E372B]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#C68B59] text-[#FFFDF9] flex items-center justify-center shadow-sm shrink-0">
-              {showGoogleView ? <GoogleIcon className="w-5 h-5" /> : <Sparkles className="w-5 h-5" />}
+            <div
+              className={`w-10 h-10 rounded-2xl flex items-center justify-center shadow-sm shrink-0 overflow-hidden ${
+                showGoogleView
+                  ? 'bg-[#C68B59] text-[#FFFDF9]'
+                  : 'bg-[#EFE3D3] border border-[#C68B59]/45 p-1'
+              }`}
+            >
+              {showGoogleView ? (
+                <GoogleIcon className="w-5 h-5" />
+              ) : (
+                <img
+                  src="/logo-kopi.jpg"
+                  alt="Logo HargaPas UMKM"
+                  className="w-full h-full object-contain mix-blend-multiply"
+                />
+              )}
             </div>
             <div>
               <h2

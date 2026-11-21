@@ -82,6 +82,12 @@ body {
   transition: background-color 220ms var(--ease-out), color 220ms var(--ease-out);
 }
 
+/* Script / Handwritten Café Font for Landing Card Titles */
+.font-card-title {
+  font-family: 'Caveat', cursive;
+  letter-spacing: 0.02em;
+}
+
 /* Anti-scrollbar jelek untuk sidebar */
 .no-scrollbar {
   overflow-x: hidden;
